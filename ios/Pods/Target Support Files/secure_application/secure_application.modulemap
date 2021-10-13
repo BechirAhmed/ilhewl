@@ -1,0 +1,6 @@
+framework module secure_application {
+  umbrella header "secure_application-umbrella.h"
+
+  export *
+  module * { export * }
+}
