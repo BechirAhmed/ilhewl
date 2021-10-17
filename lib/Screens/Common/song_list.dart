@@ -416,7 +416,8 @@ class _SongsListPageState extends State<SongsListPage> {
                                     // },
                                   );
                                 }).toList()))
-                              ])),
+                              ]),
+            ),
           ),
           MiniPlayer(),
         ],

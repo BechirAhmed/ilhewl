@@ -1703,12 +1703,9 @@ class _PlayScreenState extends State<PlayScreen> {
                                                                               .ellipsis,
                                                                     ),
                                                                     onTap: () {
-                                                                      queue[index].extras["selling"] == 1 &&
-                                                                              !queue[index].extras[
-                                                                                  "purchased"]
-                                                                          ? _handlePurchaseDialog(queue[
-                                                                              index])
-                                                                          : AudioService.skipToQueueItem(queue[index].id);
+                                                                      queue[index].extras["selling"] == 1 && !queue[index].extras["purchased"]
+                                                                          ? _handlePurchaseDialog(queue[index])
+                                                                          : _playQueue(queue[index].id);
                                                                     },
                                                                   ),
                                                                 ),
@@ -1740,6 +1737,10 @@ class _PlayScreenState extends State<PlayScreen> {
             child: container);
   }
 
+  _playQueue(id){
+    AudioService.skipToQueueItem(id);
+    Api().playTrack(id, "song");
+  }
   /// A stream reporting the combined state of the current media item and its
   /// current position.
   Stream<MediaState> get _mediaStateStream =>
@@ -1778,6 +1779,12 @@ class _PlayScreenState extends State<PlayScreen> {
     await AudioService.updateQueue(globalQueue);
     // await AudioService.skipToQueueItem(globalQueue[globalIndex].id);
     await AudioService.play();
+    bool isCaptured = await FlutterForbidshot.iosIsCaptured;
+    if(isCaptured){
+      AudioService.customAction("setVolume", 0.0);
+    }else{
+      AudioService.customAction("setVolume", 1.0);
+    }
     Api().playTrack(globalQueue[globalIndex].id, "song");
   }
 

@@ -161,6 +161,11 @@ class _MyAppState extends State<MyApp> {
     setState(() {
       isCaptured = isCapture;
     });
+    if(isCapture){
+      AudioService.customAction("setVolume", 0.0);
+    }else{
+      AudioService.customAction("setVolume", 1.0);
+    }
     subscription = FlutterForbidshot.iosShotChange.listen((event) {
       setState(() {
         isCaptured = !isCaptured;

@@ -8,6 +8,7 @@ import 'package:ilhewl/APIs/api.dart';
 import 'package:ilhewl/CustomWidgets/collage.dart';
 import 'package:ilhewl/CustomWidgets/custom_physics.dart';
 import 'package:ilhewl/CustomWidgets/gradientContainers.dart';
+import 'package:ilhewl/Screens/Artist/UploadScreen.dart';
 import 'package:ilhewl/Screens/Player/audioplayer.dart';
 import 'package:ilhewl/CustomWidgets/emptyScreen.dart';
 import 'package:ilhewl/CustomWidgets/miniplayer.dart';
@@ -15,7 +16,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 // import 'package:ext_storage/ext_storage.dart';
 import 'package:hive/hive.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:unicorndial/unicorndial.dart';
 import 'package:audiotagger/audiotagger.dart';
 import 'dart:io';
 import '../Library/showSongs.dart';
@@ -504,29 +505,27 @@ class _ArtistSongsState extends State<ArtistSongs> with SingleTickerProviderStat
                     ),
                   ),
 
-              floatingActionButton: SpeedDial(
-                  icon: Icons.share,
-                  backgroundColor: Colors.amber,
-                  children: [
-                    SpeedDialChild(
-                      child: Icon(Icons.upload_file_outlined),
-                      label: 'Upload New Song',
-                      backgroundColor: Colors.amberAccent,
-                      onTap: () {/* Do someting */},
-                    ),
-                    SpeedDialChild(
-                      child: Icon(Icons.email),
-                      label: 'Email',
-                      backgroundColor: Colors.amberAccent,
-                      onTap: () {/* Do something */},
-                    ),
-                    SpeedDialChild(
-                      child: Icon(Icons.chat),
-                      label: 'Message',
-                      backgroundColor: Colors.amberAccent,
-                      onTap: () {/* Do something */},
-                    ),
-                  ]
+              floatingActionButton: UnicornDialer(
+                  backgroundColor: Colors.transparent,
+                  parentButtonBackground: Theme.of(context).accentColor,
+                  orientation: UnicornOrientation.VERTICAL,
+                  parentButton: Icon(Icons.add),
+                childButtons: [
+                  UnicornButton(
+                      hasLabel: true,
+                      labelText: "Upload New Song",
+                      currentButton: FloatingActionButton(
+                        heroTag: "upload",
+                        backgroundColor: Theme.of(context).colorScheme.primary,
+                        mini: true,
+                        child: Icon(Icons.upload),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => UploadScreen()));
+                        },
+                      ))
+                ],
               ),
             ),
           ),
