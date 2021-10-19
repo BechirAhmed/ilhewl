@@ -173,6 +173,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       Hive.box('settings').put('phone', user["user"]["phone"]);
       Hive.box('settings').put('token', user['access_token']);
       Hive.box('settings').put('artistId', user['artist_id']);
+      Hive.box('settings').put('artwork_url', user["user"]['artwork_url']);
       Hive.box('settings').put('currency', user['currency']);
       EasyLoading.dismiss();
       Navigator.popAndPushNamed(context, '/');

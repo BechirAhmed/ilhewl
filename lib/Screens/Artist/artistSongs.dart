@@ -3,12 +3,17 @@ import 'dart:convert';
 import 'package:audiotagger/models/audiofile.dart';
 import 'package:audiotagger/models/tag.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:ilhewl/APIs/api.dart';
 import 'package:ilhewl/CustomWidgets/collage.dart';
 import 'package:ilhewl/CustomWidgets/custom_physics.dart';
 import 'package:ilhewl/CustomWidgets/gradientContainers.dart';
+import 'package:ilhewl/Helpers/config.dart';
+import 'package:ilhewl/Screens/Artist/EditSong.dart';
+import 'package:ilhewl/Screens/Artist/NewAlbum.dart';
 import 'package:ilhewl/Screens/Artist/UploadScreen.dart';
+import 'package:ilhewl/Screens/Artist/artist_profile.dart';
 import 'package:ilhewl/Screens/Player/audioplayer.dart';
 import 'package:ilhewl/CustomWidgets/emptyScreen.dart';
 import 'package:ilhewl/CustomWidgets/miniplayer.dart';
@@ -16,10 +21,20 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 // import 'package:ext_storage/ext_storage.dart';
 import 'package:hive/hive.dart';
+import 'package:ilhewl/Screens/Settings/profile.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:unicorndial/unicorndial.dart';
 import 'package:audiotagger/audiotagger.dart';
 import 'dart:io';
 import '../Library/showSongs.dart';
+
+
+int userId = Hive.box("settings").get("userID", defaultValue: 0);
+int artistId = Hive.box("settings").get("artistId", defaultValue: 0);
+Map homeData = Hive.box('cache').get('homepage', defaultValue: {});
+Map data = Hive.box('cache').get('artistPage', defaultValue: {});
+List lists = [...?data['artist']];
 
 class ArtistSongs extends StatefulWidget {
   final String type;
@@ -45,40 +60,140 @@ class _ArtistSongsState extends State<ArtistSongs> with SingleTickerProviderStat
 
   var nextUrl;
   ScrollController _scrollController = new ScrollController();
+  double offset = 0.0;
+
   List loadedSongs = [];
   List loadedAlbums = [];
   List loadedGenres = [];
+  List _moodsList = [];
+  List _genresList = [];
   bool loadCompleted = false;
 
   Map artist;
 
-  Future<List> getData() async {
-    // EasyLoading.show(status: "Loading...");
-    final userId = Hive.box("settings").get("artistId");
-    var artistData = await Api().fetchArtistData(userId.toString());
-    if(artistData != null){
-      artist = artistData['artist'];
-    }
-    final response = await Api().fetchArtistSongs("auth/artist", null);
-    if (response != null) {
-      var data = response;
-      var songs = data['songs'];
-      if (data["songs"]['next_page_url'] != null) {
-        nextUrl = data["songs"]['next_page_url'];
-      } else {
-        loadCompleted = true;
-      }
+  bool get isShrink {
+    return _scrollController.hasClients && offset > (MediaQuery.of(context).size.height * 0.2 - kToolbarHeight);
+  }
+
+  bool barStatus = true;
+
+  _scrollListener() {
+    if (isShrink != barStatus) {
       setState(() {
-        loadedSongs = songs["data"];
-        loadedAlbums = data["albums"]["data"];
-        loadedGenres = data["genres"];
+        barStatus = isShrink;
       });
-      EasyLoading.dismiss();
-      return loadedSongs;
-    } else {
-      EasyLoading.dismiss();
-      throw Exception('Failed to load Data');
     }
+  }
+
+  Future<List> getData() async {
+    var receivedData = await Api().fetchArtistData(artistId.toString());
+
+    if(receivedData != null && receivedData.isNotEmpty){
+      Hive.box('cache').put('artistPage', receivedData);
+      data = receivedData;
+      loadCompleted = true;
+    }
+
+    List _lists = homeData["genres"];
+    List _items = homeData["moods"];
+
+    if(_lists.isNotEmpty && _lists != null){
+      _genresList = _lists.map((e) => MultiSelectItem(e['id'], e["name"])).toList();
+    }
+    if(_items.isNotEmpty && _items != null){
+      _moodsList = _items.map((e) => MultiSelectItem(e['id'], e["name"])).toList();
+    }
+
+    setState(() {});
+    // EasyLoading.dismiss();
+    // final response = await Api().fetchArtistSongs("auth/artist", null);
+    // if (response != null) {
+    //   var data = response;
+    //   var songs = data['songs'];
+    //   if (data["songs"]['next_page_url'] != null) {
+    //     nextUrl = data["songs"]['next_page_url'];
+    //   } else {
+    //     loadCompleted = true;
+    //   }
+    //   setState(() {
+    //     loadedSongs = songs["data"];
+    //     loadedAlbums = data["albums"]["data"];
+    //     loadedGenres = data["genres"];
+    //   });
+    //   EasyLoading.dismiss();
+    //   return loadedSongs;
+    // } else {
+    //   EasyLoading.dismiss();
+    //   throw Exception('Failed to load Data');
+    // }
+  }
+
+  _updateSongStatus(songId, status) async {
+    try {
+      Navigator.pop(context);
+      EasyLoading.show(status: "Loading...");
+      // loadedSongs[index]['visibility'] = !loadedSongs[index]['visibility'];
+      Map res = await Api().authData('song/update_data/$songId?id=$songId&user_id=$userId&visibility=publish');
+      if(res.containsKey('id')){
+        final response = await Api().fetchArtistSongs("auth/artist", null);
+        if (response != null) {
+          var data = response;
+          var songs = data['songs'];
+          if (data["songs"]['next_page_url'] != null) {
+            nextUrl = data["songs"]['next_page_url'];
+          } else {
+            loadCompleted = true;
+          }
+          setState(() {
+            loadedSongs = songs["data"];
+            loadedAlbums = data["albums"]["data"];
+            loadedGenres = data["genres"];
+          });
+          EasyLoading.dismiss();
+          return loadedSongs;
+        }
+      }
+      EasyLoading.dismiss();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          elevation: 6,
+          backgroundColor: Colors.grey[900],
+          behavior: SnackBarBehavior.floating,
+          content: Text(
+            'Song has been updated!',
+            style: TextStyle(color: Colors.white),
+          ),
+          action: SnackBarAction(
+            textColor:
+            Theme.of(context).accentColor,
+            label: 'Ok',
+            onPressed: () {},
+          ),
+        ),
+      );
+    } catch (e) {
+      EasyLoading.dismiss();
+      Navigator.pop(context);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          elevation: 6,
+          backgroundColor: Colors.grey[900],
+          behavior: SnackBarBehavior.floating,
+          content: Text(
+            'Something went wrong, Try again!',
+            style: TextStyle(color: Colors.white),
+          ),
+          action: SnackBarAction(
+            textColor:
+            Theme.of(context).accentColor,
+            label: 'Ok',
+            onPressed: () {},
+          ),
+        ),
+      );
+    }
+    EasyLoading.dismiss();
+    setState(() {});
   }
 
   @override
@@ -86,6 +201,12 @@ class _ArtistSongsState extends State<ArtistSongs> with SingleTickerProviderStat
     getData();
     _tcontroller = TabController(length: 2, vsync: this);
     _tcontroller.addListener(changeTitle);
+    _scrollController = ScrollController();
+    _scrollController.addListener(() {
+      setState(() {
+        offset = _scrollController.offset;
+      });
+    });
     super.initState();
   }
 
@@ -93,6 +214,7 @@ class _ArtistSongsState extends State<ArtistSongs> with SingleTickerProviderStat
   void dispose() {
     super.dispose();
     _tcontroller.dispose();
+    _scrollController.removeListener(_scrollListener);
   }
 
   void changeTitle() {
@@ -170,13 +292,22 @@ class _ArtistSongsState extends State<ArtistSongs> with SingleTickerProviderStat
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent
+    ));
     return GradientContainer(
       child: Column(
         children: [
+          !loadCompleted ? LinearProgressIndicator(
+            backgroundColor: Colors.grey,
+            color: Theme.of(context).accentColor,
+            minHeight: 1,
+          ) : SizedBox(),
           Expanded(
             child: Scaffold(
               backgroundColor: Colors.transparent,
-              body: !loadCompleted
+              extendBodyBehindAppBar: true,
+              body: data.isEmpty
                   ? Container(
                       child: Center(
                         child: Container(
@@ -191,234 +322,280 @@ class _ArtistSongsState extends State<ArtistSongs> with SingleTickerProviderStat
                     )
                 : NestedScrollView(
                     physics: BouncingScrollPhysics(),
-                    headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+                    floatHeaderSlivers: true,
+                    controller: _scrollController,
+                    headerSliverBuilder: (BuildContext scontext, bool innerBoxIsScrolled) {
                       return <Widget>[
                         SliverAppBar(
                           backgroundColor: Colors.transparent,
                           elevation: 0,
                           stretch: true,
                           pinned: true,
-                          // floating: true,
-                          expandedHeight:
-                          MediaQuery.of(context).size.height * 0.4,
+                          floating: true,
+                          snap: true,
+                          expandedHeight: MediaQuery.of(context).size.height * 0.2,
+                          // leading: Builder(
+                          //   builder: (BuildContext context) {
+                          //     return Transform.rotate(
+                          //       angle: 22 / 7 * 2,
+                          //       child: IconButton(
+                          //         color: Theme.of(context).brightness == Brightness.dark
+                          //             ? null
+                          //             : Colors.grey[700],
+                          //         icon: const Icon(
+                          //             Icons.horizontal_split_rounded), // line_weight_rounded),
+                          //         onPressed: () {
+                          //           Scaffold.of(context).openDrawer();
+                          //         },
+                          //         tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+                          //       ),
+                          //     );
+                          //   },
+                          // ),
                           actions: [
                             PopupMenuButton(
-                                icon: Icon(Icons.sort_rounded),
+                                icon: Icon(Icons.more_vert_rounded, color: isShrink ? Colors.black87 : Colors.white,),
                                 shape: RoundedRectangleBorder(
                                     borderRadius:
                                     BorderRadius.all(Radius.circular(7.0))),
-                                onSelected: (currentIndex == 0 || currentIndex == 4)
-                                    ? (int value) {
-                                  sortValue = value;
-                                  Hive.box('settings').put('sortValue', value);
-                                  sortSongs(loadedSongs);
-                                  setState(() {});
-                                }
-                                    : (int value) {
-                                  albumSortValue = value;
-                                  Hive.box('settings')
-                                      .put('albumSortValue', value);
-                                  sortAlbums(
-                                      sortedCachedAlbumKeysList,
-                                      sortedCachedArtistKeysList,
-                                      sortedCachedGenreKeysList,
-                                      loadedAlbums,
-                                      loadedSongs,
-                                      loadedGenres);
-                                  setState(() {});
+                                onSelected: (int value) {
+
                                 },
-                                itemBuilder: (currentIndex == 0 || currentIndex == 4)
-                                    ? (context) => [
+                                itemBuilder: (context) => [
                                   PopupMenuItem(
                                     value: 0,
-                                    child: Row(
-                                      children: [
-                                        sortValue == 0
-                                            ? Icon(
-                                          Icons.check_rounded,
-                                          color: Theme.of(context)
-                                              .brightness ==
-                                              Brightness.dark
-                                              ? Colors.white
-                                              : Colors.grey[700],
-                                        )
-                                            : SizedBox(),
-                                        SizedBox(width: 10),
-                                        Text(
-                                          'A-Z',
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  PopupMenuItem(
-                                    value: 1,
-                                    child: Row(
-                                      children: [
-                                        sortValue == 1
-                                            ? Icon(
-                                          Icons.check_rounded,
-                                          color: Theme.of(context)
-                                              .brightness ==
-                                              Brightness.dark
-                                              ? Colors.white
-                                              : Colors.grey[700],
-                                        )
-                                            : SizedBox(),
-                                        SizedBox(width: 10),
-                                        Text(
-                                          'Z-A',
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  PopupMenuItem(
-                                    value: 2,
-                                    child: Row(
-                                      children: [
-                                        sortValue == 2
-                                            ? Icon(
-                                          Icons.check_rounded,
-                                          color: Theme.of(context)
-                                              .brightness ==
-                                              Brightness.dark
-                                              ? Colors.white
-                                              : Colors.grey[700],
-                                        )
-                                            : SizedBox(),
-                                        SizedBox(width: 10),
-                                        Text('Release Date'),
-                                      ],
-                                    ),
-                                  ),
-                                  PopupMenuItem(
-                                    value: 3,
-                                    child: Row(
-                                      children: [
-                                        sortValue == 3
-                                            ? Icon(
-                                          Icons.shuffle_rounded,
-                                          color: Theme.of(context)
-                                              .brightness ==
-                                              Brightness.dark
-                                              ? Colors.white
-                                              : Colors.grey[700],
-                                        )
-                                            : SizedBox(),
-                                        SizedBox(width: 10),
-                                        Text(
-                                          'Shuffle',
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ]
-                                    : (context) => [
-                                  PopupMenuItem(
-                                    value: 0,
-                                    child: Row(
-                                      children: [
-                                        albumSortValue == 0
-                                            ? Icon(
-                                          Icons.check_rounded,
-                                          color: Theme.of(context)
-                                              .brightness ==
-                                              Brightness.dark
-                                              ? Colors.white
-                                              : Colors.grey[700],
-                                        )
-                                            : SizedBox(),
-                                        SizedBox(width: 10),
-                                        Text(
-                                          'A-Z',
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  PopupMenuItem(
-                                    value: 1,
-                                    child: Row(
-                                      children: [
-                                        albumSortValue == 1
-                                            ? Icon(
-                                          Icons.check_rounded,
-                                          color: Theme.of(context)
-                                              .brightness ==
-                                              Brightness.dark
-                                              ? Colors.white
-                                              : Colors.grey[700],
-                                        )
-                                            : SizedBox(),
-                                        SizedBox(width: 10),
-                                        Text(
-                                          'Z-A',
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  PopupMenuItem(
-                                    value: 2,
-                                    child: Row(
-                                      children: [
-                                        albumSortValue == 2
-                                            ? Icon(
-                                          Icons.check_rounded,
-                                          color: Theme.of(context)
-                                              .brightness ==
-                                              Brightness.dark
-                                              ? Colors.white
-                                              : Colors.grey[700],
-                                        )
-                                            : SizedBox(),
-                                        SizedBox(width: 10),
-                                        Text(
-                                          '10-1',
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  PopupMenuItem(
-                                    value: 3,
-                                    child: Row(
-                                      children: [
-                                        albumSortValue == 3
-                                            ? Icon(
-                                          Icons.check_rounded,
-                                          color: Theme.of(context)
-                                              .brightness ==
-                                              Brightness.dark
-                                              ? Colors.white
-                                              : Colors.grey[700],
-                                        )
-                                            : SizedBox(),
-                                        SizedBox(width: 10),
-                                        Text(
-                                          '1-10',
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  PopupMenuItem(
-                                    value: 4,
-                                    child: Row(
-                                      children: [
-                                        albumSortValue == 4
-                                            ? Icon(
-                                          Icons.shuffle_rounded,
-                                          color: Theme.of(context)
-                                              .brightness ==
-                                              Brightness.dark
-                                              ? Colors.white
-                                              : Colors.grey[700],
-                                        )
-                                            : SizedBox(),
-                                        SizedBox(width: 10),
-                                        Text(
-                                          'Shuffle',
-                                        ),
-                                      ],
-                                    ),
+                                    child: TextButton.icon(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ArtistProfile()));
+                                      },
+                                      label: Text("Edit Profile", style: TextStyle(color: MyTheme().isDark ? Colors.white : Colors.black),),
+                                      icon: Icon(
+                                        Icons.edit,
+                                        color: MyTheme().isDark ? Colors.white60 : Colors.grey[700],
+                                      ),
+                                    )
                                   ),
                                 ]),
+                            // PopupMenuButton(
+                            //     icon: Icon(Icons.sort_rounded),
+                            //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(7.0))),
+                            //     onSelected: (currentIndex == 0 || currentIndex == 4)
+                            //         ? (int value) {
+                            //       sortValue = value;
+                            //       Hive.box('settings').put('sortValue', value);
+                            //       sortSongs(loadedSongs);
+                            //       setState(() {});
+                            //     }
+                            //         : (int value) {
+                            //       albumSortValue = value;
+                            //       Hive.box('settings')
+                            //           .put('albumSortValue', value);
+                            //       sortAlbums(
+                            //           sortedCachedAlbumKeysList,
+                            //           sortedCachedArtistKeysList,
+                            //           sortedCachedGenreKeysList,
+                            //           loadedAlbums,
+                            //           loadedSongs,
+                            //           loadedGenres);
+                            //       setState(() {});
+                            //     },
+                            //     itemBuilder: (currentIndex == 0 || currentIndex == 4)
+                            //         ? (context) => [
+                            //       PopupMenuItem(
+                            //         value: 0,
+                            //         child: Row(
+                            //           children: [
+                            //             sortValue == 0
+                            //                 ? Icon(
+                            //               Icons.check_rounded,
+                            //               color: Theme.of(context)
+                            //                   .brightness ==
+                            //                   Brightness.dark
+                            //                   ? Colors.white
+                            //                   : Colors.grey[700],
+                            //             )
+                            //                 : SizedBox(),
+                            //             SizedBox(width: 10),
+                            //             Text(
+                            //               'A-Z',
+                            //             ),
+                            //           ],
+                            //         ),
+                            //       ),
+                            //       PopupMenuItem(
+                            //         value: 1,
+                            //         child: Row(
+                            //           children: [
+                            //             sortValue == 1
+                            //                 ? Icon(
+                            //               Icons.check_rounded,
+                            //               color: Theme.of(context)
+                            //                   .brightness ==
+                            //                   Brightness.dark
+                            //                   ? Colors.white
+                            //                   : Colors.grey[700],
+                            //             )
+                            //                 : SizedBox(),
+                            //             SizedBox(width: 10),
+                            //             Text(
+                            //               'Z-A',
+                            //             ),
+                            //           ],
+                            //         ),
+                            //       ),
+                            //       PopupMenuItem(
+                            //         value: 2,
+                            //         child: Row(
+                            //           children: [
+                            //             sortValue == 2
+                            //                 ? Icon(
+                            //               Icons.check_rounded,
+                            //               color: Theme.of(context)
+                            //                   .brightness ==
+                            //                   Brightness.dark
+                            //                   ? Colors.white
+                            //                   : Colors.grey[700],
+                            //             )
+                            //                 : SizedBox(),
+                            //             SizedBox(width: 10),
+                            //             Text('Release Date'),
+                            //           ],
+                            //         ),
+                            //       ),
+                            //       PopupMenuItem(
+                            //         value: 3,
+                            //         child: Row(
+                            //           children: [
+                            //             sortValue == 3
+                            //                 ? Icon(
+                            //               Icons.shuffle_rounded,
+                            //               color: Theme.of(context)
+                            //                   .brightness ==
+                            //                   Brightness.dark
+                            //                   ? Colors.white
+                            //                   : Colors.grey[700],
+                            //             )
+                            //                 : SizedBox(),
+                            //             SizedBox(width: 10),
+                            //             Text(
+                            //               'Shuffle',
+                            //             ),
+                            //           ],
+                            //         ),
+                            //       ),
+                            //     ]
+                            //         : (context) => [
+                            //       PopupMenuItem(
+                            //         value: 0,
+                            //         child: Row(
+                            //           children: [
+                            //             albumSortValue == 0
+                            //                 ? Icon(
+                            //               Icons.check_rounded,
+                            //               color: Theme.of(context)
+                            //                   .brightness ==
+                            //                   Brightness.dark
+                            //                   ? Colors.white
+                            //                   : Colors.grey[700],
+                            //             )
+                            //                 : SizedBox(),
+                            //             SizedBox(width: 10),
+                            //             Text(
+                            //               'A-Z',
+                            //             ),
+                            //           ],
+                            //         ),
+                            //       ),
+                            //       PopupMenuItem(
+                            //         value: 1,
+                            //         child: Row(
+                            //           children: [
+                            //             albumSortValue == 1
+                            //                 ? Icon(
+                            //               Icons.check_rounded,
+                            //               color: Theme.of(context)
+                            //                   .brightness ==
+                            //                   Brightness.dark
+                            //                   ? Colors.white
+                            //                   : Colors.grey[700],
+                            //             )
+                            //                 : SizedBox(),
+                            //             SizedBox(width: 10),
+                            //             Text(
+                            //               'Z-A',
+                            //             ),
+                            //           ],
+                            //         ),
+                            //       ),
+                            //       PopupMenuItem(
+                            //         value: 2,
+                            //         child: Row(
+                            //           children: [
+                            //             albumSortValue == 2
+                            //                 ? Icon(
+                            //               Icons.check_rounded,
+                            //               color: Theme.of(context)
+                            //                   .brightness ==
+                            //                   Brightness.dark
+                            //                   ? Colors.white
+                            //                   : Colors.grey[700],
+                            //             )
+                            //                 : SizedBox(),
+                            //             SizedBox(width: 10),
+                            //             Text(
+                            //               '10-1',
+                            //             ),
+                            //           ],
+                            //         ),
+                            //       ),
+                            //       PopupMenuItem(
+                            //         value: 3,
+                            //         child: Row(
+                            //           children: [
+                            //             albumSortValue == 3
+                            //                 ? Icon(
+                            //               Icons.check_rounded,
+                            //               color: Theme.of(context)
+                            //                   .brightness ==
+                            //                   Brightness.dark
+                            //                   ? Colors.white
+                            //                   : Colors.grey[700],
+                            //             )
+                            //                 : SizedBox(),
+                            //             SizedBox(width: 10),
+                            //             Text(
+                            //               '1-10',
+                            //             ),
+                            //           ],
+                            //         ),
+                            //       ),
+                            //       PopupMenuItem(
+                            //         value: 4,
+                            //         child: Row(
+                            //           children: [
+                            //             albumSortValue == 4
+                            //                 ? Icon(
+                            //               Icons.shuffle_rounded,
+                            //               color: Theme.of(context)
+                            //                   .brightness ==
+                            //                   Brightness.dark
+                            //                   ? Colors.white
+                            //                   : Colors.grey[700],
+                            //             )
+                            //                 : SizedBox(),
+                            //             SizedBox(width: 10),
+                            //             Text(
+                            //               'Shuffle',
+                            //             ),
+                            //           ],
+                            //         ),
+                            //       ),
+                            //     ]),
                           ],
                           flexibleSpace: FlexibleSpaceBar(
                             // title: Text(
@@ -433,31 +610,31 @@ class _ArtistSongsState extends State<ArtistSongs> with SingleTickerProviderStat
                                   begin: Alignment.topCenter,
                                   end: Alignment.bottomCenter,
                                   colors: [
-                                    Colors.black,
+                                    Theme.of(context).accentColor,
                                     Colors.transparent
                                   ],
                                 ).createShader(Rect.fromLTRB(
                                     0, 0, rect.width, rect.height));
                               },
                               blendMode: BlendMode.dstIn,
-                              child: artist['artwork_url'] == null
+                              child: data['artist']['artwork_url'] == null
                                 ? Image(
-                                  fit: BoxFit.cover,
-                                  image: AssetImage(
-                                      'assets/cover.jpg'))
+                                    fit: BoxFit.cover,
+                                    image: AssetImage('assets/cover.jpg'),
+                                  )
                                   : CachedNetworkImage(
-                                fit: BoxFit.cover,
-                                errorWidget: (context, _, __) =>
-                                    Image(
-                                      image: AssetImage(
-                                          'assets/album.png'),
-                                    ),
-                                imageUrl: artist['artwork_url'].replaceAll('http:', 'https:').replaceAll('50x50', '500x500').replaceAll('150x150', '500x500'),
-                                placeholder: (context, url) =>
-                                    Image(
-                                      image: AssetImage(
-                                          'assets/album.png'),
-                                    ),
+                                      fit: BoxFit.cover,
+                                      errorWidget: (context, _, __) =>
+                                          Image(
+                                            image: AssetImage('assets/artist.png'),
+                                            fit: BoxFit.cover,
+                                          ),
+                                      imageUrl: data['artist']['artwork_url'].replaceAll('http:', 'https:').replaceAll('50x50', '500x500').replaceAll('150x150', '500x500'),
+                                      placeholder: (context, url) =>
+                                          Image(
+                                            image: AssetImage('assets/artist.png'),
+                                            fit: BoxFit.cover,
+                                          ),
                               ),
                             ),
                           ),
@@ -469,10 +646,11 @@ class _ArtistSongsState extends State<ArtistSongs> with SingleTickerProviderStat
                       child: Scaffold(
                         backgroundColor: Colors.transparent,
                         appBar: AppBar(
-                          title: Text("${artist['name']}"),
+                          title: Text("${data['artist']['name']}", style: TextStyle(color: MyTheme().isDark ? Colors.white : Colors.black54,),),
                           automaticallyImplyLeading: false,
                           bottom: TabBar(
                               controller: _tcontroller,
+                              labelColor: MyTheme().isDark ? Colors.white : Colors.black54,
                               tabs: [
                                 Tab(
                                   text: 'Songs',
@@ -486,18 +664,15 @@ class _ArtistSongsState extends State<ArtistSongs> with SingleTickerProviderStat
                               ]
                           ),
                           centerTitle: true,
-                          backgroundColor:
-                          Theme.of(context).brightness == Brightness.dark
-                              ? Colors.transparent
-                              : Theme.of(context).accentColor,
+                          backgroundColor: Colors.transparent,
                           elevation: 0,
                         ),
                         body: TabBarView(
                             physics: CustomPhysics(),
                             controller: _tcontroller,
                             children: [
-                              songsTab(),
-                              albumsTab(),
+                              songsTab(data['artist']['songs']),
+                              albumsTab(data['artist']['albums']),
                               // genresTab(),
                             ]
                         ),
@@ -522,7 +697,24 @@ class _ArtistSongsState extends State<ArtistSongs> with SingleTickerProviderStat
                         onPressed: () {
                           Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => UploadScreen()));
+                              MaterialPageRoute(builder: (context) => UploadScreen(albums: loadedAlbums,)));
+                        },
+                      )),
+                  UnicornButton(
+                      hasLabel: true,
+                      labelText: "New Album",
+                      currentButton: FloatingActionButton(
+                        heroTag: "add",
+                        backgroundColor: Theme.of(context).colorScheme.primary,
+                        mini: true,
+                        child: Icon(Icons.add),
+                        onPressed: () {
+                          showCupertinoModalBottomSheet(
+                            backgroundColor: Colors.white70,
+                            expand: true,
+                            context: context,
+                            builder: (context) => ModalWithScroll(artistId: artistId, userId: userId, genres: _genresList, moods: _moodsList,),
+                          );
                         },
                       ))
                 ],
@@ -535,15 +727,15 @@ class _ArtistSongsState extends State<ArtistSongs> with SingleTickerProviderStat
     );
   }
 
-  songsTab() {
-    return loadedSongs.length == 0
+  songsTab(songs) {
+    return songs.length == 0
         ? EmptyScreen().emptyScreen(context, false, 3, "Nothing to ", 15.0, "Show Here", 45, "Upload something", 23.0)
         : ListView.builder(
             physics: BouncingScrollPhysics(),
             padding: EdgeInsets.only(top: 20, bottom: 10),
             shrinkWrap: true,
             itemExtent: 70.0,
-            itemCount: loadedSongs.length,
+            itemCount: songs.length,
             itemBuilder: (context, index) {
               return ListTile(
                 leading: Card(
@@ -557,7 +749,7 @@ class _ArtistSongsState extends State<ArtistSongs> with SingleTickerProviderStat
                       Image(
                         image: AssetImage('assets/cover.jpg'),
                       ),
-                      loadedSongs[index]['artwork_url'] == null
+                      songs[index]['artwork_url'] == null
                           ? SizedBox()
                           : SizedBox(
                               height: 50.0,
@@ -568,7 +760,7 @@ class _ArtistSongsState extends State<ArtistSongs> with SingleTickerProviderStat
                                       image: AssetImage(
                                           'assets/cover.jpg'),
                                     ),
-                                imageUrl: loadedSongs[index]['artwork_url']
+                                imageUrl: songs[index]['artwork_url']
                                     .replaceAll('http:', 'https:'),
                                 placeholder: (context, url) =>
                                     Image(
@@ -581,115 +773,28 @@ class _ArtistSongsState extends State<ArtistSongs> with SingleTickerProviderStat
                   ),
                 ),
                 title: Text(
-                  loadedSongs[index]['title'] != null &&
-                      loadedSongs[index]['title'].trim() != ""
-                      ? loadedSongs[index]['title']
-                      : '${loadedSongs[index]['id'].split('/').last}',
+                  songs[index]['title'] != null &&
+                      songs[index]['title'].trim() != ""
+                      ? songs[index]['title']
+                      : '${songs[index]['id'].split('/').last}',
                   overflow: TextOverflow.ellipsis,
                 ),
                 subtitle: Text(
-                  loadedSongs[index]['release_date']
+                  songs[index]['released_at']
                       +" - "
-                      +(loadedSongs[index]["selling"] == 1 ? loadedSongs[index]["price"] + " $currency" : "Free"),
+                      +(songs[index]["selling"] == 1 ? songs[index]["price"] + " $currency" : "Free"),
                   overflow: TextOverflow.ellipsis,
                 ),
                 trailing: PopupMenuButton(
                   icon: Icon(Icons.more_vert_rounded),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(7.0))),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(7.0))),
                   onSelected: (value) async {
                     if (value == 0) {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          String fileName = loadedSongs[index]['title']
-                              .split('/')
-                              .last
-                              .toString();
-                          List temp = fileName.split('.');
-                          temp.removeLast();
-                          String songName = temp.join('.');
-                          final controller =
-                              TextEditingController(text: songName);
-                          return AlertDialog(
-                            content: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      'Title',
-                                      style: TextStyle(
-                                          color: Theme.of(context).accentColor),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                TextField(
-                                    autofocus: true,
-                                    controller: controller,
-                                    onSubmitted: (value) async {
-                                      try {
-                                        Navigator.pop(context);
-                                        String newName = loadedSongs[index]
-                                                ['title']
-                                            .toString()
-                                            .replaceFirst(songName, value);
-
-                                        while (await File(newName).exists()) {
-                                          newName = newName.replaceFirst(
-                                              value, value + ' (1)');
-                                        }
-
-                                        File(loadedSongs[index]['title'])
-                                            .rename(newName);
-                                        loadedSongs[index]['title'] = newName;
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          SnackBar(
-                                            elevation: 6,
-                                            backgroundColor: Colors.grey[900],
-                                            behavior: SnackBarBehavior.floating,
-                                            content: Text(
-                                              'Renamed to ${loadedSongs[index]['title'].split('/').last}',
-                                              style: TextStyle(
-                                                  color: Colors.white),
-                                            ),
-                                            action: SnackBarAction(
-                                              textColor:
-                                                  Theme.of(context).accentColor,
-                                              label: 'Ok',
-                                              onPressed: () {},
-                                            ),
-                                          ),
-                                        );
-                                      } catch (e) {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          SnackBar(
-                                            elevation: 6,
-                                            backgroundColor: Colors.grey[900],
-                                            behavior: SnackBarBehavior.floating,
-                                            content: Text(
-                                              'Failed to Rename ${loadedSongs[index]['id'].split('/').last}',
-                                              style: TextStyle(
-                                                  color: Colors.white),
-                                            ),
-                                            action: SnackBarAction(
-                                              textColor:
-                                                  Theme.of(context).accentColor,
-                                              label: 'Ok',
-                                              onPressed: () {},
-                                            ),
-                                          ),
-                                        );
-                                      }
-                                      setState(() {});
-                                    }),
-                              ],
-                            ),
+                      showDialog(context: context, builder: (BuildContext context) {
+                          int songId = songs[index]['id'];
+                          int status = songs[index]['visibility'];
+                          return CupertinoAlertDialog(
+                            title: Text(songs[index]['visibility'] == 0 ? 'Publish' : 'UnPublish'),
                             actions: [
                               TextButton(
                                 style: TextButton.styleFrom(
@@ -717,59 +822,7 @@ class _ArtistSongsState extends State<ArtistSongs> with SingleTickerProviderStat
                                   style: TextStyle(color: Colors.white),
                                 ),
                                 onPressed: () async {
-                                  try {
-                                    Navigator.pop(context);
-                                    String newName = loadedSongs[index]['title']
-                                        .toString()
-                                        .replaceFirst(
-                                            songName, controller.text);
-
-                                    while (await File(newName).exists()) {
-                                      newName = newName.replaceFirst(
-                                          controller.text,
-                                          controller.text + ' (1)');
-                                    }
-
-                                    File(loadedSongs[index]['title'])
-                                        .rename(newName);
-                                    loadedSongs[index]['title'] = newName;
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        elevation: 6,
-                                        backgroundColor: Colors.grey[900],
-                                        behavior: SnackBarBehavior.floating,
-                                        content: Text(
-                                          'Renamed to ${loadedSongs[index]['title'].split('/').last}',
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                        action: SnackBarAction(
-                                          textColor:
-                                              Theme.of(context).accentColor,
-                                          label: 'Ok',
-                                          onPressed: () {},
-                                        ),
-                                      ),
-                                    );
-                                  } catch (e) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        elevation: 6,
-                                        backgroundColor: Colors.grey[900],
-                                        behavior: SnackBarBehavior.floating,
-                                        content: Text(
-                                          'Failed to Rename ${loadedSongs[index]['title'].split('/').last}',
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                        action: SnackBarAction(
-                                          textColor:
-                                              Theme.of(context).accentColor,
-                                          label: 'Ok',
-                                          onPressed: () {},
-                                        ),
-                                      ),
-                                    );
-                                  }
-                                  setState(() {});
+                                  _updateSongStatus(songId, status);
                                 },
                               ),
                               SizedBox(
@@ -781,229 +834,11 @@ class _ArtistSongsState extends State<ArtistSongs> with SingleTickerProviderStat
                       );
                     }
                     if (value == 1) {
-                      showDialog(
+                      showCupertinoModalBottomSheet(
+                        backgroundColor: Colors.white70,
+                        expand: true,
                         context: context,
-                        builder: (BuildContext context) {
-                          final _titlecontroller = TextEditingController(
-                              text: loadedSongs[index]['title']);
-                          final _albumcontroller = TextEditingController(
-                              text: loadedSongs[index]['album']);
-                          final _artistcontroller = TextEditingController(
-                              text: loadedSongs[index]['artist']);
-                          final _albumArtistController = TextEditingController(
-                              text: loadedSongs[index]['albumArtist']);
-                          final _genrecontroller = TextEditingController(
-                              text: loadedSongs[index]['genre']);
-                          final _yearcontroller = TextEditingController(
-                              text: loadedSongs[index]['release_date']);
-                          return AlertDialog(
-                            content: Container(
-                              height: 400,
-                              width: 300,
-                              child: SingleChildScrollView(
-                                physics: BouncingScrollPhysics(),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Text(
-                                          'Title',
-                                          style: TextStyle(
-                                              color: Theme.of(context)
-                                                  .accentColor),
-                                        ),
-                                      ],
-                                    ),
-                                    TextField(
-                                        autofocus: true,
-                                        controller: _titlecontroller,
-                                        onSubmitted: (value) {}),
-                                    SizedBox(
-                                      height: 30,
-                                    ),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          'Artist',
-                                          style: TextStyle(
-                                              color: Theme.of(context)
-                                                  .accentColor),
-                                        ),
-                                      ],
-                                    ),
-                                    TextField(
-                                        autofocus: true,
-                                        controller: _artistcontroller,
-                                        onSubmitted: (value) {}),
-                                    SizedBox(
-                                      height: 30,
-                                    ),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          'Album Artist',
-                                          style: TextStyle(
-                                              color: Theme.of(context)
-                                                  .accentColor),
-                                        ),
-                                      ],
-                                    ),
-                                    TextField(
-                                        autofocus: true,
-                                        controller: _albumArtistController,
-                                        onSubmitted: (value) {}),
-                                    SizedBox(
-                                      height: 30,
-                                    ),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          'Album',
-                                          style: TextStyle(
-                                              color: Theme.of(context)
-                                                  .accentColor),
-                                        ),
-                                      ],
-                                    ),
-                                    TextField(
-                                        autofocus: true,
-                                        controller: _albumcontroller,
-                                        onSubmitted: (value) {}),
-                                    SizedBox(
-                                      height: 30,
-                                    ),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          'Genre',
-                                          style: TextStyle(
-                                              color: Theme.of(context)
-                                                  .accentColor),
-                                        ),
-                                      ],
-                                    ),
-                                    TextField(
-                                        autofocus: true,
-                                        controller: _genrecontroller,
-                                        onSubmitted: (value) {}),
-                                    SizedBox(
-                                      height: 30,
-                                    ),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          'Year',
-                                          style: TextStyle(
-                                              color: Theme.of(context)
-                                                  .accentColor),
-                                        ),
-                                      ],
-                                    ),
-                                    TextField(
-                                        autofocus: true,
-                                        controller: _yearcontroller,
-                                        onSubmitted: (value) {}),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            actions: [
-                              TextButton(
-                                style: TextButton.styleFrom(
-                                  primary: Theme.of(context).brightness ==
-                                          Brightness.dark
-                                      ? Colors.white
-                                      : Colors.grey[700],
-                                ),
-                                child: Text("Cancel"),
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                              ),
-                              TextButton(
-                                style: TextButton.styleFrom(
-                                  primary: Colors.white,
-                                  backgroundColor:
-                                      Theme.of(context).accentColor,
-                                ),
-                                child: Text(
-                                  "Ok",
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                onPressed: () async {
-                                  try {
-                                    Navigator.pop(context);
-                                    loadedSongs[index]['title'] =
-                                        _titlecontroller.text;
-                                    loadedSongs[index]['album'] =
-                                        _albumcontroller.text;
-                                    loadedSongs[index]['artist'] =
-                                        _artistcontroller.text;
-                                    loadedSongs[index]['albumArtist'] =
-                                        _albumArtistController.text;
-                                    loadedSongs[index]['genre'] =
-                                        _genrecontroller.text;
-                                    loadedSongs[index]['year'] =
-                                        _yearcontroller.text;
-                                    final tag = Tag(
-                                      title: _titlecontroller.text,
-                                      artist: _artistcontroller.text,
-                                      album: _albumcontroller.text,
-                                      genre: _genrecontroller.text,
-                                      year: _yearcontroller.text,
-                                      albumArtist: _albumArtistController.text,
-                                    );
-
-                                    final tagger = Audiotagger();
-                                    await tagger.writeTags(
-                                      path: loadedSongs[index]['id'],
-                                      tag: tag,
-                                    );
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        elevation: 6,
-                                        backgroundColor: Colors.grey[900],
-                                        behavior: SnackBarBehavior.floating,
-                                        content: Text(
-                                          'Successfully edited tags',
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                        action: SnackBarAction(
-                                          textColor:
-                                              Theme.of(context).accentColor,
-                                          label: 'Ok',
-                                          onPressed: () {},
-                                        ),
-                                      ),
-                                    );
-                                  } catch (e) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        elevation: 6,
-                                        backgroundColor: Colors.grey[900],
-                                        behavior: SnackBarBehavior.floating,
-                                        content: Text(
-                                          'Failed to edit tags',
-                                          style: TextStyle(color: Colors.white),
-                                        ),
-                                        action: SnackBarAction(
-                                          textColor:
-                                              Theme.of(context).accentColor,
-                                          label: 'Ok',
-                                          onPressed: () {},
-                                        ),
-                                      ),
-                                    );
-                                  }
-                                },
-                              ),
-                              SizedBox(
-                                width: 5,
-                              ),
-                            ],
-                          );
-                        },
+                        builder: (context) => EditSongModal(artistId: artistId, userId: userId, songId: songs[index]['id'], albums: loadedAlbums,),
                       );
                     }
                   },
@@ -1012,9 +847,9 @@ class _ArtistSongsState extends State<ArtistSongs> with SingleTickerProviderStat
                       value: 0,
                       child: Row(
                         children: [
-                          Icon(Icons.edit_rounded),
+                          Icon(songs[index]['visibility'] == 0 ? Icons.publish : Icons.unpublished),
                           Spacer(),
-                          Text('Rename'),
+                          Text(songs[index]['visibility'] == 0 ? 'Publish' : 'UnPublish'),
                           Spacer(),
                         ],
                       ),
@@ -1023,11 +858,9 @@ class _ArtistSongsState extends State<ArtistSongs> with SingleTickerProviderStat
                       value: 1,
                       child: Row(
                         children: [
-                          Icon(
-                              // CupertinoIcons.tag
-                              Icons.local_offer_rounded),
+                          Icon(Icons.edit),
                           Spacer(),
-                          Text('Edit Tags'),
+                          Text('Edit Song'),
                           Spacer(),
                         ],
                       ),
@@ -1040,7 +873,7 @@ class _ArtistSongsState extends State<ArtistSongs> with SingleTickerProviderStat
                       opaque: false, // set to false
                       pageBuilder: (_, __, ___) => PlayScreen(
                         data: {
-                          'response': loadedSongs,
+                          'response': songs,
                           'index': index,
                           'offline': false
                         },
@@ -1053,7 +886,8 @@ class _ArtistSongsState extends State<ArtistSongs> with SingleTickerProviderStat
             });
   }
 
-  albumsTab() {
+  albumsTab(albums) {
+    loadedAlbums = albums;
     return loadedAlbums.isEmpty
         ? EmptyScreen().emptyScreen(context, false, 3, "Nothing to ", 15.0,
             "Show Here", 45, "Create new Albums", 23.0)

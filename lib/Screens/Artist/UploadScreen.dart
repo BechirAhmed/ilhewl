@@ -6,16 +6,23 @@ import 'dart:math';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:hive/hive.dart';
 import 'package:ilhewl/APIs/api.dart';
 import 'package:ilhewl/CustomWidgets/FabMiniMenu.dart';
 import 'package:ilhewl/CustomWidgets/gradientContainers.dart';
 import 'package:ilhewl/CustomWidgets/snackbar.dart';
 import 'package:ilhewl/Helpers/app_config.dart';
 import 'package:ilhewl/Helpers/util.dart';
+import 'package:ilhewl/Screens/Artist/NewAlbum.dart';
+import 'package:ilhewl/Screens/Artist/artistSongs.dart';
 import 'package:ilhewl/Services/FileService.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as fileUtil;
 import 'package:multi_select_flutter/multi_select_flutter.dart';
+import 'package:dio/dio.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 
 class UploadScreen extends StatefulWidget {
   final List albums;
@@ -30,13 +37,19 @@ class _UploadScreenState extends State<UploadScreen> with TickerProviderStateMix
   AnimationController _controller;
   final _scaffoldKey = GlobalKey<ScaffoldState>(); // new line
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey = new GlobalKey<RefreshIndicatorState>();
-  // List _genresList = [];
-  List _moodsList = [];
+  final artistId = Hive.box("settings").get("artistId");
+  final userId = Hive.box("settings").get("userID");
+  String token = Hive.box("settings").get("token");
+  Map<String, String> headers = {};
+
   List _tagsList = [];
+  List _moodsList = [];
   List _albumsList = [];
   List _genresList = [];
   List<FabMiniMenu> fabItems;
+  int _selectedAlbum;
   File _selectedFile;
+  File _selectedImage;
   String _fileSize = "0 KB";
   double _progressValue = 0;
   int _progressPercentValue = 0;
@@ -44,21 +57,26 @@ class _UploadScreenState extends State<UploadScreen> with TickerProviderStateMix
   bool _showControlBtn = false;
   Map _uploadedSong;
   String _releaseDate;
-  String _selectedGenres;
-  String _selectedMoods;
+  List _selectedGenres;
+  List _selectedMoods;
 
   DateTime _date = DateTime.now();
   DateTime _initialDate;
   DateTime _maxDate;
 
+  bool _visibility = true;
   TextEditingController _songTitleController;
   TextEditingController _descriptionController;
   TextEditingController _lyricsController;
   TextEditingController _copyrightController;
 
+  var dio = Dio();
+
   @override
   void initState() {
     super.initState();
+    dio.options.baseUrl = 'https://ilhewl.com/api';
+
     _initialDate = DateTime(_date.year, _date.month, _date.day - 1);
     _maxDate = DateTime(_date.year, _date.month + 3, _date.day);
     _songTitleController = TextEditingController();
@@ -72,7 +90,6 @@ class _UploadScreenState extends State<UploadScreen> with TickerProviderStateMix
     );
 
     _albumsList = widget.albums;
-    print(_albumsList);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       //_refreshIndicatorKey.currentState.show();
@@ -149,9 +166,9 @@ class _UploadScreenState extends State<UploadScreen> with TickerProviderStateMix
 
       var song = await FileService().fileUploadMultipart(file: file, onUploadProgress: _setUploadProgress);
 
-      _showSnackBar("File uploaded - ${fileUtil.basename(file.path)}");
       if(song.contains("id")){
-        //TODO: Notify Artist to fill up song informations
+        _showSnackBar("File uploaded - ${fileUtil.basename(file.path)}");
+        EasyLoading.showToast("Song Uploaded Success! Now please fill all song information to complete the upload.", duration: Duration(seconds: 3), toastPosition: EasyLoadingToastPosition.center, dismissOnTap: true);
         setState(() {
           _showControlBtn = false;
           _fileUploaded = true;
@@ -178,7 +195,6 @@ class _UploadScreenState extends State<UploadScreen> with TickerProviderStateMix
       });
   }
 
-
   Future<Null> _dataLoad() async {
     try {
       _refreshIndicatorKey?.currentState?.show();
@@ -199,10 +215,95 @@ class _UploadScreenState extends State<UploadScreen> with TickerProviderStateMix
     }
   }
 
+  Future _reloadAlbums() async {
+    EasyLoading.show(status: "loading...");
+    final response = await Api().fetchArtistSongs("auth/artist", null);
+    if (response != null) {
+      List data = response["albums"]["data"];
+      if(data != null && data.isNotEmpty) {
+        EasyLoading.dismiss();
+        setState(() {
+          _albumsList = data;
+        });
+      }else{
+        EasyLoading.dismiss();
+        EasyLoading.showError("You don't have any albums, try create new one!");
+      }
+      EasyLoading.dismiss();
+    } else {
+      EasyLoading.dismiss();
+      throw Exception('Failed to load Data');
+    }
+    EasyLoading.dismiss();
+  }
+
+  Future<FormData> FormData1() async {
+    return FormData.fromMap({
+      'id': _uploadedSong["id"],
+      'title': _songTitleController.text,
+      'description': _descriptionController.text,
+      'album_id': _selectedAlbum,
+      'genre': _selectedGenres.join(","),
+      'mood': _selectedMoods.join(","),
+      'released_at': _releaseDate,
+      'copyright': _copyrightController.text,
+      'user_id': userId,
+      'visibility': _visibility,
+      'artwork': await MultipartFile.fromFile(_selectedImage.path, filename: 'artwork.jpg'),
+    });
+  }
+
+  Future _updateSongData() async {
+    if (_songTitleController.text == null || _uploadedSong == null || _selectedImage == null) {
+      EasyLoading.showError("You missed something, check all required infos!");
+      return;
+    }
+    headers = {"Accept": "application/json", 'Authorization': 'Bearer $token'};
+
+    // EasyLoading.show(status: "Loading...");
+    Response response;
+
+    try{
+      response = await dio.post(
+        '/song/update/${_uploadedSong["id"]}',
+        data: await FormData1(),
+        options: Options(headers: headers),
+        onSendProgress: (received, total) {
+          if (total != -1) {
+            EasyLoading.showProgress(received / total * 100);
+            // print((received / total * 100).toStringAsFixed(0) + '%');
+          }
+        },
+      );
+
+    }catch(e){
+      print(e);
+    }
+
+
+    EasyLoading.dismiss();
+    if(response.statusCode == 200){
+      EasyLoading.showSuccess("Success!");
+      EasyLoading.dismiss();
+      Navigator.of(context).pop();
+
+    }else{
+      EasyLoading.showError("Failed! Try again");
+      EasyLoading.dismiss();
+    }
+
+  }
+
+  pickImageModal(BuildContext context) async {
+    var image = await ImagePicker().pickImage(source: ImageSource.gallery);
+
+    setState(() {
+      _selectedImage = File(image.path);
+    });
+  }
+
   _showSnackBar(String text) {
-    // final snackBar = SnackBar(content: Text(text));
     ShowSnackBar().showSnackBar(context, text);
-    // _scaffoldKey.currentState.showSnackBar(snackBar);
   }
 
   void _chooseFile() async {
@@ -366,7 +467,7 @@ class _UploadScreenState extends State<UploadScreen> with TickerProviderStateMix
                     ],
                   ) : SizedBox(),
                   SizedBox(height: 10,),
-                  _fileUploaded ? _buildDetailsView() : SizedBox(),
+                  !_fileUploaded ? _buildDetailsView() : SizedBox(),
                 ],
               ),
             ),
@@ -501,66 +602,71 @@ class _UploadScreenState extends State<UploadScreen> with TickerProviderStateMix
                   ]),
             )
           ),
-          // Container(
-          //   height: 80,
-          //   child: Card(
-          //     color: Colors.white38,
-          //     elevation: 10.0,
-          //     child: Row(
-          //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //       crossAxisAlignment: CrossAxisAlignment.start,
-          //       children: [
-          //         Stack(
-          //           alignment: AlignmentDirectional.center,
-          //           children: [
-          //             Image(
-          //               image: AssetImage("assets/song.png"),
-          //               width: 72,
-          //               height: 72,
-          //             ),
-          //             Column(
-          //               mainAxisAlignment: MainAxisAlignment.center,
-          //               children: [
-          //                 Text("$_progressPercentValue %"),
-          //                 Text(_selectedFile != null ? "$size" : "0 KB"),
-          //               ],
-          //             )
-          //           ],
-          //         ),
-          //         Container(
-          //           width: AppConfig.screenWidth - 80,
-          //           padding: EdgeInsets.only(top: 10.0),
-          //           child: Column(
-          //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //               crossAxisAlignment: CrossAxisAlignment.start,
-          //               children: [
-          //                 Container(
-          //                   padding: const EdgeInsets.only(left: 8.0),
-          //                   child: Text(
-          //                       _selectedFile == null ? "Choose file" : "File: ${fileUtil.basename(_selectedFile.path)}",
-          //                     style: TextStyle(fontSize: AppConfig.screenWidth * .04),
-          //                   ),
-          //                 ),
-          //                 // new Container(
-          //                 //     padding: EdgeInsets.only(top: 10),
-          //                 //     child: new Column(children: <Widget>[
-          //                 //       Text(
-          //                 //         '$_progressPercentValue %',
-          //                 //         style: Theme.of(context).textTheme.display1,
-          //                 //       ),
-          //                 //     ])
-          //                 // ),
-          //                 Container(
-          //                     width: AppConfig.screenWidth - 80,
-          //                     child: LinearProgressIndicator(value: _selectedFile == null ? 0 : _progressValue)
-          //                 ),
-          //                 // new Expanded(flex: 1, child: _buildPreviewImage()),
-          //               ]),
-          //         ),
-          //       ],
-          //     ),
-          //   )  ,
-          // ),
+          SizedBox(height: 20,),
+          _customLabel("Image", true),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Align(
+                alignment: Alignment.center,
+                child: Column(
+                  children: [
+                    Stack(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            pickImageModal(context);
+                          },
+                          child: Container(
+                            width: AppConfig.screenWidth * .4,
+                            height: AppConfig.screenWidth * .4,
+                            decoration: BoxDecoration(
+                              color: const Color(0xff7c94b6),
+                              image: DecorationImage(
+                                image: _selectedImage != null
+                                    ? FileImage(File(_selectedImage.path))
+                                    : AssetImage("assets/album.png"),
+                                fit: BoxFit.cover,
+                              ),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.center,
+                          child: GestureDetector(
+                            onTap: () async {
+                              pickImageModal(context);
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.only(top: 69.5, left: 69.5),
+                              height: 25,
+                              width: 25,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Center(
+                                heightFactor: 24,
+                                widthFactor: 24,
+                                child: Icon(
+                                  Icons.camera_alt,
+                                  color: Colors.black,
+                                  size: 16,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
           SizedBox(height: 20,),
           _customLabel("Title", true),
           SizedBox(height: 5,),
@@ -614,26 +720,60 @@ class _UploadScreenState extends State<UploadScreen> with TickerProviderStateMix
                 )
               ],
             ),
-            child: _albumsList != null ? DropdownButton(
-              items: _albumsList.map((value) {
-                return DropdownMenuItem<String>(
-                  value: value['id'],
-                  child: Text(value['title']),
-                );
-              }).toList(),
-              onChanged: (val) {
-                print(val);
-              },
-            ) : TextButton(
-                onPressed: () {
-
-                },
-                child: Text(
-                  "Create new album +",
+            child: _albumsList != null && _albumsList.isNotEmpty ? DropdownButtonHideUnderline(
+              child: DropdownButton(
+                value: _selectedAlbum,
+                isExpanded: true,
+                items: _albumsList.map((value) {
+                  return DropdownMenuItem(
+                    value: value['id'],
+                    child: Text(value['title'], style: TextStyle(color: Colors.white),),
+                  );
+                }).toList(),
+                hint:Text(
+                  "Please choose an album",
                   style: TextStyle(
-                    color: Colors.white38
+                      color: Colors.white70,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500),
+                ),
+                onChanged: (val) {
+                  setState(() {
+                    _selectedAlbum = val;
+                  });
+                },
+              ),
+            ) : ListTile(
+              title: Text("Create new album +"),
+              trailing: PopupMenuButton(
+                onSelected: (value) {
+                  if(value == 1){
+                    showCupertinoModalBottomSheet(
+                      backgroundColor: Colors.white70,
+                      expand: true,
+                      context: context,
+                      builder: (context) => ModalWithScroll(artistId: artistId, userId: userId, genres: _genresList, moods: _moodsList,),
+                    );
+                  }else if(value == 2){
+                    _reloadAlbums();
+                  }
+                },
+                icon: Icon(
+                  Icons.more_vert_rounded,
+                  color: Theme.of(context).iconTheme.color,
+                ),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(7.0))),
+                itemBuilder: (BuildContext context) => <PopupMenuEntry>[
+                  const PopupMenuItem(
+                    value: 1,
+                    child: Text('New Album'),
                   ),
-                )
+                  const PopupMenuItem(
+                    value: 2,
+                    child: Text('Refresh Albums list'),
+                  ),
+                ],
+              ),
             )
           ),
           SizedBox(height: 20.0,),
@@ -756,7 +896,7 @@ class _UploadScreenState extends State<UploadScreen> with TickerProviderStateMix
             showHeader: false,
             onTap: (values) {
               setState(() {
-                _selectedGenres = values.toString();
+                _selectedGenres = values;
               });
             },
           ) : SizedBox(),
@@ -778,7 +918,7 @@ class _UploadScreenState extends State<UploadScreen> with TickerProviderStateMix
             showHeader: false,
             onTap: (values) {
               setState(() {
-                _selectedMoods = values.toString();
+                _selectedMoods = values;
               });
             },
           ) : SizedBox(),
@@ -818,6 +958,18 @@ class _UploadScreenState extends State<UploadScreen> with TickerProviderStateMix
             ),
           ),
           SizedBox(height: 20,),
+          _customLabel("Ready to be Published", false),
+          SizedBox(height: 5,),
+          Checkbox(
+            value: _visibility,
+            onChanged: (value) {
+              setState(() {
+                _visibility = value;
+              });
+              print(_visibility);
+            },
+          ),
+          SizedBox(height: 20,),
           Center(
             child: Padding(
               padding: const EdgeInsets.only(left: 10, right: 10),
@@ -842,7 +994,7 @@ class _UploadScreenState extends State<UploadScreen> with TickerProviderStateMix
                       style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                     ),
                     onPressed: () {
-
+                      _updateSongData();
                     },
                   )
               ),
@@ -879,7 +1031,6 @@ class _UploadScreenState extends State<UploadScreen> with TickerProviderStateMix
     }
   }
 }
-
 
 class FilePreview extends StatefulWidget {
   _FilePreviewState createState() => _FilePreviewState();

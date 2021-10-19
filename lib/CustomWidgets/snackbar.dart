@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ShowSnackBar {
-  void showSnackBar(BuildContext context, String title,
-      {SnackBarAction action, Duration duration, bool noAction = false}) {
+  void showSnackBar(BuildContext context, String title, {SnackBarAction action, Duration duration, bool noAction = false}) {
     try {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

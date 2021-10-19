@@ -106,6 +106,8 @@ class NewFormatResponse {
         "lyrics_snippet": response['has_lyrics'] ? formatString(response["lyric"]["lyrics"]) : "",
         "release_date": response["released_at"],
         "title": formatString(response['title']),
+        "approved": response['approved'],
+        "visibility": response['visibility'],
         // .split('(')
         // .first
         "artist": formatString(artistNames.join(", ")),
@@ -448,6 +450,26 @@ class NewFormatResponse {
     }
     return data;
   }
+
+  Future<Map> formatArtistPageData(Map data) async {
+    try {
+      data["songs"] = await formatSongsInList(data["songs"], false);
+      data["latests"] = await formatSongsInList(data["latests"], false);
+
+      data["collections"] = [
+        "new_trending",
+        "latests",
+        "popular_artists",
+        "genres",
+        "moods",
+        // "artist_recos",
+      ];
+    } catch (err) {
+      print(err);
+    }
+    return data;
+  }
+
   Future<Map> formatCollectionPageData(Map data) async {
     try {
       // data["new_trending"] = await formatSongsInList(data["new_trending"], false);

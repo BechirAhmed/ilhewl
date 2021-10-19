@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:ilhewl/CustomWidgets/custom_physics.dart';
 import 'package:ilhewl/CustomWidgets/snackbar.dart';
 import 'package:ilhewl/Helpers/app_config.dart';
@@ -41,6 +42,7 @@ class _HomePageState extends State<HomePage> {
   DateTime backButtonPressTime;
   String name = Hive.box("settings").get('name', defaultValue: 'Guest');
   int artistId = Hive.box("settings").get('artistId', defaultValue: 0);
+  String artworkUrl = Hive.box("settings").get('artwork_url', defaultValue: 'https://www.ilhewl.com/skins/default/images/small-logo.png');
 
   String capitalize(String msg) {
     return "${msg[0].toUpperCase()}${msg.substring(1)}";
@@ -193,6 +195,7 @@ class _HomePageState extends State<HomePage> {
     return GradientContainer(
       child: Scaffold(
           resizeToAvoidBottomInset: false,
+          extendBodyBehindAppBar: true,
           backgroundColor: Colors.transparent,
           drawer: Drawer(
             child: GradientContainer(
@@ -209,8 +212,7 @@ class _HomePageState extends State<HomePage> {
                         elevation: 0,
                         stretch: true,
                         pinned: false,
-                        expandedHeight:
-                        MediaQuery.of(context).size.height * 0.2,
+                        expandedHeight: MediaQuery.of(context).size.height * 0.2,
                         flexibleSpace: FlexibleSpaceBar(
                           title: Text(
                             "ilhewl",
@@ -262,24 +264,24 @@ class _HomePageState extends State<HomePage> {
                                 Navigator.pop(context);
                               },
                             ),
-                            artistId != 0 ? ListTile(
-                              title: Text('My Music'),
-                              contentPadding:
-                              EdgeInsets.symmetric(horizontal: 20.0),
-                              leading: Icon(
-                                MdiIcons.folderMusic,
-                                color: Theme.of(context).iconTheme.color,
-                              ),
-                              onTap: () {
-                                Navigator.pop(context);
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                      artistId != 0 ? ArtistSongs(type: 'all',) : DownloadedSongs(type: 'all',)
-                                  ));
-                              },
-                            ) : SizedBox(),
+                            // artistId != 0 ? ListTile(
+                            //   title: Text('My Music'),
+                            //   contentPadding:
+                            //   EdgeInsets.symmetric(horizontal: 20.0),
+                            //   leading: Icon(
+                            //     MdiIcons.folderMusic,
+                            //     color: Theme.of(context).iconTheme.color,
+                            //   ),
+                            //   onTap: () {
+                            //     Navigator.pop(context);
+                            //     Navigator.push(
+                            //         context,
+                            //         MaterialPageRoute(
+                            //             builder: (context) =>
+                            //           artistId != 0 ? ArtistSongs(type: 'all',) : DownloadedSongs(type: 'all',)
+                            //       ));
+                            //   },
+                            // ) : SizedBox(),
                             ListTile(
                               title: Text('Wallet'),
                               contentPadding:
@@ -994,7 +996,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                         // Collections(),
                         LibraryPage(),
-                        ProfileScreen(),
+                        artistId != 0 ? ArtistSongs(type: 'all',) : ProfileScreen(),
                       ],
                     ),
                   ),
@@ -1031,16 +1033,29 @@ class _HomePageState extends State<HomePage> {
                           selectedColor: Theme.of(context).accentColor,
                         ),
                         SalomonBottomBarItem(
-                        icon: const Icon(MdiIcons.music),
-                        title: const Text('Library'),
+                          icon: const Icon(MdiIcons.music),
+                          title: const Text('Library'),
                           selectedColor: Theme.of(context).accentColor,
                         ),
                         SalomonBottomBarItem(
-                        icon: ClipRRect(
-                          borderRadius: BorderRadius.circular(20.0),
-                          child: Image.asset("assets/logo.png", fit: BoxFit.cover),
-                        ),
-                        title: Text("Profile"),
+                          icon: ClipRRect(
+                            borderRadius: BorderRadius.circular(20.0),
+                            child: CachedNetworkImage(
+                              fit: BoxFit.cover,
+                              errorWidget: (context, _, __) =>
+                                  Image(
+                                    image: AssetImage('assets/logo.png'),
+                                    fit: BoxFit.cover,
+                                  ),
+                              imageUrl: artworkUrl.replaceAll('http:', 'https:'),
+                              placeholder: (context, url) =>
+                                  Image(
+                                    image: AssetImage('assets/logo.png'),
+                                    fit: BoxFit.cover,
+                                  ),
+                            ),
+                          ),
+                          title: Text("Profile"),
                           selectedColor: Theme.of(context).accentColor,
                         ),
                       ],

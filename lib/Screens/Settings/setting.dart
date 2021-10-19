@@ -192,7 +192,7 @@ class _SettingPageState extends State<SettingPage> {
                               activeColor: Theme.of(context).accentColor,
                               title: Text('Dark Mode'),
                               dense: true,
-                              value: box.get('darkMode') ?? true,
+                              value: box.get('darkMode') ?? false,
                               onChanged: (val) {
                                 box.put('darkMode', val);
                                 currentTheme.switchTheme(val);

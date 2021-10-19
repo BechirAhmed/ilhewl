@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
 class MyTheme with ChangeNotifier {
-  bool _isDark = Hive.box('settings').get('darkMode') ?? true;
+  bool isDark = Hive.box('settings').get('darkMode') ?? true;
 
   String accentColor = Hive.box('settings').get('themeColor');
   String canvasColor =
@@ -107,7 +107,7 @@ class MyTheme with ChangeNotifier {
   ];
 
   void switchTheme(bool val) {
-    _isDark = val;
+    isDark = val;
     final themeColor = Hive.box("settings").get("themeColor");
     print(themeColor);
     final color = Hive.box("settings").get("colorHue");
@@ -125,7 +125,7 @@ class MyTheme with ChangeNotifier {
   }
 
   ThemeMode currentTheme() {
-    return _isDark ? ThemeMode.dark : ThemeMode.light;
+    return isDark ? ThemeMode.dark : ThemeMode.light;
   }
 
   int currentHue() {
@@ -168,7 +168,7 @@ class MyTheme with ChangeNotifier {
         return Colors.lightGreenAccent[hue];
 
       default:
-        return _isDark ? Colors.tealAccent[400] : Colors.lightBlueAccent[400];
+        return isDark ? Colors.tealAccent[400] : Colors.lightBlueAccent[400];
     }
   }
 
@@ -250,7 +250,7 @@ class MyTheme with ChangeNotifier {
         return Colors.lightGreenAccent[currentHue()];
 
       default:
-        return _isDark ? Colors.tealAccent[400] : Colors.lightBlueAccent[400];
+        return isDark ? Colors.tealAccent[400] : Colors.lightBlueAccent[400];
     }
   }
 }

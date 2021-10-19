@@ -47,7 +47,8 @@ dependencies:
   flutter_forbidshot: 0.0.2
   image_picker: any
   open_file: any
-
+  dio: ^4.0.0
+  modal_bottom_sheet: ^2.0.0
 
 
   # UI related

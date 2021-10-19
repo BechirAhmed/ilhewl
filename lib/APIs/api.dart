@@ -49,6 +49,7 @@ class Api {
     'Authorization': 'Bearer $token'
   };
 
+
   Future<Map> fetchHomePageData() async {
     String params = "discover";
     Map result;
@@ -96,7 +97,7 @@ class Api {
     return result;
   }
   Future<Map> fetchArtistData(userId) async {
-    String params = "artist/$userId";
+    String params = "artist/data/$userId";
     Map result;
     try {
       final res = await getResponse(params);
@@ -145,10 +146,12 @@ class Api {
           'Authorization': 'Bearer $token'
         }
       );
-
+print(res.body);
       if(res.statusCode == 200){
         final body = json.decode(res.body);
         result = body;
+      }else{
+        return json.decode(res.body);
       }
 
     } catch(e) {
