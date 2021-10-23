@@ -33,8 +33,7 @@ class _SearchPageState extends State<SearchPage> {
   bool fetched = false;
   bool albumFetched = false;
   List search = Hive.box('settings').get('search', defaultValue: []);
-  bool showHistory =
-      Hive.box('settings').get('showHistory', defaultValue: true);
+  bool showHistory = Hive.box('settings').get('showHistory', defaultValue: true);
   FloatingSearchBarController _controller = FloatingSearchBarController();
 
   @override
@@ -48,18 +47,14 @@ class _SearchPageState extends State<SearchPage> {
     if (!status) {
       status = true;
       // this fetches top 5 songs results
-      SaavnAPI()
-          .fetchSongSearchResults(query == '' ? widget.query : query, '5')
-          .then((value) {
+      SaavnAPI().fetchSongSearchResults(query == '' ? widget.query : query, '5').then((value) {
         setState(() {
           searchedData["Songs"] = value;
           fetched = true;
         });
       });
       // this fetches albums, playlists, artists, etc
-      SaavnAPI()
-          .fetchSearchResults(query == '' ? widget.query : query)
-          .then((value) {
+      SaavnAPI().fetchSearchResults(query == '' ? widget.query : query).then((value) {
         setState(() {
           searchedData.addEntries(value[0].entries);
           position = value[1];
@@ -68,6 +63,7 @@ class _SearchPageState extends State<SearchPage> {
         });
       });
     }
+
     return GradientContainer(
       child: SafeArea(
         child: Column(

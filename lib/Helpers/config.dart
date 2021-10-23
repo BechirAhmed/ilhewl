@@ -17,6 +17,7 @@ class MyTheme with ChangeNotifier {
   int bottomGrad = Hive.box('settings').get('bottomGrad', defaultValue: 2);
 
   int colorHue = Hive.box('settings').get('colorHue');
+  Color playGradientColor;
 
   List<List<Color>> backOpt = [
     [
@@ -132,6 +133,10 @@ class MyTheme with ChangeNotifier {
     return colorHue ?? 400;
   }
 
+  Future<void> setLastPlayGradient(Color color) async {
+    playGradientColor = color;
+  }
+
   Color getColor(String color, int hue) {
     switch (color) {
       case 'Red':
@@ -205,6 +210,11 @@ class MyTheme with ChangeNotifier {
   List<Color> getBackGradient() {
     return backOpt[backGrad];
   }
+
+  Color getPlayGradient() {
+    return backOpt[backGrad].last;
+  }
+
 
   List<Color> getTransBackGradient() {
     return transOpt[backGrad];

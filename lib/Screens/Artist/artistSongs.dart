@@ -34,7 +34,7 @@ int userId = Hive.box("settings").get("userID", defaultValue: 0);
 int artistId = Hive.box("settings").get("artistId", defaultValue: 0);
 Map homeData = Hive.box('cache').get('homepage', defaultValue: {});
 Map data = Hive.box('cache').get('artistPage', defaultValue: {});
-List lists = [...?data['artist']];
+
 
 class ArtistSongs extends StatefulWidget {
   final String type;
@@ -334,6 +334,10 @@ class _ArtistSongsState extends State<ArtistSongs> with SingleTickerProviderStat
                           floating: true,
                           snap: true,
                           expandedHeight: MediaQuery.of(context).size.height * 0.2,
+                          systemOverlayStyle: SystemUiOverlayStyle(
+                              statusBarColor: Colors.transparent
+                          ),
+                          automaticallyImplyLeading: false,
                           // leading: Builder(
                           //   builder: (BuildContext context) {
                           //     return Transform.rotate(
@@ -721,7 +725,6 @@ class _ArtistSongsState extends State<ArtistSongs> with SingleTickerProviderStat
               ),
             ),
           ),
-          MiniPlayer(),
         ],
       ),
     );

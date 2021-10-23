@@ -216,7 +216,7 @@ class _LikedSongsState extends State<LikedSongs> with SingleTickerProviderStateM
   void getLiked() {
     likedBox = Hive.box(widget.playlistName);
     _songs = likedBox?.values?.toList() ?? [];
-    print(_songs);
+
     AddSongsCount().addSong(
       widget.playlistName,
       _songs.length,

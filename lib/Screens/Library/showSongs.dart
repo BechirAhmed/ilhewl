@@ -237,7 +237,7 @@ class _SongsListState extends State<SongsList> {
                                             image:
                                                 AssetImage('assets/cover.jpg'),
                                           ),
-                                          imageUrl: _songs[index]['artUri']
+                                          imageUrl: _songs[index]['artwork_url']
                                               .replaceAll('http:', 'https:'),
                                           placeholder: (context, url) => Image(
                                             image:

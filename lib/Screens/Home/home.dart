@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/services.dart';
 import 'package:ilhewl/CustomWidgets/custom_physics.dart';
 import 'package:ilhewl/CustomWidgets/snackbar.dart';
 import 'package:ilhewl/Helpers/app_config.dart';
@@ -195,7 +196,6 @@ class _HomePageState extends State<HomePage> {
     return GradientContainer(
       child: Scaffold(
           resizeToAvoidBottomInset: false,
-          extendBodyBehindAppBar: true,
           backgroundColor: Colors.transparent,
           drawer: Drawer(
             child: GradientContainer(
@@ -652,196 +652,6 @@ class _HomePageState extends State<HomePage> {
                                       toolbarHeight: 45,
                                       // floating: true,
                                       automaticallyImplyLeading: false,
-                                      flexibleSpace: LayoutBuilder(
-                                        builder: (BuildContext context,
-                                            BoxConstraints constraints) {
-                                          return FlexibleSpaceBar(
-                                            // collapseMode: CollapseMode.parallax,
-                                            background: GestureDetector(
-                                              child: Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: <Widget>[
-                                                  // SizedBox(
-                                                  //   height: 60,
-                                                  // ),
-                                                  // Row(
-                                                  //   children: [
-                                                  //     Padding(
-                                                  //       padding:
-                                                  //       const EdgeInsets.only(
-                                                  //           left: 15.0),
-                                                  //       child: Text(
-                                                  //         'Hi There,',
-                                                  //         style: TextStyle(
-                                                  //             letterSpacing: 2,
-                                                  //             color: Theme.of(
-                                                  //                 context)
-                                                  //                 .accentColor,
-                                                  //             fontSize: 30,
-                                                  //             fontWeight:
-                                                  //             FontWeight
-                                                  //                 .bold),
-                                                  //       ),
-                                                  //     ),
-                                                  //   ],
-                                                  // ),
-                                                  // Padding(
-                                                  //   padding:
-                                                  //   const EdgeInsets.only(
-                                                  //       left: 15.0),
-                                                  //   child: Row(
-                                                  //     crossAxisAlignment:
-                                                  //     CrossAxisAlignment.end,
-                                                  //     children: [
-                                                  //       ValueListenableBuilder(
-                                                  //           valueListenable:
-                                                  //           Hive.box(
-                                                  //               'settings')
-                                                  //               .listenable(),
-                                                  //           builder: (BuildContext
-                                                  //           context,
-                                                  //               Box box,
-                                                  //               widget) {
-                                                  //             return Text(
-                                                  //               (box.get('name') ==
-                                                  //                   null ||
-                                                  //                   box.get('name') ==
-                                                  //                       '')
-                                                  //                   ? 'Guest'
-                                                  //                   : capitalize(box
-                                                  //                   .get(
-                                                  //                   'name')
-                                                  //                   .split(
-                                                  //                   ' ')[0]),
-                                                  //               style: TextStyle(
-                                                  //                   letterSpacing:
-                                                  //                   2,
-                                                  //                   fontSize: 20,
-                                                  //                   fontWeight:
-                                                  //                   FontWeight
-                                                  //                       .w500),
-                                                  //             );
-                                                  //           }),
-                                                  //     ],
-                                                  //   ),
-                                                  // ),
-                                                ],
-                                              ),
-                                              onTap: () {
-                                                showDialog(
-                                                  context: context,
-                                                  builder:
-                                                      (BuildContext context) {
-                                                    final _controller =
-                                                    TextEditingController(
-                                                        text: name);
-                                                    return AlertDialog(
-                                                      content: Column(
-                                                        mainAxisSize:
-                                                        MainAxisSize.min,
-                                                        children: [
-                                                          Row(
-                                                            children: [
-                                                              Text(
-                                                                'Name',
-                                                                style: TextStyle(
-                                                                    color: Theme.of(
-                                                                        context)
-                                                                        .accentColor),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                          TextField(
-                                                              autofocus: true,
-                                                              textAlignVertical:
-                                                              TextAlignVertical
-                                                                  .bottom,
-                                                              controller:
-                                                              _controller,
-                                                              onSubmitted:
-                                                                  (value) {
-                                                                Hive.box(
-                                                                    'settings')
-                                                                    .put(
-                                                                    'name',
-                                                                    value
-                                                                        .trim());
-                                                                name =
-                                                                    value.trim();
-                                                                Navigator.pop(
-                                                                    context);
-                                                                updateUserDetails(
-                                                                    'name',
-                                                                    value.trim());
-                                                                setState(() {});
-                                                              }),
-                                                        ],
-                                                      ),
-                                                      actions: [
-                                                        TextButton(
-                                                          style: TextButton
-                                                              .styleFrom(
-                                                            primary: Theme.of(
-                                                                context)
-                                                                .brightness ==
-                                                                Brightness
-                                                                    .dark
-                                                                ? Colors.white
-                                                                : Colors
-                                                                .grey[700],
-                                                          ),
-                                                          child: Text("Cancel"),
-                                                          onPressed: () {
-                                                            Navigator.pop(
-                                                                context);
-                                                          },
-                                                        ),
-                                                        TextButton(
-                                                          style: TextButton
-                                                              .styleFrom(
-                                                            primary: Colors.white,
-                                                            backgroundColor:
-                                                            Theme.of(context)
-                                                                .accentColor,
-                                                          ),
-                                                          child: Text(
-                                                            "Ok",
-                                                            style: TextStyle(
-                                                                color:
-                                                                Colors.white),
-                                                          ),
-                                                          onPressed: () {
-                                                            Hive.box("settings")
-                                                                .put(
-                                                                'name',
-                                                                _controller
-                                                                    .text
-                                                                    .trim());
-
-                                                            Navigator.pop(
-                                                                context);
-                                                            updateUserDetails(
-                                                                'name',
-                                                                _controller.text
-                                                                    .trim());
-                                                            name = _controller
-                                                                .text
-                                                                .trim();
-                                                            setState(() {});
-                                                          },
-                                                        ),
-                                                        SizedBox(
-                                                          width: 5,
-                                                        ),
-                                                      ],
-                                                    );
-                                                  },
-                                                );
-                                              },
-                                            ),
-                                          );
-                                        },
-                                      ),
                                     ),
                                     SliverAppBar(
                                       automaticallyImplyLeading: false,
@@ -854,12 +664,7 @@ class _HomePageState extends State<HomePage> {
                                       title: Align(
                                         alignment: Alignment.centerRight,
                                         child: AnimatedContainer(
-                                          width: max(
-                                              MediaQuery.of(context).size.width -
-                                                  _size,
-                                              MediaQuery.of(context).size.width -
-                                                  75),
-
+                                          width: max(MediaQuery.of(context).size.width - _size, MediaQuery.of(context).size.width - 75),
                                           duration: Duration(milliseconds: 300),
                                           padding: EdgeInsets.all(2.0),
                                           // margin: EdgeInsets.zero,
@@ -942,16 +747,13 @@ class _HomePageState extends State<HomePage> {
                                                   },
                                                 );
                                               } else {
-                                                List search = Hive.box('settings')
-                                                    .get('search',
-                                                    defaultValue: []);
+                                                List search = Hive.box('settings').get('search', defaultValue: []);
                                                 if (search.contains(query))
                                                   search.remove(query);
                                                 search.insert(0, query);
                                                 if (search.length > 10)
                                                   search = search.sublist(0, 10);
-                                                Hive.box('settings')
-                                                    .put('search', search);
+                                                Hive.box('settings').put('search', search);
                                                 Navigator.push(
                                                     context,
                                                     MaterialPageRoute(
