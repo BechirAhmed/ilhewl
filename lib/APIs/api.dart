@@ -236,9 +236,9 @@ print(res.body);
 
   Future<List> getTopSearches() async {
     List result = [];
-    String params = "__call=content.getTopSearches";
+    String params = "top-search";
     try {
-      final res = await getResponse(params, useProxy: true);
+      final res = await getResponse(params);
       if (res.statusCode == 200) {
         final List getMain = json.decode(res.body);
         result = getMain.map((element) {
@@ -249,20 +249,19 @@ print(res.body);
     return result;
   }
 
-  Future<List> fetchSongSearchResults(String searchQuery, String count) async {
-    List searchedList = [];
-    String params = "p=1&q=$searchQuery&n=$count&__call=search.getResults";
-
+  Future<Map> fetchSongSearchResults(query) async {
+    String params = "search/$query";
+    Map result;
     try {
-      final res = await getResponse(params, useProxy: true);
+      final res = await getResponse(params);
       if (res.statusCode == 200) {
-        final getMain = json.decode(res.body);
-        List responseList = getMain["results"];
-        searchedList =
-            await FormatResponse().formatSongsResponse(responseList, 'song');
+        final data = json.decode(res.body);
+        result = await NewFormatResponse().formatSearchData(data);
       }
-    } catch (e) {}
-    return searchedList;
+    } catch (e) {
+      print(e);
+    }
+    return result;
   }
 
   Future<List<Map>> fetchSearchResults(String searchQuery) async {
