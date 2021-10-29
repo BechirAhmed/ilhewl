@@ -13,7 +13,6 @@ ${BUILT_PRODUCTS_DIR}/SwiftyGif/SwiftyGif.framework
 ${BUILT_PRODUCTS_DIR}/audio_service/audio_service.framework
 ${BUILT_PRODUCTS_DIR}/audio_session/audio_session.framework
 ${BUILT_PRODUCTS_DIR}/device_info/device_info.framework
-${BUILT_PRODUCTS_DIR}/ext_storage/ext_storage.framework
 ${BUILT_PRODUCTS_DIR}/file_picker/file_picker.framework
 ${BUILT_PRODUCTS_DIR}/flutter_forbidshot/flutter_forbidshot.framework
 ${BUILT_PRODUCTS_DIR}/flutter_isolate/flutter_isolate.framework
@@ -21,6 +20,7 @@ ${BUILT_PRODUCTS_DIR}/image_picker/image_picker.framework
 ${BUILT_PRODUCTS_DIR}/just_audio/just_audio.framework
 ${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework
 ${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework
+${BUILT_PRODUCTS_DIR}/on_audio_query/on_audio_query.framework
 ${BUILT_PRODUCTS_DIR}/open_file/open_file.framework
 ${BUILT_PRODUCTS_DIR}/otp_autofill/otp_autofill.framework
 ${BUILT_PRODUCTS_DIR}/package_info/package_info.framework

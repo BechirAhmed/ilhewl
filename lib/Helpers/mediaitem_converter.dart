@@ -4,6 +4,7 @@ class MediaItemConverter {
   Map mediaItemtoMap(MediaItem mediaItem) {
     return {
       'id': mediaItem.id.toString(),
+      'cacheKey': mediaItem.extras['cacheKey'].toString(),
       'album': mediaItem.album.toString(),
       'artist': mediaItem.artist.toString(),
       'duration': mediaItem.duration.inSeconds.toString(),
@@ -38,13 +39,34 @@ class MediaItemConverter {
         extras: {
           "url": song["url"],
           "has_lyrics": song['has_lyrics'],
+          "cacheKey": song['cacheKey'],
           "lyrics_snippet": song['lyrics_snippet'],
           "release_date": song["release_date"],
-          "album_id": song["album_id"],
           "price": song["price"],
           "selling": song["selling"],
           "purchased": song["purchased"],
           "allow_download": song["allow_download"],
+        });
+  }
+
+  MediaItem downMapToMediaItem(Map song) {
+    return MediaItem(
+        id: song['id'].toString(),
+        album: song['album'].toString(),
+        artist: song['artist'].toString(),
+        duration: Duration(seconds: int.parse(
+                (song['duration'] == null || song['duration'] == 'null')
+                    ? '180'
+                    : song['duration'].toString())),
+        title: song['title'].toString(),
+        artUri: Uri.file(song['image'].toString()),
+        genre: song['genre'].toString(),
+        extras: {
+          'url': song['path'].toString(),
+          'genre': song['genre'],
+          "has_lyrics": song['has_lyrics'],
+          "lyrics_snippet": song['lyrics_snippet'],
+          'release_date': song['release_date'],
         });
   }
 }

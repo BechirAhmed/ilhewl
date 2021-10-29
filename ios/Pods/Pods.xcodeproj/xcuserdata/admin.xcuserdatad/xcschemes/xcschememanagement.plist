@@ -99,11 +99,6 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>ext_storage.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
 		<key>file_picker.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -145,6 +140,11 @@
 			<false/>
 		</dict>
 		<key>nanopb.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>on_audio_query.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>

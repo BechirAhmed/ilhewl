@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:typed_data';
 import 'package:audio_session/audio_session.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_forbidshot/flutter_forbidshot.dart';
 import 'package:ilhewl/APIs/api.dart';
@@ -8,7 +10,9 @@ import 'package:ilhewl/CustomWidgets/downloadButton.dart';
 import 'package:ilhewl/CustomWidgets/equalizer.dart';
 import 'package:ilhewl/CustomWidgets/gradientContainers.dart';
 import 'package:ilhewl/CustomWidgets/like_button.dart';
+import 'package:ilhewl/CustomWidgets/song_cache_icon.dart';
 import 'package:ilhewl/Helpers/app_config.dart';
+import 'package:ilhewl/Helpers/cache_provider.dart';
 import 'package:ilhewl/Helpers/config.dart';
 import 'package:ilhewl/Helpers/lyrics.dart';
 import 'package:ilhewl/Helpers/mediaitem_converter.dart';
@@ -19,6 +23,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:ilhewl/Services/stream_subscriber.dart';
+import 'package:just_audio/just_audio.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:miniplayer/miniplayer.dart';
 import 'package:path_provider/path_provider.dart';
@@ -46,7 +52,7 @@ class PlayScreen extends StatefulWidget {
   _PlayScreenState createState() => _PlayScreenState();
 }
 
-class _PlayScreenState extends State<PlayScreen> {
+class _PlayScreenState extends State<PlayScreen> with StreamSubscriber {
   bool fromMiniplayer = false;
   String preferredQuality = Hive.box('settings').get('streamingQuality') ?? '96 kbps';
   String preferredDownloadQuality = Hive.box('settings').get('downloadQuality') ?? '320 kbps';
@@ -54,12 +60,14 @@ class _PlayScreenState extends State<PlayScreen> {
   bool stopServiceOnPause = Hive.box('settings').get('stopServiceOnPause') ?? true;
   bool shuffle = Hive.box('settings').get('shuffle') ?? false;
   bool useImageColor = Hive.box('settings').get('useImageColor', defaultValue: true) as bool;
+  bool enforceRepeat = Hive.box('settings').get('enforceRepeat', defaultValue: false) as bool;
   List<MediaItem> globalQueue = [];
   int globalIndex = 0;
   bool same = false;
   List response = [];
   bool fetched = false;
   bool offline = false;
+  bool downloaded = false;
   bool fromYT = false;
   String defaultCover = '';
   MediaItem playItem;
@@ -68,6 +76,8 @@ class _PlayScreenState extends State<PlayScreen> {
   bool isExpanded = false;
   double initialExtent = minExtent;
   int oldIndex;
+
+  bool playCountRegistered = false;
 
   final ValueNotifier<Color> gradientColor = ValueNotifier<Color>(currentTheme.playGradientColor);
 
@@ -304,34 +314,26 @@ class _PlayScreenState extends State<PlayScreen> {
   }
 
   Future<MediaItem> setTags(Map response, Directory tempDir) async {
-    String playTitle = response['title'];
+    String playTitle = response['title'].toString();
     playTitle == ''
-        ? playTitle = response['id']
-            .split('/')
-            .last
-            .replaceAll('.m4a', '')
-            .replaceAll('.mp3', '')
-        : playTitle = response['title'];
-    String playArtist = response['artist'];
-    playArtist == ''
-        ? playArtist = response['id']
-            .split('/')
-            .last
-            .replaceAll('.m4a', '')
-            .replaceAll('.mp3', '')
-        : playArtist = response['artist'];
+        ? playTitle = response['_display_name_wo_ext'].toString()
+        : playTitle = response['title'].toString();
+    String playArtist = response['artist'].toString();
+    playArtist == '<unknown>'
+        ? playArtist = 'Unknown'
+        : playArtist = response['artist'].toString();
 
-    String playAlbum = response['album'];
-    final playDuration = response['duration'] ?? 180;
+    final String playAlbum = response['album'].toString();
+    final int playDuration = response['duration'] as int ?? 180000;
     String filePath;
     if (response['image'] != null) {
       try {
-        File file = File(
-            '${tempDir.path}/${playTitle.toString().replaceAll('/', '')}-${playArtist.toString().replaceAll('/', '')}.jpg');
+        final File file =
+        File('${tempDir.path}/${response["_display_name_wo_ext"]}.jpg');
         filePath = file.path;
         if (!await file.exists()) {
           await file.create();
-          file.writeAsBytesSync(response['image']);
+          file.writeAsBytesSync(response['image'] as Uint8List);
         }
       } catch (e) {
         filePath = null;
@@ -340,14 +342,16 @@ class _PlayScreenState extends State<PlayScreen> {
       filePath = await getImageFileFromAssets();
     }
 
-    MediaItem tempDict = MediaItem(
-        id: response['id'],
+    final MediaItem tempDict = MediaItem(
+        id: response['_id'].toString(),
         album: playAlbum,
-        duration: Duration(seconds: playDuration),
-        title: playTitle != null ? playTitle.split("(")[0] : 'Unknown',
+        duration: Duration(milliseconds: playDuration),
+        title: playTitle != null ? playTitle.split('(')[0] : 'Unknown',
         artist: playArtist ?? 'Unknown',
         artUri: Uri.file(filePath),
-        extras: {'url': response['id']});
+        extras: {
+          'url': response['_data'].toString(),
+        });
     return tempDict;
   }
 
@@ -362,20 +366,54 @@ class _PlayScreenState extends State<PlayScreen> {
     return file.path;
   }
 
-  void setOffValues(List response) {
+  void setOffValues(List response, {bool downloaed = false}) {
     getTemporaryDirectory().then((tempDir) async {
       final File file =
-          File('${(await getTemporaryDirectory()).path}/cover.jpg');
+      File('${(await getTemporaryDirectory()).path}/cover.jpg');
       if (!await file.exists()) {
         final byteData = await rootBundle.load('assets/cover.jpg');
         await file.writeAsBytes(byteData.buffer
             .asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
       }
       for (int i = 0; i < response.length; i++) {
-        globalQueue.add(await setTags(response[i], tempDir));
+        globalQueue.add(await setTags(response[i] as Map, tempDir));
       }
-      setState(() {});
+      fetched = true;
+      updateNplay();
     });
+  }
+
+  Future<void> updateNplay() async {
+    await AudioService.setShuffleMode(AudioServiceShuffleMode.none);
+    await AudioService.updateQueue(globalQueue);
+    await AudioService.skipToQueueItem(globalIndex.toString());
+    await AudioService.play();
+    if (enforceRepeat) {
+      switch (repeatMode) {
+        case 'None':
+          AudioService.setRepeatMode(AudioServiceRepeatMode.none);
+          break;
+        case 'All':
+          AudioService.setRepeatMode(AudioServiceRepeatMode.all);
+          break;
+        case 'One':
+          AudioService.setRepeatMode(AudioServiceRepeatMode.one);
+          break;
+        default:
+          break;
+      }
+    } else {
+      AudioService.setRepeatMode(AudioServiceRepeatMode.none);
+    }
+  }
+
+  void setDownValues(List response) {
+    globalQueue.addAll(
+      response
+          .map((song) => MediaItemConverter().downMapToMediaItem(song as Map)),
+    );
+    fetched = true;
+    updateNplay();
   }
 
   void setValues(List response) {
@@ -402,7 +440,7 @@ class _PlayScreenState extends State<PlayScreen> {
     }
     response = data['response'];
     globalIndex = data['index'];
-    fromYT = data['fromYT'] ?? false;
+    downloaded = data['downloaded'] as bool ?? false;
     if (data['offline'] == null) {
       offline = AudioService.currentMediaItem?.extras['url'].startsWith('http')
           ? false
@@ -421,7 +459,7 @@ class _PlayScreenState extends State<PlayScreen> {
         Hive.box('settings').put('shuffle', shuffle);
         AudioService.stop();
         if (offline) {
-          setOffValues(response);
+          downloaded ? setDownValues(response) : setOffValues(response);
         } else {
           setValues(response);
         }
@@ -499,47 +537,27 @@ class _PlayScreenState extends State<PlayScreen> {
                                   backgroundColor: Colors.transparent,
                                   context: context,
                                   builder: (BuildContext context) {
+                                    String lyrics;
+                                    Lyrics().getOffLyrics(mediaItem.extras['url'].toString()).then((value) {
+                                      lyrics = value;
+                                    });
                                     return BottomGradientContainer(
                                       padding: EdgeInsets.zero,
                                       child: Center(
                                         child: SingleChildScrollView(
                                           physics: BouncingScrollPhysics(),
-                                          padding: EdgeInsets.fromLTRB(
-                                              10, 30, 10, 30),
-                                          child: FutureBuilder(
-                                              future: Lyrics().getOffLyrics(
-                                                mediaItem.id.toString(),
-                                              ),
-                                              builder: (BuildContext context,
-                                                  AsyncSnapshot snapshot) {
-                                                if (snapshot.connectionState ==
-                                                    ConnectionState.done) {
-                                                  String lyrics = snapshot.data;
-                                                  if (lyrics == '') {
-                                                    return EmptyScreen()
-                                                        .emptyScreen(
-                                                        context, false,
-                                                        0,
-                                                        ":( ",
-                                                        100.0,
-                                                        "Lyrics",
-                                                        60.0,
-                                                        "Not Available",
-                                                        20.0);
-                                                  }
-                                                  return SelectableText(
-                                                    lyrics,
-                                                    textAlign: TextAlign.center,
-                                                  );
-                                                }
-                                                return CircularProgressIndicator(
-                                                  valueColor:
-                                                  AlwaysStoppedAnimation<
-                                                      Color>(
-                                                      Theme.of(context)
-                                                          .accentColor),
-                                                );
-                                              }),
+                                          padding: EdgeInsets.fromLTRB(10, 30, 10, 30),
+                                          child: mediaItem.extras["has_lyrics"] == true
+                                              ? SelectableText(
+                                            '$lyrics',
+                                            textAlign:
+                                            TextAlign
+                                                .center,
+                                          )
+                                              : SizedBox(
+                                            height: AppConfig.screenHeight / 2,
+                                            child: EmptyScreen().emptyScreen(context, false, 0, ":( ", 100.0, "Lyrics", 60.0, "Not Available", 20.0),
+                                          ),
                                         ),
                                       ),
                                     );
@@ -813,12 +831,13 @@ class _PlayScreenState extends State<PlayScreen> {
                                                         height: MediaQuery.of(context).size.width * 0.85,
                                                         image: AssetImage('assets/cover.jpg')
                                                     )
-                                                        : offline
+                                                        : offline && (mediaItem != null && mediaItem.artUri.toString().startsWith('file'))
                                                         ? Image(
                                                         fit: BoxFit.cover,
                                                         height: MediaQuery.of(context).size.width * 0.85,
+                                                        gaplessPlayback: true,
                                                         image:
-                                                        FileImage(File(globalQueue[globalIndex].artUri.toFilePath(),
+                                                        FileImage(File(mediaItem.artUri.toFilePath(),
                                                         )))
                                                         : CachedNetworkImage(
                                                       fit: BoxFit.cover,
@@ -1042,13 +1061,15 @@ class _PlayScreenState extends State<PlayScreen> {
                                                       height: MediaQuery.of(context).size.width * 0.85,
                                                       image: AssetImage('assets/cover.jpg')),
                                                   (globalQueue.length > globalIndex)
-                                                      ? offline
+                                                      ? offline && (mediaItem != null && mediaItem.artUri.toString().startsWith('file'))
                                                       ? Image(
                                                       fit: BoxFit.cover,
                                                       height: MediaQuery.of(context).size.width * 0.85,
+                                                      gaplessPlayback: true,
                                                       image: FileImage(
-                                                          File(globalQueue[globalIndex].artUri.toFilePath(),
-                                                          )))
+                                                            File(mediaItem.artUri.toFilePath(),
+                                                          ))
+                                                        )
                                                       : CachedNetworkImage(
                                                     fit: BoxFit.cover,
                                                     errorWidget: (BuildContext context, _, __) => Image(image: AssetImage('assets/cover.jpg'),),
@@ -1090,10 +1111,11 @@ class _PlayScreenState extends State<PlayScreen> {
                                                         height: MediaQuery.of(context).size.width * 0.85,
                                                         image: AssetImage('assets/cover.jpg')
                                                     ),
-                                                    offline
+                                                    offline && (mediaItem != null && mediaItem.artUri.toString().startsWith('file'))
                                                         ? Image(
                                                         fit: BoxFit.cover,
                                                         height: MediaQuery.of(context).size.width * 0.85,
+                                                        gaplessPlayback: true,
                                                         image: FileImage(File(mediaItem.artUri.toFilePath()))
                                                     )
                                                         : CachedNetworkImage(
@@ -1368,10 +1390,10 @@ class _PlayScreenState extends State<PlayScreen> {
                                               }
                                                   : null)
                                               : IconButton(
-                                              icon: Icon(Icons
-                                                  .skip_next_rounded),
-                                              iconSize: 45.0,
-                                              onPressed: null),
+                                                    icon: Icon(Icons.skip_next_rounded),
+                                                    iconSize: 45.0,
+                                                    onPressed: null
+                                                ),
 
                                           Column(
                                             children: [
@@ -1415,47 +1437,23 @@ class _PlayScreenState extends State<PlayScreen> {
                                                 },
                                               ),
                                               if (!offline)
-                                                (mediaItem != null &&
-                                                    queue.isNotEmpty &&
-                                                    mediaItem.extras[
-                                                    "allow_download"])
-                                                    ? DownloadButton(data: {
-                                                  'id': mediaItem.id
-                                                      .toString(),
-                                                  'artist': mediaItem
-                                                      .artist
-                                                      .toString(),
-                                                  'album': mediaItem
-                                                      .album
-                                                      .toString(),
-                                                  'artUri':
-                                                  mediaItem.artUri
-                                                      .toString(),
-                                                  'duration': mediaItem
-                                                      .duration
-                                                      .inSeconds
-                                                      .toString(),
-                                                  'title': mediaItem
-                                                      .title
-                                                      .toString(),
-                                                  'url': mediaItem
-                                                      .extras['url']
-                                                      .toString(),
-                                                  "genre": mediaItem
-                                                      .genre
-                                                      .toString(),
-                                                  "has_lyrics":
-                                                  mediaItem.extras[
-                                                  "has_lyrics"],
-                                                  "release_date":
-                                                  mediaItem.extras[
-                                                  "release_date"],
-                                                  "price": mediaItem
-                                                      .extras["price"],
-                                                  "allow_download":
-                                                  mediaItem.extras[
-                                                  "allow_download"],
-                                                })
+                                                (mediaItem != null && queue.isNotEmpty)
+                                                // ? SongCacheIcon(song: mediaItem)
+                                                ? DownloadButton(
+                                                    icon: 'download',
+                                                    data: {
+                                                      'id': mediaItem.id.toString(),
+                                                      'artist': mediaItem.artist.toString(),
+                                                      'album': mediaItem.album.toString(),
+                                                      'image': mediaItem.artUri.toString(),
+                                                      'duration': mediaItem.duration.inSeconds.toString(),
+                                                      'title': mediaItem.title.toString(),
+                                                      'url': mediaItem.extras['url'].toString(),
+                                                      'genre': mediaItem.genre.toString(),
+                                                      'has_lyrics': mediaItem.extras['has_lyrics'],
+                                                      'lyrics_snippet': mediaItem.extras['lyrics_snippet'],
+                                                      'release_date': mediaItem.extras['release_date'],
+                                                    })
                                                     : IconButton(
                                                     icon: Icon(
                                                       Icons.save_alt,
@@ -1782,9 +1780,6 @@ class _PlayScreenState extends State<PlayScreen> {
           (queue, mediaItem) => QueueState(queue, mediaItem));
 
   audioPlayerButton() async {
-    // if(item['selling'] == "0"){
-    //   sleepTimer(30);
-    // }
     await AudioService.start(
       backgroundTaskEntrypoint: _audioPlayerTaskEntrypoint,
       params: {
@@ -1808,7 +1803,16 @@ class _PlayScreenState extends State<PlayScreen> {
     }else{
       AudioService.customAction("setVolume", 1.0);
     }
-    Api().playTrack(globalQueue[globalIndex].id, "song");
+    // subscribe(AudioService.positionStream.listen((Duration position) {
+    //   if(playCountRegistered) return;
+    //   if (position.inSeconds / globalQueue[globalIndex].duration.inSeconds.toDouble() > .25) {
+    //     Api().playTrack(globalQueue[globalIndex].id, "song");
+    //     setState(() {
+    //       playCountRegistered = true;
+    //     });
+    //   }
+    // }));
+
   }
 
   FloatingActionButton playButton() => FloatingActionButton(

@@ -14,9 +14,9 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "8E63563B54FF6C942076AD225EEAFB68"
-               BuildableName = "ext_storage.framework"
-               BlueprintName = "ext_storage"
+               BlueprintIdentifier = "453C58824EBF0866E4FCD559AA3DF6DA"
+               BuildableName = "on_audio_query.framework"
+               BlueprintName = "on_audio_query"
                ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>

@@ -106,7 +106,7 @@ class _AuthScreenState extends State<AuthScreen> {
       Navigator.popAndPushNamed(context, '/');
       EasyLoading.showSuccess("Success!");
     }else{
-      EasyLoading.showError(user['message']);
+      // EasyLoading.showError(user['message']);
     }
 
     EasyLoading.dismiss();

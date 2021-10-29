@@ -23,12 +23,15 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
 
   # Audio related
   audiotagger: ^2.2.1
   audio_service: ^0.17.1
   audio_session: ^0.1.5
   just_audio: ^0.9.7
+  on_audio_query: ^2.5.0
 
 
   # Productivity
@@ -49,6 +52,7 @@ dependencies:
   open_file: any
   dio: ^4.0.0
   modal_bottom_sheet: ^2.0.0
+  provider: ^5.0.0
 
 
   # UI related
@@ -71,9 +75,6 @@ dependencies:
   firebase_database: ^8.0.0
   
   # Storage related
-  ext_storage:
-    git:
-      url: git://github.com/GitJournal/ext_storage.git
   path_provider: ^2.0.3
   permission_handler: ^8.1.6
   file_picker: ^4.0.2
@@ -85,6 +86,7 @@ dependencies:
   pin_code_fields: ^7.3.0
   unicorndial: ^1.1.5
   multi_select_flutter: ^4.0.0
+  flutter_cache_manager: ^3.1.2
 
 
 dev_dependencies:
@@ -107,6 +109,8 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  generate: true
 
   # To add assets to your application, add an assets section, like this:
   assets:

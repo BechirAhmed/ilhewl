@@ -90,6 +90,7 @@ class NewFormatResponse {
 
       Map info = {
         "id": response["id"],
+        "cacheKey": formatString("CACHE_${response['id']}"),
         "type": response["type"],
         "album": response["album"] == null || response["album"] == "null" ? formatString("ilhewl") : formatString(response["album"]["title"]),
         // .split('(')
@@ -444,6 +445,21 @@ class NewFormatResponse {
         "genres",
         "moods",
         // "artist_recos",
+      ];
+    } catch (err) {
+      print(err);
+    }
+    return data;
+  }
+  Future<Map> formatSearchData(Map data) async {
+    try {
+      data["songs"] = await formatSongsInList(data["songs"], false);
+
+      data["collections"] = [
+        "songs",
+        "artists",
+        "genres",
+        "moods",
       ];
     } catch (err) {
       print(err);

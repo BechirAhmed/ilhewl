@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:ilhewl/APIs/api.dart';
 import 'package:ilhewl/Helpers/format.dart';
 import 'package:ilhewl/Screens/Common/song_list.dart';
@@ -11,16 +12,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hive/hive.dart';
 import 'package:ilhewl/APIs/saavnApi.dart';
+import 'package:ilhewl/Services/song_provider.dart';
+import 'package:provider/provider.dart';
 
 bool fetched = false;
 List preferredLanguage = Hive.box('settings').get('preferredLanguage') ?? ['English'];
 String currency = Hive.box('settings').get('currency') ?? "MRU";
 Map data = Hive.box('cache').get('homepage', defaultValue: {});
-
-// Map data = {};
-
 List lists = [...?data["collections"]];
-// List lists = ["recent", ...?data["collections"]];
 
 class HomeData extends StatefulWidget {
   @override
@@ -38,6 +37,10 @@ class _HomeDataState extends State<HomeData> {
   }
 
   void getHomePageData() async {
+
+    SongProvider songProvider = context.watch();
+    // Hive.box('cache').delete('cachedDownloadedSongs');
+
     EasyLoading.show(status: "Loading...");
     Map recievedData = await Api().fetchHomePageData();
 
@@ -45,17 +48,11 @@ class _HomeDataState extends State<HomeData> {
       Hive.box('cache').put('homepage', recievedData);
       data = recievedData;
       lists = [...?data["collections"]];
+      songProvider.init(data['latests']);
       // lists = ["recent", ...?data["collections"]];
     }
     setState(() {});
     EasyLoading.dismiss();
-    // recievedData = await FormatResponse().formatPromoLists(data);
-    // if (recievedData != null && recievedData.isNotEmpty) {
-    //   Hive.box('cache').put('homepage', recievedData);
-    //   data = recievedData;
-    //   lists = ["recent", ...?data["collections"]];
-    // }
-    // setState(() {});
   }
 
   void fetchWallet() async {
@@ -224,6 +221,7 @@ class _HomeDataState extends State<HomeData> {
   }
 
   Future<void> _pullRefresh() async {
+    Provider.of<SongProvider>(context, listen: false);
     getHomePageData();
   }
 
@@ -241,103 +239,6 @@ class _HomeDataState extends State<HomeData> {
         scrollDirection: Axis.vertical,
         itemCount: data.isEmpty ? 0 : lists.length,
         itemBuilder: (context, idx) {
-          // if (idx == 0) {
-          //   return (recentList.isEmpty ||
-          //           !Hive.box('settings').get('showRecent', defaultValue: true))
-          //       ? SizedBox()
-          //       : Column(
-          //           children: [
-          //             Row(
-          //               children: [
-          //                 Padding(
-          //                   padding: const EdgeInsets.fromLTRB(15, 10, 0, 5),
-          //                   child: Text(
-          //                     'Last Session',
-          //                     style: TextStyle(
-          //                       color: Theme.of(context).accentColor,
-          //                       fontSize: 18,
-          //                       fontWeight: FontWeight.w800,
-          //                     ),
-          //                   ),
-          //                 ),
-          //               ],
-          //             ),
-          //             SizedBox(
-          //               height: MediaQuery.of(context).size.height / 4 + 10,
-          //               child: ListView.builder(
-          //                 physics: BouncingScrollPhysics(),
-          //                 scrollDirection: Axis.horizontal,
-          //                 padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-          //                 itemCount: recentList.length,
-          //                 itemBuilder: (context, index) {
-          //                   return GestureDetector(
-          //                     child: SizedBox(
-          //                       width:
-          //                           MediaQuery.of(context).size.height / 4 - 30,
-          //                       child: Column(
-          //                         children: [
-          //                           Card(
-          //                             elevation: 5,
-          //                             shape: RoundedRectangleBorder(
-          //                               borderRadius:
-          //                                   BorderRadius.circular(10.0),
-          //                             ),
-          //                             clipBehavior: Clip.antiAlias,
-          //                             child: CachedNetworkImage(
-          //                               errorWidget: (context, _, __) => Image(
-          //                                 image: AssetImage('assets/cover.jpg'),
-          //                               ),
-          //                               imageUrl: recentList[index]["image"]
-          //                                   .replaceAll('http:', 'https:'),
-          //                               placeholder: (context, url) => Image(
-          //                                 image: AssetImage('assets/cover.jpg'),
-          //                               ),
-          //                             ),
-          //                           ),
-          //                           Text(
-          //                             '${recentList[index]["title"]}',
-          //                             textAlign: TextAlign.center,
-          //                             softWrap: false,
-          //                             overflow: TextOverflow.ellipsis,
-          //                           ),
-          //                           Text(
-          //                             '${recentList[index]["artist"]}',
-          //                             textAlign: TextAlign.center,
-          //                             softWrap: false,
-          //                             overflow: TextOverflow.ellipsis,
-          //                             style: TextStyle(
-          //                                 fontSize: 11,
-          //                                 color: Theme.of(context)
-          //                                     .textTheme
-          //                                     .caption
-          //                                     .color),
-          //                           ),
-          //                         ],
-          //                       ),
-          //                     ),
-          //                     onTap: () {
-          //                       Navigator.push(
-          //                         context,
-          //                         PageRouteBuilder(
-          //                           opaque: false,
-          //                           pageBuilder: (_, __, ___) => PlayScreen(
-          //                             data: {
-          //                               'response': recentList,
-          //                               'index': index,
-          //                               'offline': false,
-          //                             },
-          //                             fromMiniplayer: false,
-          //                           ),
-          //                         ),
-          //                       );
-          //                     },
-          //                   );
-          //                 },
-          //               ),
-          //             ),
-          //           ],
-          //         );
-          // }
           return Column(
             children: [
               Row(
@@ -494,6 +395,7 @@ class _HomeDataState extends State<HomeData> {
                               item["selling"] == 1 && !item["purchased"]
                                 ? _handlePurchaseDialog(item)
                                 :
+                                  // DefaultCacheManager().removeFile(item['cacheKey']);
                                   Navigator.push(
                                     context,
                                     PageRouteBuilder(

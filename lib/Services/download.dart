@@ -1,208 +1,272 @@
 import 'dart:io';
 import 'package:audiotagger/audiotagger.dart';
 import 'package:audiotagger/models/tag.dart';
-import 'package:ext_storage/ext_storage.dart';
+import 'package:ilhewl/CustomWidgets/snackbar.dart';
 import 'package:ilhewl/Helpers/lyrics.dart';
-// import 'package:ext_storage/ext_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart';
+import 'package:ilhewl/Services/ext_storage_provider.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class Download with ChangeNotifier {
-  String preferredDownloadQuality =
-      Hive.box('settings').get('downloadQuality') ?? '320 kbps';
+  int rememberOption;
+  final ValueNotifier<bool> remember = ValueNotifier<bool>(false);
+  String preferredDownloadQuality = Hive.box('settings').get('downloadQuality', defaultValue: '320 kbps') as String;
+  String downloadFormat = 'm4a';
+  bool createDownloadFolder = Hive.box('settings').get('createDownloadFolder', defaultValue: false) as bool;
+  bool createYoutubeFolder = Hive.box('settings').get('createYoutubeFolder', defaultValue: false) as bool;
   double progress = 0.0;
-  String currentDownloadId = '';
   String lastDownloadId = '';
-  String dlPath = Hive.box('settings').get('downloadPath', defaultValue: '');
   bool downloadLyrics =
-      Hive.box('settings').get('downloadLyrics', defaultValue: false);
+  Hive.box('settings').get('downloadLyrics', defaultValue: true) as bool;
+  bool download = true;
 
   Future<String> getLyrics(Map data) async {
-    if (data["has_lyrics"] == "true") {
-      return Lyrics().getSaavnLyrics(data["id"]);
+    if (data['has_lyrics'] == 'true') {
+      return data['extras']['lyrics_snippet'];
+      return Lyrics().getSaavnLyrics(data['id'].toString());
     } else {
-      return Lyrics()
-          .getLyrics(data['title'].toString(), data['artist'].toString());
+    return data['extras']['lyrics_snippet'];
+      return Lyrics().getLyrics(data['title'].toString(), data['artist'].toString());
     }
   }
 
-  Future<void> prepareDownload(BuildContext context, Map data) async {
-    PermissionStatus status = await Permission.storage.status;
-    if (status.isPermanentlyDenied || status.isDenied) {
-      Map<Permission, PermissionStatus> statuses = await [
-        Permission.storage,
-        Permission.accessMediaLocation,
-        Permission.mediaLibrary,
-      ].request();
-      print("Prepare Download");
-      debugPrint(statuses[Permission.storage].toString());
+  Future<void> prepareDownload(BuildContext context, Map data, {bool createFolder = false, String folderName}) async {
+    download = true;
+    if (!Platform.isWindows) {
+      PermissionStatus status = await Permission.storage.status;
+      if (status.isPermanentlyDenied || status.isDenied) {
+        await [
+          Permission.storage,
+          Permission.accessMediaLocation,
+          Permission.mediaLibrary,
+        ].request();
+        // debugPrint(statuses[Permission.storage].toString());
+      }
+      status = await Permission.storage.status;
     }
-    status = await Permission.storage.status;
-    if (status.isGranted) {
-      print('permission granted');
+    final RegExp avoid = RegExp(r'[\.\\\*\:\"\?#/;\|]');
+    data['title'] = data['title'].toString().split('(From')[0].trim();
+    String filename = '${data["title"]} - ${data["artist"]}';
+    String dlPath =
+    Hive.box('settings').get('downloadPath', defaultValue: '') as String;
+    if (filename.length > 200) {
+      final String temp = filename.substring(0, 200);
+      final List tempList = temp.split(', ');
+      tempList.removeLast();
+      filename = tempList.join(', ');
     }
-    RegExp avoid = RegExp(r'[\.\\\*\:\"\?#/;\|]');
-    data['title'] = data['title'].toString().split("(From")[0].trim();
-    String filename = data['title'] + " - " + data['artist'];
-    filename = filename.replaceAll(avoid, "") + ".m4a";
-    if (dlPath == '')
-      // dlPath = await getApplicationDocumentsDirectory();
-      // print("path ${dir.path}");
-      dlPath = await ExtStorage.getExternalStoragePublicDirectory(ExtStorage.DIRECTORY_MUSIC);
 
-    bool exists = await File(dlPath + "/" + filename).exists();
+    filename = '${filename.replaceAll(avoid, "").replaceAll("  ", " ")}.m4a';
+    if (dlPath == '') {
+      final String temp = await ExtStorageProvider.getExtStorage(dirName: 'Music');
+      dlPath = temp;
+    }
+    if (data['url'].toString().contains('google') && createYoutubeFolder) {
+      dlPath = '$dlPath/YouTube';
+      if (!await Directory(dlPath).exists()) {
+        await Directory(dlPath).create();
+      }
+    }
+
+    if (createFolder && createDownloadFolder && folderName != null) {
+      final String foldername = folderName.replaceAll(avoid, '');
+      dlPath = '$dlPath/$foldername';
+      if (!await Directory(dlPath).exists()) {
+        await Directory(dlPath).create();
+      }
+    }
+
+    final bool exists = await File('$dlPath/$filename').exists();
     if (exists) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text(
-              "Already Exists",
-              style: TextStyle(color: Theme.of(context).accentColor),
-            ),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: 500,
-                  child: Row(
+      if (remember.value == true && rememberOption != null) {
+        switch (rememberOption) {
+          case 0:
+            lastDownloadId = data['id'].toString();
+            break;
+          case 1:
+            downloadSong(context, dlPath, filename, data);
+            break;
+          case 2:
+            while (await File('$dlPath/$filename').exists()) {
+              filename = filename.replaceAll('.m4a', ' (1).m4a');
+            }
+            break;
+          default:
+            lastDownloadId = data['id'].toString();
+            break;
+        }
+      } else {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+                title: Text(
+                  "Already Exists",
+                  style:
+                  TextStyle(color: Theme.of(context).colorScheme.secondary),
+                ),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      '"${data['title']}" already exists.\nDo you want to download it again?}',
+                      softWrap: true,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                  ],
+                ),
+                actions: [
+                  Column(
                     children: [
-                      Text(
-                        '"${data['title']}" already exists.\nDo you want to download it again?',
-                        softWrap: true,
-                        // style: TextStyle(color: Theme.of(context).accentColor),
+                      ValueListenableBuilder(
+                          valueListenable: remember,
+                          builder: (BuildContext context, bool value,
+                              Widget child) {
+                            return Row(
+                              children: [
+                                Checkbox(
+                                  activeColor:
+                                  Theme.of(context).colorScheme.secondary,
+                                  value: remember.value,
+                                  onChanged: (bool value) {
+                                    remember.value = value ?? false;
+                                  },
+                                ),
+                                Text("Remember my choice"),
+                              ],
+                            );
+                          }),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          TextButton(
+                            style: TextButton.styleFrom(
+                              primary: Theme.of(context).brightness ==
+                                  Brightness.dark
+                                  ? Colors.white
+                                  : Colors.grey[700],
+                            ),
+                            onPressed: () {
+                              lastDownloadId = data['id'].toString();
+                              Navigator.pop(context);
+                              rememberOption = 0;
+                            },
+                            child: Text(
+                              "No",
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                          ),
+                          TextButton(
+                            style: TextButton.styleFrom(
+                              primary: Theme.of(context).brightness ==
+                                  Brightness.dark
+                                  ? Colors.white
+                                  : Colors.grey[700],
+                            ),
+                            onPressed: () async {
+                              Navigator.pop(context);
+                              Hive.box('downloads').delete(data['id']);
+                              downloadSong(context, dlPath, filename, data);
+                              rememberOption = 1;
+                            },
+                            child:
+                            Text("Yes, but Replace Old"),
+                          ),
+                          const SizedBox(width: 5.0),
+                          TextButton(
+                            style: TextButton.styleFrom(
+                              primary: Colors.white,
+                              backgroundColor:
+                              Theme.of(context).colorScheme.secondary,
+                            ),
+                            onPressed: () async {
+                              Navigator.pop(context);
+                              while (await File('$dlPath/$filename').exists()) {
+                                filename =
+                                    filename.replaceAll('.m4a', ' (1).m4a');
+                              }
+                              rememberOption = 2;
+                              downloadSong(context, dlPath, filename, data);
+                            },
+                            child: Text(
+                              "Yes",
+                              style: TextStyle(
+                                  color:
+                                  Theme.of(context).colorScheme.secondary ==
+                                      Colors.white
+                                      ? Colors.black
+                                      : null),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-              ],
-            ),
-            actions: [
-              TextButton(
-                style: TextButton.styleFrom(
-                  primary: Theme.of(context).brightness == Brightness.dark
-                      ? Colors.white
-                      : Colors.grey[700],
-                ),
-                child: Text(
-                  "No",
-                  style: TextStyle(color: Colors.white),
-                ),
-                onPressed: () {
-                  lastDownloadId = data['id'];
-                  Navigator.pop(context);
-                },
-              ),
-              TextButton(
-                style: TextButton.styleFrom(
-                  primary: Theme.of(context).brightness == Brightness.dark
-                      ? Colors.white
-                      : Colors.grey[700],
-                ),
-                child: Text("Yes, but Replace Old"),
-                onPressed: () async {
-                  Navigator.pop(context);
-                  downloadSong(context, dlPath, filename, data);
-                },
-              ),
-              TextButton(
-                style: TextButton.styleFrom(
-                  primary: Colors.white,
-                  backgroundColor: Theme.of(context).accentColor,
-                ),
-                child: Text("Yes"),
-                onPressed: () async {
-                  Navigator.pop(context);
-                  while (await File(dlPath + "/" + filename).exists()) {
-                    filename = filename.replaceAll('.m4a', ' (1).m4a');
-                  }
-                  downloadSong(context, dlPath, filename, data);
-                },
-              ),
-              SizedBox(
-                width: 5,
-              ),
-            ],
-          );
-        },
-      );
+                ]);
+          },
+        );
+      }
     } else {
       downloadSong(context, dlPath, filename, data);
     }
   }
 
-  Future<void> downloadSong(
-      BuildContext context, String dlPath, String filename, Map data) async {
-    ScaffoldMessengerState scaffoldMessenger = ScaffoldMessenger.of(context);
+  Future<void> downloadSong(BuildContext context, String dlPath, String fileName, Map data) async {
     progress = null;
     notifyListeners();
     String filepath;
     String filepath2;
-    List<int> _bytes = [];
+    String appPath;
+    final List<int> _bytes = [];
     String lyrics;
-    final artname = filename.replaceAll(".m4a", "artwork.jpg");
-    Directory appDir = await getApplicationDocumentsDirectory();
-    String appPath = appDir.path;
-    if (data['url'].toString().contains('google')) {
-      filename = filename.replaceAll('.m4a', '.weba');
+    final artname = fileName.replaceAll('.m4a', '.jpg');
+    if (!Platform.isWindows) {
+      final Directory appDir = await getTemporaryDirectory();
+      appPath = appDir.path;
+    } else {
+      final Directory temp = await getDownloadsDirectory();
+      appPath = temp.path;
     }
+    // if (data['url'].toString().contains('google')) {
+    // filename = filename.replaceAll('.m4a', '.opus');
+    // }
     try {
-      await File(dlPath + "/" + filename)
+      await File('$dlPath/$fileName')
           .create(recursive: true)
           .then((value) => filepath = value.path);
-      print("created audio file");
-      await File(appPath + "/" + artname)
-          .create(recursive: true)
-          .then((value) => filepath2 = value.path);
+      // print('created audio file');
+
+      await File('$appPath/$artname').create(recursive: true).then((value) => filepath2 = value.path);
     } catch (e) {
       await [
         Permission.manageExternalStorage,
       ].request();
-      await File(dlPath + "/" + filename)
+      await File('$dlPath/$fileName')
           .create(recursive: true)
           .then((value) => filepath = value.path);
-      print("created audio file");
-      await File(appPath + "/" + artname)
+      // print('created audio file');
+      await File('$appPath/$artname')
           .create(recursive: true)
           .then((value) => filepath2 = value.path);
     }
-    debugPrint('Audio path $filepath');
-    debugPrint('Image path $filepath2');
-    try {
-      scaffoldMessenger.showSnackBar(
-        SnackBar(
-          elevation: 6,
-          backgroundColor: Colors.grey[900],
-          behavior: SnackBarBehavior.floating,
-          content: Text(
-            filepath.endsWith('.weba')
-                ? 'Downloading "${data['title'].toString()}" in Best Quality Available'
-                : 'Downloading "${data['title'].toString()}" in $preferredDownloadQuality',
-            style: TextStyle(color: Colors.white),
-          ),
-          action: SnackBarAction(
-            textColor: Theme.of(context).accentColor,
-            label: 'Ok',
-            onPressed: () {},
-          ),
-        ),
-      );
-    } catch (e) {
-      print("Failed to show Snackbar: $e");
-    }
+    // debugPrint('Audio path $filepath');
+    // debugPrint('Image path $filepath2');
 
-    String kUrl = data['url'].replaceAll(
-        "_96.", "_${preferredDownloadQuality.replaceAll(' kbps', '')}.");
-    final response = await Client().send(Request('GET', Uri.parse(kUrl)));
-    int total = response.contentLength ?? 0;
+    final String kUrl = data['url'].toString().replaceAll(
+        '_96.', "_${preferredDownloadQuality.replaceAll(' kbps', '')}.");
+    final client = Client();
+    final response = await client.send(Request('GET', Uri.parse(kUrl)));
+    final int total = response.contentLength ?? 0;
     int recieved = 0;
     response.stream.asBroadcastStream();
     response.stream.listen((value) {
@@ -211,67 +275,91 @@ class Download with ChangeNotifier {
         recieved += value.length;
         progress = recieved / total;
         notifyListeners();
-      } catch (e) {}
-    }).onDone(() async {
-      final file = File("${(filepath)}");
-      await file.writeAsBytes(_bytes);
-
-      HttpClientRequest request2 =
-          await HttpClient().getUrl(Uri.parse(data['image']));
-      HttpClientResponse response2 = await request2.close();
-      final bytes2 = await consolidateHttpClientResponseBytes(response2);
-      File file2 = File(filepath2);
-
-      await file2.writeAsBytes(bytes2);
-      try {
-        lyrics = downloadLyrics ? await getLyrics(data) : '';
+        if (!download) {
+          client.close();
+        }
       } catch (e) {
-        print('Error fetching lyrics: $e');
-        lyrics = '';
+        // print('Error: $e');
       }
-      debugPrint("Started tag editing");
+    }).onDone(() async {
+      if (download) {
+        final file = File(filepath);
+        await file.writeAsBytes(_bytes);
 
-      final Tag tag = Tag(
-        title: data['title'],
-        artist: data['artist'],
-        albumArtist:
-            data['album_artist'] ?? data['artist'].toString()?.split(', ')[0],
-        artwork: filepath2.toString(),
-        album: data['album'],
-        genre: data['language'],
-        year: data['year'],
-        lyrics: lyrics,
-        comment: 'ilhewl',
-      );
+        final client = HttpClient();
+        final HttpClientRequest request2 = await client.getUrl(Uri.parse(data['image'].toString()));
+        final HttpClientResponse response2 = await request2.close();
+        final bytes2 = await consolidateHttpClientResponseBytes(response2);
+        final File file2 = File(filepath2);
 
-      final tagger = Audiotagger();
-      await tagger.writeTags(
-        path: filepath,
-        tag: tag,
-      );
-      await Future.delayed(const Duration(seconds: 1), () {});
-      if (await file2.exists()) {
-        await file2.delete();
-      }
-      debugPrint("Done");
-      lastDownloadId = data['id'];
-      progress = 0.0;
-      notifyListeners();
+        await file2.writeAsBytes(bytes2);
+        try {
+          lyrics = downloadLyrics ? await getLyrics(data) : '';
+        } catch (e) {
+          // print('Error fetching lyrics: $e');
+          lyrics = '';
+        }
 
-      scaffoldMessenger.showSnackBar(SnackBar(
-        elevation: 6,
-        backgroundColor: Colors.grey[900],
-        behavior: SnackBarBehavior.floating,
-        content: Text(
+        final Tag tag = Tag(
+          title: data['title'].toString(),
+          artist: data['artist'].toString(),
+          albumArtist: data['album_artist']?.toString() ?? data['artist']?.toString().split(', ')[0],
+          artwork: filepath2.toString(),
+          album: data['album'].toString(),
+          genre: data['genre'].toString(),
+          lyrics: lyrics,
+          comment: 'ilhewl',
+        );
+        try {
+          final tagger = Audiotagger();
+          await tagger.writeTags(
+            path: filepath,
+            tag: tag,
+          );
+          // await Future.delayed(const Duration(seconds: 1), () async {
+          //   if (await file2.exists()) {
+          //     await file2.delete();
+          //   }
+          // });
+        } catch (e) {
+          // print('Failed to edit tags');
+        }
+        client.close();
+        // debugPrint('Done');
+        lastDownloadId = data['id'].toString();
+        progress = 0.0;
+        notifyListeners();
+
+        ShowSnackBar().showSnackBar(
+          context,
           '"${data['title'].toString()}" has been downloaded',
-          style: TextStyle(color: Colors.white),
-        ),
-        action: SnackBarAction(
-          textColor: Theme.of(context).accentColor,
-          label: 'Ok',
-          onPressed: () {},
-        ),
-      ));
+        );
+
+        final songData = {
+          'id': data['id'].toString(),
+          'title': data['title'].toString(),
+          'subtitle': data['subtitle'].toString(),
+          'artist': data['artist'].toString(),
+          'albumArtist': data['album_artist']?.toString() ?? data['artist']?.toString().split(', ')[0],
+          'album': data['album'].toString(),
+          'genre': data['genre'].toString(),
+          'year': data['year'].toString(),
+          'lyrics_snippet': lyrics,
+          'duration': data['duration'],
+          'release_date': data['release_date'].toString(),
+          'album_id': data['album_id'].toString(),
+          'perma_url': data['perma_url'].toString(),
+          'quality': preferredDownloadQuality,
+          'path': filepath,
+          'image': filepath2,
+          'image_url': data['image'].toString(),
+          'dateAdded': DateTime.now().toString(),
+        };
+        Hive.box('downloads').put(songData['id'], songData);
+      } else {
+        download = true;
+        progress = 0.0;
+      }
     });
   }
 }

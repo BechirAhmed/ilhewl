@@ -65,6 +65,7 @@ class _UploadScreenState extends State<UploadScreen> with TickerProviderStateMix
   DateTime _maxDate;
 
   bool _visibility = true;
+  bool _free = false;
   TextEditingController _songTitleController;
   TextEditingController _descriptionController;
   TextEditingController _lyricsController;
@@ -249,6 +250,7 @@ class _UploadScreenState extends State<UploadScreen> with TickerProviderStateMix
       'copyright': _copyrightController.text,
       'user_id': userId,
       'visibility': _visibility,
+      'selling': _free ? 1 : 0,
       'artwork': await MultipartFile.fromFile(_selectedImage.path, filename: 'artwork.jpg'),
     });
   }
@@ -467,7 +469,7 @@ class _UploadScreenState extends State<UploadScreen> with TickerProviderStateMix
                     ],
                   ) : SizedBox(),
                   SizedBox(height: 10,),
-                  !_fileUploaded ? _buildDetailsView() : SizedBox(),
+                  _fileUploaded ? _buildDetailsView() : SizedBox(),
                 ],
               ),
             ),
@@ -966,7 +968,17 @@ class _UploadScreenState extends State<UploadScreen> with TickerProviderStateMix
               setState(() {
                 _visibility = value;
               });
-              print(_visibility);
+            },
+          ),
+          SizedBox(height: 20,),
+          _customLabel("Free", false),
+          SizedBox(height: 5,),
+          Checkbox(
+            value: _free,
+            onChanged: (value) {
+              setState(() {
+                _free = value;
+              });
             },
           ),
           SizedBox(height: 20,),

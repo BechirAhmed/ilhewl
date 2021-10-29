@@ -10,8 +10,8 @@
 #endif
 #endif
 
-#import "ExtStoragePlugin.h"
+#import "OnAudioQueryPlugin.h"
 
-FOUNDATION_EXPORT double ext_storageVersionNumber;
-FOUNDATION_EXPORT const unsigned char ext_storageVersionString[];
+FOUNDATION_EXPORT double on_audio_queryVersionNumber;
+FOUNDATION_EXPORT const unsigned char on_audio_queryVersionString[];
 

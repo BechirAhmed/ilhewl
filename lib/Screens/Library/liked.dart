@@ -9,6 +9,8 @@ import 'package:ilhewl/CustomWidgets/downloadButton.dart';
 import 'package:ilhewl/CustomWidgets/emptyScreen.dart';
 import 'package:ilhewl/CustomWidgets/gradientContainers.dart';
 import 'package:ilhewl/CustomWidgets/miniplayer.dart';
+import 'package:ilhewl/CustomWidgets/song_cache_icon.dart';
+import 'package:ilhewl/Helpers/cache_provider.dart';
 import 'package:ilhewl/Helpers/mediaitem_converter.dart';
 import 'package:ilhewl/Screens/Library/showSongs.dart';
 import 'package:ilhewl/Screens/Player/audioplayer.dart';
@@ -42,7 +44,7 @@ class _LikedSongsState extends State<LikedSongs> with SingleTickerProviderStateM
   int currentIndex = 0;
   int sortValue = Hive.box('settings').get('playlistSortValue', defaultValue: 2);
   int albumSortValue = Hive.box('settings').get('albumSortValue', defaultValue: 2);
-
+  CacheProvider cacheProvider;
 
   double walletBalance = 0.0;
   bool walletLoading = true;
@@ -718,6 +720,8 @@ class _LikedSongsState extends State<LikedSongs> with SingleTickerProviderStateM
                                             // DownloadButton(
                                             //     data: _songs[index],
                                             //     icon: 'download'),
+
+                                            SongCacheIcon(song: _songs[index]),
                                             PopupMenuButton(
                                                 icon: Icon(
                                                     Icons.more_vert_rounded),

@@ -3,11 +3,12 @@ import 'package:flutter/services.dart';
 import 'package:ilhewl/CustomWidgets/custom_physics.dart';
 import 'package:ilhewl/CustomWidgets/snackbar.dart';
 import 'package:ilhewl/Helpers/app_config.dart';
+import 'package:ilhewl/Helpers/config.dart';
 import 'package:ilhewl/Helpers/countrycodes.dart';
 import 'package:ilhewl/CustomWidgets/gradientContainers.dart';
 import 'package:ilhewl/Screens/Home/homeData.dart';
 import 'package:ilhewl/Screens/Home/saavn.dart';
-import 'package:ilhewl/Screens/Library/downloaded.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ilhewl/Screens/Library/library.dart';
 import 'package:ilhewl/Screens/Search/search.dart';
 import 'package:ilhewl/Screens/Settings/profile.dart';
@@ -264,24 +265,46 @@ class _HomePageState extends State<HomePage> {
                                 Navigator.pop(context);
                               },
                             ),
-                            // artistId != 0 ? ListTile(
-                            //   title: Text('My Music'),
-                            //   contentPadding:
-                            //   EdgeInsets.symmetric(horizontal: 20.0),
-                            //   leading: Icon(
-                            //     MdiIcons.folderMusic,
-                            //     color: Theme.of(context).iconTheme.color,
-                            //   ),
-                            //   onTap: () {
-                            //     Navigator.pop(context);
-                            //     Navigator.push(
-                            //         context,
-                            //         MaterialPageRoute(
-                            //             builder: (context) =>
-                            //           artistId != 0 ? ArtistSongs(type: 'all',) : DownloadedSongs(type: 'all',)
-                            //       ));
-                            //   },
-                            // ) : SizedBox(),
+                            ListTile(
+                              title: Text(AppLocalizations.of(context).myMusic),
+                              contentPadding:
+                              const EdgeInsets.symmetric(horizontal: 20.0),
+                              leading: Icon(
+                                MdiIcons.folderMusic,
+                                color: Theme.of(context).iconTheme.color,
+                              ),
+                              onTap: () {
+                                Navigator.pop(context);
+                                Navigator.pushNamed(context, '/mymusic');
+                              },
+                            ),
+                            ListTile(
+                              title: Text(AppLocalizations.of(context).downs),
+                              contentPadding:
+                              const EdgeInsets.symmetric(horizontal: 20.0),
+                              leading: Icon(
+                                Icons.download_done_rounded,
+                                color: Theme.of(context).iconTheme.color,
+                              ),
+                              onTap: () {
+                                Navigator.pop(context);
+                                Navigator.pushNamed(context, '/downloads');
+                              },
+                            ),
+                            ListTile(
+                              title:
+                              Text(AppLocalizations.of(context).playlists),
+                              contentPadding:
+                              const EdgeInsets.symmetric(horizontal: 20.0),
+                              leading: Icon(
+                                Icons.playlist_play_rounded,
+                                color: Theme.of(context).iconTheme.color,
+                              ),
+                              onTap: () {
+                                Navigator.pop(context);
+                                Navigator.pushNamed(context, '/playlists');
+                              },
+                            ),
                             ListTile(
                               title: Text('Wallet'),
                               contentPadding:
@@ -350,10 +373,35 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
                   Padding(
+                    padding: const EdgeInsets.only(left: 10, right: 10),
+                    child: Container(
+                        padding: EdgeInsets.only(top: 5, bottom: 5, left: 10, right: 10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0),
+                          color: Theme.of(context).accentColor,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black26,
+                              blurRadius: 5.0,
+                              spreadRadius: 0.0,
+                              offset: Offset(0.0, 3.0),
+                            )
+                          ],
+                        ),
+                        child: TextButton(
+                          child: Text("Become an Artist", style: TextStyle(color: MyTheme().isDark ? Colors.white : Colors.black54, fontWeight: FontWeight.bold),),
+                          onPressed: () {
+                            Navigator.pop(context);
+                            Navigator.pushNamed(context, '/claim_artist_profile');
+                          },
+                        )
+                    ),
+                  ),
+                  Padding(
                     padding: const EdgeInsets.fromLTRB(5, 30, 5, 20),
                     child: Center(
                       child: Text(
-                        'Made with ♥ by Foryts',
+                        'Made with ♥ by Mauritanian Artists',
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 12),
                       ),
