@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hive/hive.dart';
 import 'package:ilhewl/APIs/api.dart';
+import 'package:ilhewl/CustomWidgets/snackbar.dart';
 import 'package:ilhewl/Helpers/app_config.dart';
 import 'package:ilhewl/Helpers/config.dart';
 import 'package:image_picker/image_picker.dart';
@@ -17,6 +18,9 @@ class ClaimArtistProfile extends StatefulWidget {
 }
 
 class _ClaimArtistProfileState extends State<ClaimArtistProfile> {
+
+  int artistId = Hive.box("settings").get('artistId', defaultValue: 0);
+  int userId = Hive.box("settings").get('userID', defaultValue: 0);
 
   Map artist;
   bool loading = true;
@@ -33,7 +37,6 @@ class _ClaimArtistProfileState extends State<ClaimArtistProfile> {
 
   pickImageModal(BuildContext context) async {
     var image = await ImagePicker().pickImage(source: ImageSource.gallery);
-
     setState(() {
       _selectedFile = File(image.path);
     });
@@ -42,6 +45,7 @@ class _ClaimArtistProfileState extends State<ClaimArtistProfile> {
   @override
   void initState() {
     super.initState();
+    main();
     _nameController = TextEditingController();
     _phoneController = TextEditingController();
     _emailController = TextEditingController();
@@ -66,15 +70,18 @@ class _ClaimArtistProfileState extends State<ClaimArtistProfile> {
 
   void main() async {
     EasyLoading.show(status: "Loading...");
-    final userId = await Hive.box('settings').get('userID');
     if(userId != null){
       Map user = await Api().fetchUserData(userId);
+      if(user['artist_id'] != 0){
+        if(artistId == 0){
+          Hive.box('settings').put('artistId', user['artist_id']);
+        }
+        ShowSnackBar().showSnackBar(context, 'Your Request already accepted!');
+      }
       _nameController = TextEditingController(text: user["name"]);
       _phoneController = TextEditingController(text: user["phone"]);
       _emailController = TextEditingController(text: user["email"]);
-      setState(() {
-
-      });
+      setState(() {});
     }
 
     loading = false;

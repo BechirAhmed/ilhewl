@@ -23,6 +23,14 @@ class _DownloadButtonState extends State<DownloadButton> {
   }
 
   @override
+  void dispose() {
+    down.removeListener(() {
+      setState(() {});
+    });
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: 50,

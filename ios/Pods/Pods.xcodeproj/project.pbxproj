@@ -37,6 +37,7 @@
 		020A4E34A8466C43556283C72BC74122 /* FMDatabaseAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = D288D1ACDF4B7CD8AF99BFFE982A5009 /* FMDatabaseAdditions.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		021974FDD1E52DD69A97E90051760CD9 /* SDWebImageDownloaderResponseModifier.h in Headers */ = {isa = PBXBuildFile; fileRef = 7712562D91975ADCD6FB8B48B72A8B56 /* SDWebImageDownloaderResponseModifier.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		028197EB1C5E4F2611A9CAFDFC95691C /* FIRAppAssociationRegistration.h in Headers */ = {isa = PBXBuildFile; fileRef = FB8A529D960CBD175B7CC03A2920562B /* FIRAppAssociationRegistration.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		02D0149E1E0B234A82DFE43E9DA2B9CD /* BetterEventChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = 28331914EB081D3A680A4B80504D7C4E /* BetterEventChannel.m */; };
 		02F4A25AD51CB6D1502C9B25D32BB82B /* JavaScriptChannelHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 71C7A9610E5CC458FE99EE6648F62F8D /* JavaScriptChannelHandler.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		032ACF7D1C196978C5947BD08DF3CE2A /* FIRLogger.h in Headers */ = {isa = PBXBuildFile; fileRef = 6AD3B1421E6B5CE0925DCEBAB783CB32 /* FIRLogger.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		032B428C8C869FFA865E66E7845946DC /* FIRServerValue.m in Sources */ = {isa = PBXBuildFile; fileRef = FA5F4AA223F2E1FB0891BB0864B20673 /* FIRServerValue.m */; };
@@ -45,6 +46,7 @@
 		03AE5CE8F1E749843B806FDCD88BD49A /* SDAnimatedImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6BDD0997F5F247FF1DF91DB55E251119 /* SDAnimatedImageView.m */; };
 		03B5A2059468F16C8597130552DC9A30 /* FTupleBoolBlock.h in Headers */ = {isa = PBXBuildFile; fileRef = 81B907BCC0CE1ECFF6729A7ADBAB2898 /* FTupleBoolBlock.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		03F097E3327D65425BCE850389725981 /* DKPhotoPDFPreviewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD4938DF4A1E3FCEB14A436B65C116AA /* DKPhotoPDFPreviewVC.swift */; };
+		04A3D979F9DAC258959E9AF21563F0F2 /* LoadControl.m in Sources */ = {isa = PBXBuildFile; fileRef = 6356833BDF07C6E86E6CDDCB51EE2CCD /* LoadControl.m */; };
 		0501BFFB545B96F340495EA3D14AD3E8 /* UIImage+MemoryCacheCost.m in Sources */ = {isa = PBXBuildFile; fileRef = 870C609DC29E76A7B21391A06C53692B /* UIImage+MemoryCacheCost.m */; };
 		05035D9C096EE9E7B32FF9B5EEC69A58 /* FChildEventRegistration.h in Headers */ = {isa = PBXBuildFile; fileRef = C8C75AA4E1E8817DC4A06F7B819B05E1 /* FChildEventRegistration.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		05137191D6BC84488BF3BCCFBB5E568D /* UIImage+ForceDecode.m in Sources */ = {isa = PBXBuildFile; fileRef = 308C4A66C189CBD18BBAD168CF4041AB /* UIImage+ForceDecode.m */; };
@@ -63,7 +65,6 @@
 		07F8B99635F757875992A46C33205028 /* SDAnimatedImageRep.m in Sources */ = {isa = PBXBuildFile; fileRef = 3D71B86865A4D22FF120F03942B7F0BA /* SDAnimatedImageRep.m */; };
 		0828838C90067CA1762CC027EDF9422B /* ImageUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = DCA2C17A30460BC480086133B301A3DF /* ImageUtils.m */; };
 		08460D5F4D89F0C9665BA0C588BF711F /* GDTCORRegistrar.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C5CBB6685A427456424F6A444D82F6A /* GDTCORRegistrar.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		08BE6FABE3586BB467BCFE61957096BD /* IndexedAudioSource.h in Headers */ = {isa = PBXBuildFile; fileRef = A020FC783CD0739BF9EF2C8F9FF86C81 /* IndexedAudioSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		08C413389ACA26DE401882A82EA32F0D /* BluetoothPermissionStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 8388A5F5C41CED406B74EE8470BAAC41 /* BluetoothPermissionStrategy.m */; };
 		0916D6BE3D70FB2BC6D276E970D8E35D /* FTupleSetIdPath.m in Sources */ = {isa = PBXBuildFile; fileRef = E59D96FD2D5CD9824597E47728D5C94F /* FTupleSetIdPath.m */; };
 		092025B3BF963E021361FC82E31226D5 /* pt_BR.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 708AF085A3C6C0406FA20CB16428A5C6 /* pt_BR.lproj */; };
@@ -133,6 +134,7 @@
 		19503FE0E20DCF556CE2BBB981656DA3 /* FBLPromise+Timeout.m in Sources */ = {isa = PBXBuildFile; fileRef = 04CF071C90943D3FBCB7C38E833EF256 /* FBLPromise+Timeout.m */; };
 		1ADD8F645E0785E4A98F0D2AC2DA239A /* FAtomicNumber.m in Sources */ = {isa = PBXBuildFile; fileRef = 891552A68FCAEA615070E5A7670D58DA /* FAtomicNumber.m */; };
 		1AFF4D0E422B97A6C818502D52F8A8AB /* FSnapshotUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 578B7B6694BC240CEECAEA27CE888DD1 /* FSnapshotUtilities.m */; };
+		1B20009B92219E3B3CF6D56DAFF4B226 /* AudioSource.h in Headers */ = {isa = PBXBuildFile; fileRef = A8A96CC731C57BCBE5D8359585D8F980 /* AudioSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1B53441BA45EE9FFDB493BCA8F870D8C /* FIRDatabaseConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = A59EB3480CF67A60C01721A04D39FFD2 /* FIRDatabaseConfig.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		1B592A1CC1E333B80903216959DD15D3 /* DKPhotoImageUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 768C2BCA663BE9FEFC19F9D7E6A81005 /* DKPhotoImageUtility.swift */; };
 		1B9F728EA8A3602DD22C4019EEE835C5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE1974021190C1DA9964B145768EEDD2 /* Foundation.framework */; };
@@ -169,6 +171,7 @@
 		222B156D6204165A9D30BBD002FB8D4F /* GDTCCTCompressionHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 0532BD0CD6DDF6ABA7CA5E1295616136 /* GDTCCTCompressionHelper.m */; };
 		22707F69DDDBB5EC9AB29C63CB498E10 /* FSparseSnapshotTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 2494B5E682D7F7CED98C9F8B6C0EDA90 /* FSparseSnapshotTree.m */; };
 		2296CC82AB21C1C21F852887441FC5FE /* GDTCOREvent_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 3247042223DC3B6597BA14BB578F57BA /* GDTCOREvent_Private.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		22C986AFE1467F65F490A43C9DB12578 /* JustAudioPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 017E6E8E65878CAF6EB1D15583E8727C /* JustAudioPlugin.m */; };
 		23A617D7F84396FA8AE284840952336C /* FMaxNode.m in Sources */ = {isa = PBXBuildFile; fileRef = E9A6C1A4E157837044855C1CF0650BF9 /* FMaxNode.m */; };
 		23C60836E968F7C131787C493A9E0D84 /* FBLPromise+Delay.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D3948F380C94156A3190B61EA2BDD9A /* FBLPromise+Delay.m */; };
 		23EFC42438F8B90E8B98FFF11835E8A0 /* FIRComponentContainer.h in Headers */ = {isa = PBXBuildFile; fileRef = 3F7D1EEA63168FED9551D463A895617B /* FIRComponentContainer.h */; settings = {ATTRIBUTES = (Project, ); }; };
@@ -181,8 +184,9 @@
 		2705FA4212019A61EF96E23C5582956A /* FTupleTSN.h in Headers */ = {isa = PBXBuildFile; fileRef = 3660F6840AA086717E6FC792E9946C95 /* FTupleTSN.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		27168E4FB0667417A0C0BCA72447DD98 /* FQuerySpec.h in Headers */ = {isa = PBXBuildFile; fileRef = D3A83E599876223EF37017A909AD6602 /* FQuerySpec.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		277852348CB9D792A1583F8063BD5FD9 /* SDImageGIFCoder.h in Headers */ = {isa = PBXBuildFile; fileRef = ECB5CE3D5B45F0A05457246A40D2521E /* SDImageGIFCoder.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		277CB3BBA7DE6120D557D184405B729E /* UriAudioSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 97A5AB7BE1005CC7EC82110CE3B56B37 /* UriAudioSource.m */; };
 		27E4037697CF7AA04F408BC1A1E755AD /* NSURLSession+GULPromises.h in Headers */ = {isa = PBXBuildFile; fileRef = 93B137353ACC699350718719CC112647 /* NSURLSession+GULPromises.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		28063A95B14981E123998814DC15A622 /* LoopingAudioSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 12DF86CF509E1A6CBA7F5695FFA02515 /* LoopingAudioSource.m */; };
+		283947091AFCE66782252595E648B8B1 /* UriAudioSource.h in Headers */ = {isa = PBXBuildFile; fileRef = E0EFB85DDE66B8C7132B5DE77E82BB72 /* UriAudioSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2854DEBD00D6B7EE520FB6A8874C483B /* FIRDatabaseReference_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 404471C176F713F8956E4621863E93C6 /* FIRDatabaseReference_Private.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		289591A65985E993C183FEEE316F0197 /* FLevelDBStorageEngine.h in Headers */ = {isa = PBXBuildFile; fileRef = 7EEB4C83FD66D76299AECE0C38D80C26 /* FLevelDBStorageEngine.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		2896D0BCB77EB20342922D6E71335ADA /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E4F24F22772126B2B8414850497A947B /* ImageIO.framework */; };
@@ -197,6 +201,7 @@
 		2A40850CE198B018437FF400B864F926 /* FBLPromise+Async.h in Headers */ = {isa = PBXBuildFile; fileRef = 25A2E9B38CFE6CA590356725E0DAF395 /* FBLPromise+Async.h */; };
 		2ACD293E8DA11CE842D21E69D02D6D4B /* DKAssetGroupCellItemProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFFC4A0D9B858BC338A71C1240DF3FF4 /* DKAssetGroupCellItemProtocol.swift */; };
 		2B0850C17C914E50E589100A0CFCBB11 /* UIView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 91B5C02D80964E31EDE1180A102C9EFA /* UIView+WebCache.m */; };
+		2B28F93AAECEF95010E8D652479D6482 /* ConcatenatingAudioSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 495D45010E3984DD650CEF79DA5C9D08 /* ConcatenatingAudioSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2B5FF045DBA0117F5768D2C96D71A82A /* DarwinAudioSession.m in Sources */ = {isa = PBXBuildFile; fileRef = A94A40C264372A35D15F7E698D931AC1 /* DarwinAudioSession.m */; };
 		2B778BD07940CE77A2DBB0ED92408158 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0FAED1C555B7A0EEE36E16F963153CE4 /* Security.framework */; };
 		2BF8704CB7F332A1134B9F3846A6A1E6 /* FLTFirebasePluginRegistry.h in Headers */ = {isa = PBXBuildFile; fileRef = B6A055D1BD5D906D5C31B84DF76F2F6C /* FLTFirebasePluginRegistry.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -229,6 +234,7 @@
 		34449154551C236D141D45BCA0C2057B /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE1974021190C1DA9964B145768EEDD2 /* Foundation.framework */; };
 		3449CF670DF1D55D66B7C4121D920D80 /* port_example.h in Headers */ = {isa = PBXBuildFile; fileRef = 48D38B7BA64F3EA86202D7FBBB354BCC /* port_example.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		34C335EA566942095A539AC7A28BCE14 /* GoogleDataTransport-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 8B2333A78126920015F0E174E3BFCE86 /* GoogleDataTransport-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		34CFE6111BA85A177800BB0CC8FB399A /* ClippingAudioSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 0AA2D6E068F535A73851A513F583CA46 /* ClippingAudioSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		34EEEF126D5AE85B0483AAD26EFE463C /* FTupleRemovedQueriesEvents.m in Sources */ = {isa = PBXBuildFile; fileRef = F48B7065D95F45B0DFF22BD26B7ECC78 /* FTupleRemovedQueriesEvents.m */; };
 		354704E98E64FAA8E4CD2E74E12ECBE4 /* crc32c.h in Headers */ = {isa = PBXBuildFile; fileRef = FD0FD324C8F1CE4FBD9024442D6A100B /* crc32c.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		35575A24683B5E165E297FA5A5C5DA59 /* table_cache.h in Headers */ = {isa = PBXBuildFile; fileRef = 66A30127CEFDCEE31FC232A6817A0556 /* table_cache.h */; settings = {ATTRIBUTES = (Project, ); }; };
@@ -316,13 +322,10 @@
 		4B30EFCEE00473A39BF28CBFEB195816 /* FBLPromise+Timeout.h in Copy . Public Headers */ = {isa = PBXBuildFile; fileRef = 5D4C5D90003189AFB55DA1B43B3DDF4F /* FBLPromise+Timeout.h */; };
 		4B4938308CF21BA42AA393B8BCDBF02C /* LocationPermissionStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = DD18CE1D420756BA1017FF23F4C45D8B /* LocationPermissionStrategy.m */; };
 		4B65448429AF60357AF8BB0E233CF11D /* FTupleObjects.m in Sources */ = {isa = PBXBuildFile; fileRef = 3F23F37828A983B21D70B56A32222BB5 /* FTupleObjects.m */; };
-		4BCA0F736A0B9C3DA53CE8C77048D73A /* UriAudioSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 4B316F1BD583027430F59AAF346A3CF1 /* UriAudioSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		4BD0CBF607C30E1A066385E16878F4DB /* ClippingAudioSource.h in Headers */ = {isa = PBXBuildFile; fileRef = BDF843616D646FCC0A250DF2CF58FC82 /* ClippingAudioSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4C2A33F0DA81B9BFD3963F5C0D4DBF23 /* block.cc in Sources */ = {isa = PBXBuildFile; fileRef = FD22D884B041310720A10642E84633B7 /* block.cc */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		4C497D03D40F83DD23434AC127D50ED3 /* FBLPromise+Any.h in Headers */ = {isa = PBXBuildFile; fileRef = FAF2E0CB31445863480C974724E80068 /* FBLPromise+Any.h */; };
 		4C4CF883C911E9E5AB5346B13A56DC56 /* SDImageCoderHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 58393A4FE763C61ABA1020E274731425 /* SDImageCoderHelper.m */; };
 		4C7F1645D2743ECDD7FA95C7CFB6C0EC /* SDWeakProxy.h in Headers */ = {isa = PBXBuildFile; fileRef = 7DD9F37AFB500171E0F21C15DE2C5BB7 /* SDWeakProxy.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		4CA189EC25FA5F2791D0EE4D1A382099 /* AudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = CF84CDA55FAAFFAD4DC24CD581853B56 /* AudioPlayer.m */; };
 		4CF7C3F4295CD88170D9133009FF3C25 /* SDImageCoderHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CC5797AA5E7CA6B48B11169BA8784A6 /* SDImageCoderHelper.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4D33291A18B5B1D7E124F3CE1671D3D4 /* DKAssetGroupDetailCameraCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B048F916D8BBA0B638A2B7E00DAFF706 /* DKAssetGroupDetailCameraCell.swift */; };
 		4D382D254D68B8053086ECA615704F4F /* UIImage+GIF.m in Sources */ = {isa = PBXBuildFile; fileRef = DD63C7272F1951D704140577294B9FA3 /* UIImage+GIF.m */; };
@@ -348,10 +351,10 @@
 		532D7AF2CD4AFD5CE0046A16B73D9F0E /* SDImageFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C7ADCA01732858ED535FE765B48A5D8 /* SDImageFrame.m */; };
 		539D7765B801D2FFEAEB3A9C226AF7A4 /* FServerValues.h in Headers */ = {isa = PBXBuildFile; fileRef = B67FCB95E50DC428899C79794D59CA3C /* FServerValues.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		53D5D85E53EB43C448444D375E863F2B /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3D9B7A2DCD930F54CF07170D6F28D1D /* UIKit.framework */; };
-		541E4B76B7CEC14B1693424E87E4304F /* IndexedPlayerItem.m in Sources */ = {isa = PBXBuildFile; fileRef = C5296F1B735B8FF7214347F0D17366A6 /* IndexedPlayerItem.m */; };
 		543A7071AABE5551AFF9BB15E4A6AD5F /* OnWithFiltersQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CC29A788667DC69B9BC000B0637846 /* OnWithFiltersQuery.swift */; };
 		5468E85F58B7D84DA2F4471997B09062 /* OnArtworkQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FC962EE97265DAC7F83479F078C9CC0 /* OnArtworkQuery.swift */; };
 		546DA5DF8F5B2869B4A97E27D5414A88 /* UIImage+MemoryCacheCost.h in Headers */ = {isa = PBXBuildFile; fileRef = AE2D7D89108DCB567185B6382AF6E984 /* UIImage+MemoryCacheCost.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		54A9BC8EDDAA0F2AB0BA617AAEC6771C /* AudioSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 3363B219878911E3F26F178BCCDB9C81 /* AudioSource.m */; };
 		54EF467B30C4470384EF159C4098E1F9 /* GoogleUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6EEE1FF945AC697D7E3FF25887F11575 /* GoogleUtilities.framework */; };
 		551EA0CBE526E98F434997FE9CD4A864 /* SDImageAssetManager.m in Sources */ = {isa = PBXBuildFile; fileRef = B8B524A7E40F3CC7ED61B04E7F5B6D5B /* SDImageAssetManager.m */; };
 		55F509B3DE389166AD8244A5DE1B9ACE /* FTreeNode.h in Headers */ = {isa = PBXBuildFile; fileRef = 71AA12C8CA60C28F78648F5947D79A82 /* FTreeNode.h */; settings = {ATTRIBUTES = (Project, ); }; };
@@ -391,10 +394,10 @@
 		5D9B305999A159C5FE19697FC6901C99 /* FQueryParams.h in Headers */ = {isa = PBXBuildFile; fileRef = 66170E701EE3107CE42A08364A9E1E75 /* FQueryParams.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		5DA33A20607749FF24CA5059668ADFE8 /* FBLPromise+Always.h in Copy . Public Headers */ = {isa = PBXBuildFile; fileRef = 740C81CE7F059F4561FA8A0233552DE9 /* FBLPromise+Always.h */; };
 		5DD496C1F7FBA2B3E267A5AED6ACA193 /* FWriteTree.h in Headers */ = {isa = PBXBuildFile; fileRef = 633BCB92BF8DA2C348D841517C15FB98 /* FWriteTree.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		5E440E4BA4564940E2E9EF5185CD4149 /* LoopingAudioSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FA1F49D36052696696B31A6784D03EF /* LoopingAudioSource.m */; };
 		5F2909582213529EAFCC1597E79324DA /* DKPhotoWebVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3A8C06C9D00598B54863A31591058981 /* DKPhotoWebVC.swift */; };
 		5F4AC6CBF291CC1362694DB87BA19CC5 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0CE7DF7232D00F057744C930F20D4998 /* CFNetwork.framework */; };
 		5F80A675C8374471D63A29358659A582 /* FIRDataSnapshot_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 934EE7BCB4CDFE84CCFD5BB0014BC1C0 /* FIRDataSnapshot_Private.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		5FDD2966769787648A075D3B28469EC7 /* IndexedPlayerItem.h in Headers */ = {isa = PBXBuildFile; fileRef = EC29DC998876DAF3A937E17A6E9C9BF0 /* IndexedPlayerItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5FEF6804B6FA4A6FEF18362BBB37263D /* secure_application-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = CB035E6A985A32B013EFFCEB6F893AF8 /* secure_application-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6018C940851E5B12E81805C1A7CF841C /* comparator.h in Headers */ = {isa = PBXBuildFile; fileRef = 54C598E19D0966450AA3F4C8F0902766 /* comparator.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		603EA1A65BD33C253967FB0D1964F4B3 /* GDTCORReachability.m in Sources */ = {isa = PBXBuildFile; fileRef = EDF716D31FF7AF8A6737B19922B61B2A /* GDTCORReachability.m */; };
@@ -407,13 +410,10 @@
 		6234B840ECF98D113F9FAA364303724F /* GDTCORTransport_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 47ED36DA14396E18A649F79BC2A597BB /* GDTCORTransport_Private.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		624CCFCC70CEAE10D657255E6AF0FA7B /* SDImageAssetManager.h in Headers */ = {isa = PBXBuildFile; fileRef = D40823D3E0435962A6EC13295C1BB111 /* SDImageAssetManager.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		62B7FDAF21455BCDB1BFD1D612F9A6CC /* en.lproj in Resources */ = {isa = PBXBuildFile; fileRef = CD35D468E14FBFF6AEFBA772D39B844F /* en.lproj */; };
-		62C10C22D8F9157EB21BF49566F135FB /* IndexedPlayerItem.h in Headers */ = {isa = PBXBuildFile; fileRef = 772EAA021EBB79941FA7917DB8603802 /* IndexedPlayerItem.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		62ECAB78A225EE995307A43525707F76 /* StoragePermissionStrategy.h in Headers */ = {isa = PBXBuildFile; fileRef = A4E76413A9D589579DFED77619240790 /* StoragePermissionStrategy.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		62F916B7DA1E2F1825BF8F0ACF6C4B01 /* fbase64.h in Headers */ = {isa = PBXBuildFile; fileRef = C87EC8CB2E052547D887AA1F6DE48C98 /* fbase64.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		630E49EC8061D92DEB5AAE0A572F4563 /* LoadControl.m in Sources */ = {isa = PBXBuildFile; fileRef = F89D0DBFB3AB7F75A445A442E98F9FB5 /* LoadControl.m */; };
 		632C83BCC2D77A0EDDFD75CEE3333F8B /* FIRTransactionResult.m in Sources */ = {isa = PBXBuildFile; fileRef = 47B4C022453187C6B424E519C15BB57C /* FIRTransactionResult.m */; };
 		634648C7D89FC6276EC1D02304082332 /* FLTWKProgressionDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F87EFE1522F86808119374E102710841 /* FLTWKProgressionDelegate.m */; };
-		634F77847349FBFF97E4F1FA366C0432 /* ConcatenatingAudioSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 83042472BAAF84CF0A3F30CA4D5C9D25 /* ConcatenatingAudioSource.m */; };
 		639BFD09FA8F7BCB03E127A46FD10263 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C87E75EBA6EDB52A9B7D0A3807F12372 /* Images.xcassets */; };
 		63A16B7106A102207C628E736FAB50AD /* DKPhotoPreviewFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3043950978994CC673D478BEE3CEAE2E /* DKPhotoPreviewFactory.swift */; };
 		63C00F32F0F8C6799281B7E51B07F11F /* otp_autofill-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C31683ED679AC7916D7221E8FB6138C /* otp_autofill-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -424,7 +424,7 @@
 		64B46AC6C2BA9221B5DB2B00E6A565D1 /* FAtomicNumber.h in Headers */ = {isa = PBXBuildFile; fileRef = 67500AB25866D09ABA4AE44ACE1DA925 /* FAtomicNumber.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		64D68A22A98DA08D7DBC5BB7E0CB5705 /* FTreeSortedDictionary.h in Headers */ = {isa = PBXBuildFile; fileRef = A0040A690C72A54E5453CF937447A16F /* FTreeSortedDictionary.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		64DF0D48C3D550B1AB5B13B09B93E843 /* two_level_iterator.h in Headers */ = {isa = PBXBuildFile; fileRef = E9FA9134738F907293DD244216CB31A3 /* two_level_iterator.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		6507E405BE216BCAA53A10AF8ABC5461 /* just_audio-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 2AA81DF75028E70DC7BFCCDC2373518E /* just_audio-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6507E405BE216BCAA53A10AF8ABC5461 /* just_audio-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 1A154159EF2349C119524F6122E7EE27 /* just_audio-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		651B67BB2A45689BFB79DAAC306D47CD /* SDAnimatedImageView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = CF453D2B79CF2AB2856192BE7D2D67C5 /* SDAnimatedImageView+WebCache.m */; };
 		654A148D83D6146D9B65E335C1D49C0C /* SDImageCoder.h in Headers */ = {isa = PBXBuildFile; fileRef = EE3BA465B26E610F7CF91DA37791C15B /* SDImageCoder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6572E3CF7942F177C77AAB73C4E68EE6 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 05983EF92CEEED8E021FFF622A6935AD /* CoreTelephony.framework */; };
@@ -496,7 +496,6 @@
 		722F9688ECC6A978CF4C58E69BAF02F5 /* SDImageIOCoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 451E030230F5AD13E7FA365E2CAEE0A1 /* SDImageIOCoder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		728059CA4BBD4724B0596C23CFFA354D /* FLTFirebasePlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = DC545F4E01A48D1B5DB5459902902E90 /* FLTFirebasePlugin.m */; };
 		72C2B5F037E8EA043F7B0AE4630EB5E5 /* DKPhotoGallery.bundle in Resources */ = {isa = PBXBuildFile; fileRef = B85D4E7E4EAEF1DAD4C541A2D2E6F27D /* DKPhotoGallery.bundle */; };
-		72DE3A257DB805AB675EA664F505A400 /* JustAudioPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 25EB2A0E88C553DD92AC82BCD99E8D3E /* JustAudioPlugin.m */; };
 		7302163BA2AED9AABDB17A287F00508D /* UIImage+SwiftyGif.swift in Sources */ = {isa = PBXBuildFile; fileRef = D451653741FE3F007FB3FB2C1842D855 /* UIImage+SwiftyGif.swift */; };
 		7341A33DEACC8CBA2DD13C2DE391C04B /* FIRLibrary.h in Headers */ = {isa = PBXBuildFile; fileRef = EA0BB2F6E8957D542674A0BDBAC4D1FA /* FIRLibrary.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		735DF076BBEEC0803273B5495EC977E2 /* FirebaseCoreDiagnostics-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 40FF7B22E9440FF48EEE33A01053B245 /* FirebaseCoreDiagnostics-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -520,8 +519,8 @@
 		76D1B39DD549F6FB75E098540992CC32 /* FIRAppInternal.h in Headers */ = {isa = PBXBuildFile; fileRef = 24EB727536CBA0AE98B923FF8A173CB3 /* FIRAppInternal.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		775C31DE57488A6BD8F90F368B481360 /* FIRBundleUtil.h in Headers */ = {isa = PBXBuildFile; fileRef = F00B8C5E90311BCECBAE6F12E1282B38 /* FIRBundleUtil.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		77601FCC90FA2C3A92B426523E0E775A /* GDTCORLifecycle.m in Sources */ = {isa = PBXBuildFile; fileRef = B21EBBAB88CA9F82A03E2A042AA48677 /* GDTCORLifecycle.m */; };
-		777A4BF587AE51B00AA488A51F4FFF7E /* JustAudioPlugin.h in Headers */ = {isa = PBXBuildFile; fileRef = 7B675B7BA252D4CBCDB3F497BF859EF2 /* JustAudioPlugin.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		77B9D9B3E5982DAE83F743A9D8AEB2C2 /* GULAppEnvironmentUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 8CB7BC796DA079FDBCF2902BED01A380 /* GULAppEnvironmentUtil.m */; };
+		77D7BE29B088583B397E9256E569E598 /* LoadControl.h in Headers */ = {isa = PBXBuildFile; fileRef = 67DA5EA7D66A32BBAD8BC469DE09B681 /* LoadControl.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		77E7AACAC4FF2BF0A530912C99EBC508 /* FEventRaiser.m in Sources */ = {isa = PBXBuildFile; fileRef = D02FBA3AB65DB4EF3172D76DCE53D401 /* FEventRaiser.m */; };
 		78120623646C1FA837DBB8859FC495D4 /* SDWebImageError.h in Headers */ = {isa = PBXBuildFile; fileRef = 671910401E2AD529F00EF3B20A47EE53 /* SDWebImageError.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7816CC6073B5E90CEB76A709467CCE9A /* FLTDeviceInfoPlugin.h in Headers */ = {isa = PBXBuildFile; fileRef = 26C187080B7084B4363D049F73B461FE /* FLTDeviceInfoPlugin.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -545,7 +544,6 @@
 		7CBBB885B5507FCE69B021272607B51C /* FTupleOnDisconnect.m in Sources */ = {isa = PBXBuildFile; fileRef = 94B98BCAAF50EF33D4EE084836BE6A0F /* FTupleOnDisconnect.m */; };
 		7CCD44834180C15B6E68F2DF8DD6B377 /* FLTWKNavigationDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 731AC04B639B18A41EF0E4801B31A030 /* FLTWKNavigationDelegate.m */; };
 		7CD13D8AF87837C4DC41DA06FF5FB5D7 /* SDWebImagePrefetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = 4273853D093588DA0EDB6C1C809E590C /* SDWebImagePrefetcher.m */; };
-		7CD3BB8385B7F7FCB5ACD8A93D71F993 /* ClippingAudioSource.m in Sources */ = {isa = PBXBuildFile; fileRef = CFD5253F8989AD3B7326B930EB172126 /* ClippingAudioSource.m */; };
 		7D134CDCE809E8B49F710135BB1992FC /* SDWebImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 84289E88B8F90EEB0BA359F374692E34 /* SDWebImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7D1F5851A3419B81B76CDED0334C70DE /* FWriteTreeRef.m in Sources */ = {isa = PBXBuildFile; fileRef = 60AA52A2F05996A3B1E5078AAA208710 /* FWriteTreeRef.m */; };
 		7D2E11641A7BCD03F07D222EBE10076F /* FPendingPut.h in Headers */ = {isa = PBXBuildFile; fileRef = 77CC99EFAD3D96D700DA7B8D068B03BF /* FPendingPut.h */; settings = {ATTRIBUTES = (Project, ); }; };
@@ -561,6 +559,8 @@
 		802287778791B6D0B4E3806A34B13ED8 /* FIRCoreDiagnosticsData.h in Headers */ = {isa = PBXBuildFile; fileRef = 06317DAA8EC433A7DA6997E319B9DDAE /* FIRCoreDiagnosticsData.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		802BD7AF4103D65B44A5B3868A3487FF /* FIRLoggerLevel.h in Headers */ = {isa = PBXBuildFile; fileRef = 17D1CFDE8824700EFEE90B2A0B49DAAF /* FIRLoggerLevel.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8036C123E4336F3AF12C45B3F4AB68F4 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE1974021190C1DA9964B145768EEDD2 /* Foundation.framework */; };
+		808631AA7A3B193F51CE9C3014717302 /* BetterEventChannel.h in Headers */ = {isa = PBXBuildFile; fileRef = 5970CD659E37627AAF1CE8C3941E9D61 /* BetterEventChannel.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		80DCB2D3088236078EDB0F3C2D63A924 /* AudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = D8B75D5932C2D3DB36456D6A776D193E /* AudioPlayer.m */; };
 		80E0B1B5A2E26600369CBF446067E452 /* UIImage+Transform.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F95B0806FE2B34073BA3353A8FF1CB4 /* UIImage+Transform.m */; };
 		817DB6CEA47D437E1554540898BDC7AF /* NSButton+WebCache.h in Headers */ = {isa = PBXBuildFile; fileRef = EA99112FF79E1C870E40D3A87F9378E1 /* NSButton+WebCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		81DBA5EB0CFAC807A4B9D13539366FC1 /* two_level_iterator.cc in Sources */ = {isa = PBXBuildFile; fileRef = E7C1FA95B17F3A58BB4989F8FC41E47B /* two_level_iterator.cc */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -595,13 +595,13 @@
 		870F43AADDD259F8C6A7330995E3BB68 /* SensorPermissionStrategy.h in Headers */ = {isa = PBXBuildFile; fileRef = 12F87EF1A4A74B851C7432400BBADE0E /* SensorPermissionStrategy.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8714C25D76894DC923947405F65EE548 /* testharness.h in Headers */ = {isa = PBXBuildFile; fileRef = D93E04B0B08BF4C4180063E34BFFC1A0 /* testharness.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		87204E5E3F90CC313BFF927063CCC4F8 /* FIRDataSnapshot.m in Sources */ = {isa = PBXBuildFile; fileRef = 8C64CFA3BA53AE70720EB7C4018AE9A8 /* FIRDataSnapshot.m */; };
-		87252CAF3A5E2E28BF29764C4A80C83D /* AudioSource.h in Headers */ = {isa = PBXBuildFile; fileRef = E5A7036C99E54BD6004A3224DEB76250 /* AudioSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		87467CBE2C3D11A3786B944A1DFFFD28 /* DKPhotoContentAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C62C777D39C792AF33D0340FD5D365E2 /* DKPhotoContentAnimationView.swift */; };
 		8748332435CD5942AAC220FBC991CA69 /* OTPPlugin.h in Headers */ = {isa = PBXBuildFile; fileRef = 9E52CE4B1CAB49AC3837800079D165B0 /* OTPPlugin.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		87C83D82D950E9CF9CE8E3C4F1BBD9D7 /* table_builder.h in Headers */ = {isa = PBXBuildFile; fileRef = 43B2E8602C4CDE38DC2D1073F10AC606 /* table_builder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		883658347C0183136EC02DF7E1904223 /* FConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 022310BDD292CCF0B192474FAADDA237 /* FConnection.m */; };
 		888AC1ED1006AEF6E638F67FE94581B6 /* NSBezierPath+SDRoundedCorners.m in Sources */ = {isa = PBXBuildFile; fileRef = 08DAB51E51C5336D7B980C62EFA7EBAE /* NSBezierPath+SDRoundedCorners.m */; };
 		88B1E2C5A9BB0C575E7028C02CE1CE80 /* testharness.cc in Sources */ = {isa = PBXBuildFile; fileRef = 8D798C9EF7AC9BBCE4F3287B98FB4CE9 /* testharness.cc */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		88B3114ABB7FE0A334290E43C95F5243 /* IndexedPlayerItem.m in Sources */ = {isa = PBXBuildFile; fileRef = E3F34FBFB5645301284AE193AAA5A471 /* IndexedPlayerItem.m */; };
 		8907E3449BC886A0AF8690307A06F677 /* mutexlock.h in Headers */ = {isa = PBXBuildFile; fileRef = 0364EABCD9224087417822B2841D0D79 /* mutexlock.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		89471A2F5D7B2CC5E7CA1C0DFE807ECF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE1974021190C1DA9964B145768EEDD2 /* Foundation.framework */; };
 		8947B16A03769B6EF8CC7BA605CE2B6C /* FBLPromise+Validate.h in Copy . Public Headers */ = {isa = PBXBuildFile; fileRef = D62999F33880A4DD4CB5E1534C830122 /* FBLPromise+Validate.h */; };
@@ -662,6 +662,7 @@
 		96DCEA8AF280D8E4042B420C3065A5BE /* audio_session-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 5DF5CC3A98D62AA1F66115E20BCE8FF7 /* audio_session-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9765ABC82FCA6D86EF4EDC983125B656 /* GULSecureCoding.m in Sources */ = {isa = PBXBuildFile; fileRef = A44BF89BA082EAEB043FBDD51AC8A256 /* GULSecureCoding.m */; };
 		976B0FCB4879807E5E583706146CF218 /* FSRWebSocket.h in Headers */ = {isa = PBXBuildFile; fileRef = CF60F9014ED067B3037E72FC8E88F585 /* FSRWebSocket.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		9774AF9BCC52C4A2D61BE2ACEF0C35B0 /* ConcatenatingAudioSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EB2EAF1E1704871EDCEFAADB58D3992 /* ConcatenatingAudioSource.m */; };
 		97B6BDF795C82A0E387020114A6C3702 /* DKAssetGroupDetailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42DCAAECBC814E495EEED647FFAFD5F9 /* DKAssetGroupDetailVC.swift */; };
 		97CB337A0EAB918A150B05F564BDC614 /* SDImageTransformer.h in Headers */ = {isa = PBXBuildFile; fileRef = D29D882328F45B91DDEAF13A82532D66 /* SDImageTransformer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		98F82B6858BE6B0721D2CE7F9A952FEF /* SDDeviceHelper.h in Headers */ = {isa = PBXBuildFile; fileRef = 139728AFE373CF5E335EA7B90C5EB88E /* SDDeviceHelper.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -678,6 +679,7 @@
 		9B3AD0BFAFD135C3825ACC9826BC0FF7 /* FIRComponentType.h in Headers */ = {isa = PBXBuildFile; fileRef = EBE7FA6B8041641226B85FE5AD78587F /* FIRComponentType.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		9B8D4B80282372C97EE8BD65C042B89B /* FOperationSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 65783D892BD7F8D2AAFF7F5F67FA45F2 /* FOperationSource.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		9BC27A75BC84D761A37643D8249A5DE0 /* SDWebImageDownloaderOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = BF48877C5C1786C8AC0FA820BF031965 /* SDWebImageDownloaderOperation.m */; };
+		9C1929FBD7E813A85BF8C4D3C276C819 /* IndexedAudioSource.h in Headers */ = {isa = PBXBuildFile; fileRef = E4DADEBD2C893D52CF6B28712D67C094 /* IndexedAudioSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9C1AFD904993FBE5E4ECDEC58C3D0F38 /* filter_block.cc in Sources */ = {isa = PBXBuildFile; fileRef = 57423F862140828E3E54D674E277E80D /* filter_block.cc */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		9C66FB50CD16289840961A52393F042C /* FValidation.h in Headers */ = {isa = PBXBuildFile; fileRef = 5F6D12F6F8261D8D2AA91D881B246E5B /* FValidation.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		9C80E4BDEA921ACB0584A54E35AA35AE /* FEventGenerator.h in Headers */ = {isa = PBXBuildFile; fileRef = 2D793A962C65647399D756E2E5C682F2 /* FEventGenerator.h */; settings = {ATTRIBUTES = (Project, ); }; };
@@ -694,7 +696,6 @@
 		9E5A1A8175B698E632F57E89CEC54AE6 /* OnPlaylistsQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FB18C3C744324AE91AAF96FF4162F02 /* OnPlaylistsQuery.swift */; };
 		9E6B2BBB5E462A9CAB3D54F7DAFF331A /* FBLPromise+Race.h in Copy . Public Headers */ = {isa = PBXBuildFile; fileRef = 094C1C70E17692DA99014EDA1DCA1BEB /* FBLPromise+Race.h */; };
 		9EBEEECB619DC64E0274284091610CE4 /* FIRDatabaseConfig_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 7EB2FC1A154D580C49AD5D65B15227E6 /* FIRDatabaseConfig_Private.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		9ECCD38230F7B97F8D557658C979ED7C /* ConcatenatingAudioSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 299A597DC3B931C7D47BFD6943A2BBAE /* ConcatenatingAudioSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		9F6AF64E9F787BD3531C70707E570CC8 /* FTupleTransaction.m in Sources */ = {isa = PBXBuildFile; fileRef = 19B9D581525C9595E45F8DA6E28794CD /* FTupleTransaction.m */; };
 		9FC70D791DD7965EDC41793E95676E65 /* FMerge.m in Sources */ = {isa = PBXBuildFile; fileRef = 2978D347DB3C4E207885141B97A022CE /* FMerge.m */; };
 		A000E20457A9095A72070CD8B164764A /* FSRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = E91A83AC67C53EE8A9F8F0EBC0F4EC3A /* FSRWebSocket.m */; };
@@ -744,11 +745,9 @@
 		A9336FB2B95CDB402A252921BC5EAB79 /* FBLPromise+Timeout.h in Headers */ = {isa = PBXBuildFile; fileRef = 5D4C5D90003189AFB55DA1B43B3DDF4F /* FBLPromise+Timeout.h */; };
 		A97E84A3562A08C40F4E40B16E5F1CAD /* FRepoInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 2FD33136BBC2F48C9AF49EC6352C4967 /* FRepoInfo.m */; };
 		A9AD130399B34048B1C04719527CDA30 /* FBLPromise+Then.m in Sources */ = {isa = PBXBuildFile; fileRef = 3451E61900A6041B4FA58026A51B1578 /* FBLPromise+Then.m */; };
-		A9BD72F3EE4D8D81EA752192DA063C0A /* LoadControl.h in Headers */ = {isa = PBXBuildFile; fileRef = 9871F3C748DFB1FE388FACB6F59CFE8E /* LoadControl.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A9D7455EAD8094EDAA2A802A95416B9F /* FQueryParams.m in Sources */ = {isa = PBXBuildFile; fileRef = 13F40CB5355964F7623B09DB4EF8B808 /* FQueryParams.m */; };
 		A9D86691793EBCD296D57897EF3FD97A /* OpenFilePlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 857A566E139C20D51C5E4BD345E0B73B /* OpenFilePlugin.m */; };
 		A9E74DE0B6D02F1F1ACBEA5C58AF023A /* SDWebImageOperation.h in Headers */ = {isa = PBXBuildFile; fileRef = 9E0632524B4561DD919DCB1AE7BCC742 /* SDWebImageOperation.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		AA1307D7B5B092890EB928EBB3467120 /* IndexedAudioSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E0ABDCAFCA75186AE80A2C906B96572 /* IndexedAudioSource.m */; };
 		AA3CE63DE517C29F4744805F908C4F5B /* permission_handler-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3EF2C4EEA9BABF9F8DF488168C3D37 /* permission_handler-dummy.m */; };
 		AB4C0751FD8300B16A179D6746E265AA /* FClock.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BD278AD845C511605C3C2EA1727B0C8 /* FClock.m */; };
 		AB5CACB2EA5A1BA104352AA2303875C5 /* version_set.h in Headers */ = {isa = PBXBuildFile; fileRef = DE24F196E68AAF376582B56CCBC3F50F /* version_set.h */; settings = {ATTRIBUTES = (Project, ); }; };
@@ -766,6 +765,7 @@
 		ADF7C0E699EDF121017867325964E546 /* DKPhotoGalleryContentVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC6C383D9621C24B4DD3C2C32FB0E086 /* DKPhotoGalleryContentVC.swift */; };
 		ADFEA2F96A5F3BE56A48060A2F62A6CC /* FWebSocketConnection.h in Headers */ = {isa = PBXBuildFile; fileRef = 93D2FE7D4D1760ED7B5E8665FD1FA517 /* FWebSocketConnection.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		AE1188B8C7BA9B7DA3CD2A9A98E48984 /* DKPhotoGalleryResource.swift in Sources */ = {isa = PBXBuildFile; fileRef = E27A775223585A11A611FDF6EDD79E01 /* DKPhotoGalleryResource.swift */; };
+		AE14DA6E1F4F12805C962826A8E0CE2C /* JustAudioPlugin.h in Headers */ = {isa = PBXBuildFile; fileRef = 6208198198866FC1D8CC5D807E98EA16 /* JustAudioPlugin.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AE501E063EB90CB270B9DD5E5F2E2C74 /* FlutterWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = 76FBA0876BC95551CCC25A7FD15D427A /* FlutterWebView.m */; };
 		AE5226D8BCA6615F1D238F92ACCA215D /* FirebaseCore.h in Headers */ = {isa = PBXBuildFile; fileRef = F306EBBB05F99EC0BA277C2A5EFDED1C /* FirebaseCore.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		AE86304A2B1BCFFCE3EC14E73F7A8791 /* FQuerySpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C2F7392FC43CDBF8A99550CECF814FB /* FQuerySpec.m */; };
@@ -848,12 +848,10 @@
 		C1900B59A3FED187548DE4DF9F7EF8D7 /* SDWeakProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = D25A29C5699027B9F8C27C9A3CC99FE2 /* SDWeakProxy.m */; };
 		C23FC55C2E0799148A005B58C978EE5D /* nl.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 79AC8C37561425323DBB8293C2403DD3 /* nl.lproj */; };
 		C31DF67EE68EA4EECE4B8172CED7A61B /* FCompleteChildSource.h in Headers */ = {isa = PBXBuildFile; fileRef = B2C109798726B8972FB66FAE4848F98A /* FCompleteChildSource.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		C3308E941515948290AD2C3493344F47 /* AudioPlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = 780CB92083218F27B561D6EC8DD45C3D /* AudioPlayer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C35682269C58EAEF8281B5740EE3650A /* FMDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 938A5B48DF1B6345B0D990926E8CB70C /* FMDB.framework */; };
 		C36D2E9C683A5A3C0C12B0B687CD98B9 /* UIImage+Metadata.h in Headers */ = {isa = PBXBuildFile; fileRef = AF9592DB7874ED2FC1DED9278748BFE8 /* UIImage+Metadata.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C3B36FFA4F2DB3AAA6AE3BADEC3B8B9D /* UIImageView+WebCache.m in Sources */ = {isa = PBXBuildFile; fileRef = EDCA39BC8C6D834F668750EF6EAC70D0 /* UIImageView+WebCache.m */; };
 		C45FB5C68B50FD67765BE5632A946453 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3D9B7A2DCD930F54CF07170D6F28D1D /* UIKit.framework */; };
-		C4A35B4B5F83BF6DF2B80E2026F5B95A /* LoopingAudioSource.h in Headers */ = {isa = PBXBuildFile; fileRef = D26F670FCD24BC0D8BEDAB88D708A56B /* LoopingAudioSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C5011AF97C96665813AFC2A2508CAB73 /* version_set.cc in Sources */ = {isa = PBXBuildFile; fileRef = DF5320FA07EDDE51186657701B0473F1 /* version_set.cc */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		C50B3DFDCC5CFAC79A14B8F628933491 /* FEventGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = AF95932E70F80A2D0D71978D71F17A73 /* FEventGenerator.m */; };
 		C5351F96A5329FB49199B3497A5B704C /* zh-Hant.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 3F4DEC0B0F5FEFF1FA83AEDB0DD57EA7 /* zh-Hant.lproj */; };
@@ -869,7 +867,7 @@
 		C7BAB0B64AA00AB3DACE1BE299D31ED8 /* DKPhotoImageDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20D1529FFA20DBACD8D1BDC314072FCF /* DKPhotoImageDownloader.swift */; };
 		C7FA6DC2DF9522CB3BE5A0AF5F35CD9F /* db_iter.cc in Sources */ = {isa = PBXBuildFile; fileRef = 90F129F1F06AD0B0109AE8C57EBA2320 /* db_iter.cc */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		C7FAD73E41D3EE40F6AAD4160C9153FA /* cache.cc in Sources */ = {isa = PBXBuildFile; fileRef = 2A5C34455A1885532FE546A584382691 /* cache.cc */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		C8259B619555194B1ED3B4D11ADDDBF0 /* just_audio-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 318108E4AC3A4340EBCD808C75ADA4F1 /* just_audio-dummy.m */; };
+		C8259B619555194B1ED3B4D11ADDDBF0 /* just_audio-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 9B00CE4DE32DDA21900FC5C8170DB1BF /* just_audio-dummy.m */; };
 		C857158DCAD6F7576EE19DCD7DB0CAD6 /* GDTCOREndpoints.m in Sources */ = {isa = PBXBuildFile; fileRef = F8A886A4C81E6FEB5AF2BB13752F4CDE /* GDTCOREndpoints.m */; };
 		C89DE20B752859083A7BC9B68B94FE55 /* SDImageCodersManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 932776E68BD7D76A017B56A484267367 /* SDImageCodersManager.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C8C69AD5F9C9D9AA7EB3FA4867F032B1 /* SDWebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 70A17C154FC6D3C3D8C690F12DE351CB /* SDWebImage.framework */; };
@@ -900,6 +898,7 @@
 		CEA413C1CC8DE05BE1B8B625AB31E106 /* SDImageIOAnimatedCoder.m in Sources */ = {isa = PBXBuildFile; fileRef = D589102D9D32D24AE5F546B624B20BBF /* SDImageIOAnimatedCoder.m */; };
 		CEC1BB8FA0CB483EDBF0C3E40D8AE170 /* DKAssetGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FAAF143F567E5960F2AC57088D476E0 /* DKAssetGroup.swift */; };
 		CEE32BB8DE05DB621493F325D32B0DE9 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE1974021190C1DA9964B145768EEDD2 /* Foundation.framework */; };
+		CF2AEE4452D3610634E3D719609CE45C /* UriAudioSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 8ACF1083227F3AD1F83F56169B35CA67 /* UriAudioSource.m */; };
 		CF34FC54C011B82428D3253E4FA201D7 /* FIRDatabase_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = BDE3F0C251DB393123732701FEC3519E /* FIRDatabase_Private.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		CF50927E5C20F2D071548FFE89565038 /* FWriteTreeRef.h in Headers */ = {isa = PBXBuildFile; fileRef = F56F40B3BC588B832884035EA3024924 /* FWriteTreeRef.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		CFC82D9BD3B4421EF35D83A304C9B512 /* FBLPromise+Reduce.m in Sources */ = {isa = PBXBuildFile; fileRef = 4DAED4B01897E9680FAEE10813C7B2DA /* FBLPromise+Reduce.m */; };
@@ -923,7 +922,6 @@
 		D3F7231E22B6AF6E730FEA9469A21D90 /* FBLPromise+Retry.m in Sources */ = {isa = PBXBuildFile; fileRef = F8B22A35ED757B194A8AA8B84CEE0A67 /* FBLPromise+Retry.m */; };
 		D477F50DE0122C64A0AFC04470EC0688 /* FBLPromise+Do.h in Headers */ = {isa = PBXBuildFile; fileRef = 888B356A7F80B44DCF939B6E24F5FACD /* FBLPromise+Do.h */; };
 		D4D2D0547E34DB4B1F6C301A4618237E /* FLTPackageInfoPlugin.h in Headers */ = {isa = PBXBuildFile; fileRef = 4F4AD15BEFDB2929C70B0E63323E6F20 /* FLTPackageInfoPlugin.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		D4D91AF77DD44AA86BD76B1FA852819F /* BetterEventChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = 2ECA33667CDAEBBFF1A5169F66E849A2 /* BetterEventChannel.m */; };
 		D528A245CB4CB2A1C581917A840F4954 /* SDWebImageOptionsProcessor.m in Sources */ = {isa = PBXBuildFile; fileRef = C027E4DD2D45339D5F9B12CD4F17F55E /* SDWebImageOptionsProcessor.m */; };
 		D56F21CA4D7C529726F4E2FB4C95498B /* ru.lproj in Resources */ = {isa = PBXBuildFile; fileRef = 2279C2DE6EDD0930F886E62E53115BD5 /* ru.lproj */; };
 		D57F70B562858B31B40E399EEEDA67A2 /* FLTURLLauncherPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 0E3EA7A31CB789DD20D9A29607C65AD3 /* FLTURLLauncherPlugin.m */; };
@@ -940,12 +938,12 @@
 		D7AB53A5D680FC94A84F1E7E71CD452E /* FCacheNode.h in Headers */ = {isa = PBXBuildFile; fileRef = 48A5294D3B38D287070CA02BB63FE6AF /* FCacheNode.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		D8216B34994B0D71C303E487708B31CA /* BluetoothPermissionStrategy.h in Headers */ = {isa = PBXBuildFile; fileRef = E516A4709A29695D50C2D96C4CCAF9EE /* BluetoothPermissionStrategy.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D8699D11CA8B80ED8357934463870BE5 /* FViewProcessor.h in Headers */ = {isa = PBXBuildFile; fileRef = BCAC519A231F5772F2A047EA264D3B28 /* FViewProcessor.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		D87A9AD4C4E6A98ABF8C8705E53CA196 /* AudioSource.m in Sources */ = {isa = PBXBuildFile; fileRef = DC239AD7A92AAA0A9E05F7807D408455 /* AudioSource.m */; };
 		D883F6A64BA89FF69BCC44C90F46A653 /* GDTCORStorageEventSelector.h in Headers */ = {isa = PBXBuildFile; fileRef = BA0AFB705DE343F60189B4876C7054CB /* GDTCORStorageEventSelector.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		D9C138D03E98E15EB245CB11A5D52B75 /* FIRDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = 2D8F64ACF2DE12B11450A4463ED25D7C /* FIRDatabase.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D9C3B160325D499C0E3C7D28DE04DCF0 /* DKPhotoGalleryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CF4389878267571F3713C6F62CDCA9C /* DKPhotoGalleryItem.swift */; };
 		D9D19D6A73B6DF7CF39A59B1AA8C706A /* SDInternalMacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 40D9B0C053516A23F286D0E348427D4B /* SDInternalMacros.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		DA70526AF3A515E7C3F2ED84FD2836A0 /* GDTCCTNanopbHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 2D795D8095F2F0971E71F2843F9CCCC6 /* GDTCCTNanopbHelpers.m */; };
+		DA7E3E0A6C136107DDF315B237615711 /* AudioPlayer.h in Headers */ = {isa = PBXBuildFile; fileRef = FDD01F02831DCE27447875FF7250F73D /* AudioPlayer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DAB5AEEC447C45269479FF022D75BEB5 /* OnAudioController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8268209A13523A603BAEE15FF5A9D95A /* OnAudioController.swift */; };
 		DAC9A144EB694FE4ABF8BB6DFFFD6661 /* FTransformedEnumerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 8864806E9D4CF1871FB9AD8E275F1E09 /* FTransformedEnumerator.m */; };
 		DAF2336E3B2F477654A8207092DB374D /* FLTFirebaseCorePlugin.h in Headers */ = {isa = PBXBuildFile; fileRef = 2FFA7C91F3BCBD393B9C12AB67119D9C /* FLTFirebaseCorePlugin.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -967,6 +965,7 @@
 		DFF8111B8EABC42999E8A54E1BD40922 /* SDImageCodersManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E37754C3116B40F119D9129F9BF015 /* SDImageCodersManager.m */; };
 		E003D298FA775DE6AC7DAB7EA2855EE4 /* SDDiskCache.h in Headers */ = {isa = PBXBuildFile; fileRef = 2F877F1199C4D8BA84E418D60F251554 /* SDDiskCache.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E0C87A9C6FF3E699EBB7BCF25DCEB36B /* GDTCOREvent+GDTCCTSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = EC7CAC22D472E1CAF98A99D48C7C3270 /* GDTCOREvent+GDTCCTSupport.m */; };
+		E10CFF1A31A9531879E46F758C617B88 /* LoopingAudioSource.h in Headers */ = {isa = PBXBuildFile; fileRef = 15FE14153FBEBF3AA561C558556AD713 /* LoopingAudioSource.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E157C8D0F45957F45BEE099114F7D1A6 /* FRepo_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 5C31C911791D68D41DABD5C779C35468 /* FRepo_Private.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		E21AF7C9EADF192CAC90C626CD0B35B3 /* NSImage+Compatibility.h in Headers */ = {isa = PBXBuildFile; fileRef = 5E723CAC226E5FD7FDA8AB2343FF150D /* NSImage+Compatibility.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E25290388B76E77958260C9B2EFF8FEC /* SDImageAWebPCoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 7F3CED7C1C3BAFEFE19B8F5353D07139 /* SDImageAWebPCoder.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1000,7 +999,6 @@
 		E79DF16345B49EEBA697FF8C8396C595 /* FirebaseDatabase.h in Headers */ = {isa = PBXBuildFile; fileRef = 70B26A1C51626D2F3415378CCE5AE82C /* FirebaseDatabase.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E8A36E6F3E14C5749D59AC156DB4DFDF /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE1974021190C1DA9964B145768EEDD2 /* Foundation.framework */; };
 		E8A85DED1A888B0E01ED476801C6D2F3 /* FImmutableSortedSet.h in Headers */ = {isa = PBXBuildFile; fileRef = 41887960C21444E9D468FE9663F7BF00 /* FImmutableSortedSet.h */; settings = {ATTRIBUTES = (Project, ); }; };
-		E8B459150B288F3379A2622220FE3B34 /* BetterEventChannel.h in Headers */ = {isa = PBXBuildFile; fileRef = 423730756221DD56AF5B1EDCEFC63D3E /* BetterEventChannel.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E8D801D7EAA17373EAC3A68C407910B2 /* SwiftyGif-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = B09CFFC5D80A3B4D20E3EA277FA153F7 /* SwiftyGif-dummy.m */; };
 		E8FE82B4385B8151CAF4A5B6A7F85976 /* GULSecureCoding.h in Headers */ = {isa = PBXBuildFile; fileRef = 747E4EEAA3D0C8D958B1E2816AF3C4F6 /* GULSecureCoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E905D6C082BD5B51534CAB9D2114C494 /* FOperationSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 85C5D5C887A65264B29985BA216468B2 /* FOperationSource.m */; };
@@ -1046,6 +1044,7 @@
 		F30E19358C7A19F84257B0C20B370BBB /* db_impl.h in Headers */ = {isa = PBXBuildFile; fileRef = A55F414DD8CC52B6A41B237FC488C5F7 /* db_impl.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		F3248EF2B54263F535A516086C2B93B8 /* FBLPromise+Testing.h in Headers */ = {isa = PBXBuildFile; fileRef = A4BCBF3063D4A5845DADA344AEBF0AD0 /* FBLPromise+Testing.h */; };
 		F36C1F70230F3D8CEB37B5DE80BF65F5 /* format.h in Headers */ = {isa = PBXBuildFile; fileRef = 19E00B03A216B442A133F9F13A639A9D /* format.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		F41F59F7DBA93AF206CB7DF6C31007BE /* IndexedAudioSource.m in Sources */ = {isa = PBXBuildFile; fileRef = D2D8A63C840097EFBB2F12326F1D6ABA /* IndexedAudioSource.m */; };
 		F4A1947457BCA46380E592DFDA1CBBDE /* FIRDatabaseComponent.h in Headers */ = {isa = PBXBuildFile; fileRef = 99B29C90D28EC11442136DFCE5CF82E8 /* FIRDatabaseComponent.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		F4BF90BC4D984502650850C780E9798A /* DKAsset+Fetch.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7010B8E5BCBD6277E318B462E2B1BF9 /* DKAsset+Fetch.swift */; };
 		F4F816196607135D3D6DEC79B362055C /* DKPhotoGallery-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 5B718B3688DDA0BA23A105C9FA66BE49 /* DKPhotoGallery-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1056,6 +1055,7 @@
 		F6B2419A507118E0A526618A233F5F56 /* MediaLibraryPermissionStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = FA4E2EE65E4FDEC618174BBAB7365136 /* MediaLibraryPermissionStrategy.m */; };
 		F6B5D4B1A37DF98CC40158DF6A55DAFE /* DKPermissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F05DCDE8F4DF803A3F508E2C9D7DCC8E /* DKPermissionView.swift */; };
 		F6D4A243BC6F217D56B6911D51807F48 /* FUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = F0CCB1BEEC9C3BACB1FA901885DFFF59 /* FUtilities.m */; };
+		F6F692B368ABA51D8EDCAF2490C7E985 /* ClippingAudioSource.m in Sources */ = {isa = PBXBuildFile; fileRef = 7BCB32D7E0655E84B2BE91A2F0CB8993 /* ClippingAudioSource.m */; };
 		F777B8C9CE11BBD04B0FE76FEC8A6C90 /* OnAudiosFromQuery.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9963E927D5E14D7021E52C1069A0CC54 /* OnAudiosFromQuery.swift */; };
 		F786931CFD31FF38A422F0E67A6EDD4D /* FBLPromise+Reduce.h in Copy . Public Headers */ = {isa = PBXBuildFile; fileRef = CA2404941CDCDA732DFD7EE49102E2C0 /* FBLPromise+Reduce.h */; };
 		F7928072469B12F89450001CA5441857 /* FTree.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A4859B3CC0088DF2661ED0BCDE7D8DA /* FTree.m */; };
@@ -1710,6 +1710,7 @@
 		0106A0933C59155AE5CCC210E27797B3 /* GDTCOREvent.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GDTCOREvent.h; path = GoogleDataTransport/GDTCORLibrary/Public/GoogleDataTransport/GDTCOREvent.h; sourceTree = "<group>"; };
 		014D4E10B4DB5D663BA01FD85CBD6B77 /* DKImagePickerController.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = DKImagePickerController.debug.xcconfig; sourceTree = "<group>"; };
 		015496B4D30A0BF26E19740D4FD9F383 /* nanopb.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = nanopb.release.xcconfig; sourceTree = "<group>"; };
+		017E6E8E65878CAF6EB1D15583E8727C /* JustAudioPlugin.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = JustAudioPlugin.m; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/just_audio-0.9.14/ios/Classes/JustAudioPlugin.m"; sourceTree = "<group>"; };
 		02063638AE92E63BB2AABA88CBEE17E0 /* firebase_database.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = firebase_database.podspec; path = "../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_database-8.0.0/ios/firebase_database.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		022310BDD292CCF0B192474FAADDA237 /* FConnection.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FConnection.m; path = FirebaseDatabase/Sources/Realtime/FConnection.m; sourceTree = "<group>"; };
 		023136219D6280EFBAFB396BC54267B8 /* DKAssetGroupDetailBaseCell.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DKAssetGroupDetailBaseCell.swift; path = Sources/DKImagePickerController/View/Cell/DKAssetGroupDetailBaseCell.swift; sourceTree = "<group>"; };
@@ -1750,6 +1751,7 @@
 		0A48ABA8F29B844C0D2F72C2F8B3349F /* tr.lproj */ = {isa = PBXFileReference; includeInIndex = 1; name = tr.lproj; path = Sources/DKImagePickerController/Resource/Resources/tr.lproj; sourceTree = "<group>"; };
 		0A7F184A84AF1DAD491742124A8046AA /* FLTCookieManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FLTCookieManager.m; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/webview_flutter-2.0.13/ios/Classes/FLTCookieManager.m"; sourceTree = "<group>"; };
 		0A9F46A999C47653013D3AD854352507 /* leveldb.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = leveldb.framework; path = "leveldb-library.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		0AA2D6E068F535A73851A513F583CA46 /* ClippingAudioSource.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ClippingAudioSource.h; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/just_audio-0.9.14/ios/Classes/ClippingAudioSource.h"; sourceTree = "<group>"; };
 		0AFC489D0312125EBB9FD74C633B467E /* PromisesObjC-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "PromisesObjC-dummy.m"; sourceTree = "<group>"; };
 		0BA37AF15FCDCFC6BC0F32466F0CC04E /* FMDB.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FMDB.h; path = src/fmdb/FMDB.h; sourceTree = "<group>"; };
 		0BDE3A6133E04979AE416B8B3EA30A83 /* builder.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = builder.h; path = db/builder.h; sourceTree = "<group>"; };
@@ -1777,11 +1779,13 @@
 		110F40D73BA6F6C0D35AA048CCC9FF07 /* FIRHeartbeatInfo.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FIRHeartbeatInfo.h; path = FirebaseCore/Sources/Private/FIRHeartbeatInfo.h; sourceTree = "<group>"; };
 		117526D0049BC0DD4FF6E3B4AE0EC775 /* FIRMutableData.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FIRMutableData.h; path = FirebaseDatabase/Sources/Public/FirebaseDatabase/FIRMutableData.h; sourceTree = "<group>"; };
 		119064D08020DE59628C4D427C97DBA8 /* flutter_isolate-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "flutter_isolate-dummy.m"; sourceTree = "<group>"; };
+		11EDBB904A5F9FCCDE686679657F52B3 /* just_audio.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = just_audio.podspec; path = "../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/just_audio-0.9.14/ios/just_audio.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		124BEB58047857CF4E0C2FEF06FE66EA /* FLTPHPickerSaveImageToPathOperation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FLTPHPickerSaveImageToPathOperation.h; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/image_picker-0.8.4+1/ios/Classes/FLTPHPickerSaveImageToPathOperation.h"; sourceTree = "<group>"; };
 		12BD3C0E8844B1CF9172DB2299F40BB5 /* path_provider.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = path_provider.release.xcconfig; sourceTree = "<group>"; };
 		12C1278073CF66F4DF8C399A7DBB60B8 /* DKImagePickerController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DKImagePickerController.swift; path = Sources/DKImagePickerController/DKImagePickerController.swift; sourceTree = "<group>"; };
 		12C65B0B529B12F4EED2748322AE3E75 /* file_picker.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = file_picker.podspec; path = "../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/file_picker-4.1.3/ios/file_picker.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		12D7F62F02A8B068C4346AECEEDC2F67 /* path_provider-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "path_provider-Info.plist"; sourceTree = "<group>"; };
+		12DF86CF509E1A6CBA7F5695FFA02515 /* LoopingAudioSource.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = LoopingAudioSource.m; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/just_audio-0.9.14/ios/Classes/LoopingAudioSource.m"; sourceTree = "<group>"; };
 		12F87EF1A4A74B851C7432400BBADE0E /* SensorPermissionStrategy.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SensorPermissionStrategy.h; path = "../../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/permission_handler-8.1.6/ios/Classes/strategies/SensorPermissionStrategy.h"; sourceTree = "<group>"; };
 		1322D2D46723D390150A121402BF6A9B /* FNamedNode.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FNamedNode.m; path = FirebaseDatabase/Sources/FNamedNode.m; sourceTree = "<group>"; };
 		1343DC7223C4F4FF0B311A23DF84C798 /* GDTCCTNanopbHelpers.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GDTCCTNanopbHelpers.h; path = GoogleDataTransport/GDTCCTLibrary/Private/GDTCCTNanopbHelpers.h; sourceTree = "<group>"; };
@@ -1797,6 +1801,7 @@
 		152BC886CE3845D71CD2DFC7E34C5B03 /* webview_flutter-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "webview_flutter-prefix.pch"; sourceTree = "<group>"; };
 		156CEA68F2E74AE15FB97C89D5460790 /* package_info.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = package_info.modulemap; sourceTree = "<group>"; };
 		15C70CF5AC505AC8C589A90870A3118D /* FClock.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FClock.h; path = FirebaseDatabase/Sources/FClock.h; sourceTree = "<group>"; };
+		15FE14153FBEBF3AA561C558556AD713 /* LoopingAudioSource.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = LoopingAudioSource.h; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/just_audio-0.9.14/ios/Classes/LoopingAudioSource.h"; sourceTree = "<group>"; };
 		161BE9159CE901F43CE17EB089624E27 /* SDDeviceHelper.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDDeviceHelper.m; path = SDWebImage/Private/SDDeviceHelper.m; sourceTree = "<group>"; };
 		175E796EA47A3A8F3A5AC82603E74CB4 /* SDImageCache.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDImageCache.m; path = SDWebImage/Core/SDImageCache.m; sourceTree = "<group>"; };
 		176983A805737DDA20828A8108AB7E60 /* FLTSharePlusPlugin.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FLTSharePlusPlugin.m; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/share_plus-2.2.0/ios/Classes/FLTSharePlusPlugin.m"; sourceTree = "<group>"; };
@@ -1812,6 +1817,7 @@
 		19E00B03A216B442A133F9F13A639A9D /* format.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = format.h; path = table/format.h; sourceTree = "<group>"; };
 		19EF255D3F11FC87653EA5EA378A0F2E /* UIView+WebCache.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIView+WebCache.h"; path = "SDWebImage/Core/UIView+WebCache.h"; sourceTree = "<group>"; };
 		19FA86C5B58C2F6B59E1E7E0EB847F13 /* on_audio_query.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = on_audio_query.release.xcconfig; sourceTree = "<group>"; };
+		1A154159EF2349C119524F6122E7EE27 /* just_audio-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "just_audio-umbrella.h"; sourceTree = "<group>"; };
 		1A5B251C01D7DE783F4B409F51EF9A30 /* share_plus-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "share_plus-Info.plist"; sourceTree = "<group>"; };
 		1A7342F14FEF7F658A1DB5205E55EB4E /* open_file-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "open_file-prefix.pch"; sourceTree = "<group>"; };
 		1A8B1D6B26238345A99020DAC10E6452 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; name = LICENSE; path = "../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider-2.0.4/LICENSE"; sourceTree = "<group>"; };
@@ -1820,7 +1826,6 @@
 		1CDAEC33CFE1330D459B4A7A2E77472F /* FIRApp.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FIRApp.h; path = FirebaseCore/Sources/Public/FirebaseCore/FIRApp.h; sourceTree = "<group>"; };
 		1D02E40273C37B23A495ED70A67ABCCC /* leveldb-library.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "leveldb-library.release.xcconfig"; sourceTree = "<group>"; };
 		1D28DE56279E61E6810416C20254DF1F /* comparator.cc */ = {isa = PBXFileReference; includeInIndex = 1; name = comparator.cc; path = util/comparator.cc; sourceTree = "<group>"; };
-		1DE5A1D310FFF0A98A40D5C78DF1DA5E /* just_audio-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "just_audio-Info.plist"; sourceTree = "<group>"; };
 		1E04F1324D42835CA9F1330DDB251368 /* AppTrackingTransparencyPermissionStrategy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AppTrackingTransparencyPermissionStrategy.m; path = "../../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/permission_handler-8.1.6/ios/Classes/strategies/AppTrackingTransparencyPermissionStrategy.m"; sourceTree = "<group>"; };
 		1E141C9FC8E928A1D98BBDAF5D79E93D /* FRangedFilter.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FRangedFilter.m; path = FirebaseDatabase/Sources/FRangedFilter.m; sourceTree = "<group>"; };
 		1E9169ED64FE53ECACDEC9D65C3388FE /* FIRDatabaseConnectionContextProvider.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FIRDatabaseConnectionContextProvider.h; path = FirebaseDatabase/Sources/Login/FIRDatabaseConnectionContextProvider.h; sourceTree = "<group>"; };
@@ -1857,8 +1862,8 @@
 		25A2E9B38CFE6CA590356725E0DAF395 /* FBLPromise+Async.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "FBLPromise+Async.h"; path = "Sources/FBLPromises/include/FBLPromise+Async.h"; sourceTree = "<group>"; };
 		25A87774C3BD592EFDEEBBE66C3CBC36 /* GDTCORStorageProtocol.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GDTCORStorageProtocol.h; path = GoogleDataTransport/GDTCORLibrary/Internal/GDTCORStorageProtocol.h; sourceTree = "<group>"; };
 		25BC6DE4A96E34D534EF912223B6D50C /* FDataEvent.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FDataEvent.m; path = FirebaseDatabase/Sources/Core/View/FDataEvent.m; sourceTree = "<group>"; };
-		25EB2A0E88C553DD92AC82BCD99E8D3E /* JustAudioPlugin.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = JustAudioPlugin.m; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/just_audio-0.9.12/ios/Classes/JustAudioPlugin.m"; sourceTree = "<group>"; };
 		2613AD8B20DFB578423F18B0917B4C2C /* DKPDFView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DKPDFView.swift; path = DKPhotoGallery/Preview/PDFPreview/DKPDFView.swift; sourceTree = "<group>"; };
+		261BCB316A79D85DC9C3DC63D0535433 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; name = LICENSE; path = "../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/just_audio-0.9.14/LICENSE"; sourceTree = "<group>"; };
 		265702C9F23B6AE94E09067FFF309C75 /* FPathIndex.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FPathIndex.h; path = FirebaseDatabase/Sources/FPathIndex.h; sourceTree = "<group>"; };
 		26671B41929380D4F1F7A78A5DAE6F4B /* path_provider.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = path_provider.modulemap; sourceTree = "<group>"; };
 		267F0397D62E5B340B879651C9F6F1F7 /* GoogleDataTransport.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = GoogleDataTransport.debug.xcconfig; sourceTree = "<group>"; };
@@ -1868,11 +1873,11 @@
 		27C268A6A7E78A1FB8DFEA3E484E2E80 /* SDImageTransformer.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDImageTransformer.m; path = SDWebImage/Core/SDImageTransformer.m; sourceTree = "<group>"; };
 		27D4B6728F661AB05DCF3F5DE9DA5681 /* FBLPromisePrivate.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FBLPromisePrivate.h; path = Sources/FBLPromises/include/FBLPromisePrivate.h; sourceTree = "<group>"; };
 		27F32F7FB7DADDEF8D3665D3A32F99F1 /* sqflite-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "sqflite-dummy.m"; sourceTree = "<group>"; };
+		28331914EB081D3A680A4B80504D7C4E /* BetterEventChannel.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = BetterEventChannel.m; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/just_audio-0.9.14/ios/Classes/BetterEventChannel.m"; sourceTree = "<group>"; };
 		288521AB923B56320D5A7C3D6A2C871C /* FArraySortedDictionary.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FArraySortedDictionary.m; path = FirebaseDatabase/Sources/third_party/FImmutableSortedDictionary/FImmutableSortedDictionary/FArraySortedDictionary.m; sourceTree = "<group>"; };
 		28B764C2112488F6C1A8A228D171DBE1 /* GDTCOREventTransformer.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GDTCOREventTransformer.h; path = GoogleDataTransport/GDTCORLibrary/Public/GoogleDataTransport/GDTCOREventTransformer.h; sourceTree = "<group>"; };
 		2978D347DB3C4E207885141B97A022CE /* FMerge.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FMerge.m; path = FirebaseDatabase/Sources/Core/Operation/FMerge.m; sourceTree = "<group>"; };
 		2995B98B589F69E01B40B25DB08CCC45 /* FPriorityIndex.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FPriorityIndex.h; path = FirebaseDatabase/Sources/FPriorityIndex.h; sourceTree = "<group>"; };
-		299A597DC3B931C7D47BFD6943A2BBAE /* ConcatenatingAudioSource.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ConcatenatingAudioSource.h; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/just_audio-0.9.12/ios/Classes/ConcatenatingAudioSource.h"; sourceTree = "<group>"; };
 		29C88790EAC232F3894E1B8943E55CBE /* ar.lproj */ = {isa = PBXFileReference; includeInIndex = 1; name = ar.lproj; path = Sources/DKImagePickerController/Resource/Resources/ar.lproj; sourceTree = "<group>"; };
 		29DAC72705FFB1B8B06C62EDC6D25EAF /* FImmutableSortedDictionary.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FImmutableSortedDictionary.m; path = FirebaseDatabase/Sources/third_party/FImmutableSortedDictionary/FImmutableSortedDictionary/FImmutableSortedDictionary.m; sourceTree = "<group>"; };
 		29E7775C35B04F2C0FC0294F8478FA5B /* OnPlaylistsController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = OnPlaylistsController.swift; path = "../../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/on_audio_query-2.5.2/ios/Classes/controller/OnPlaylistsController.swift"; sourceTree = "<group>"; };
@@ -1882,7 +1887,6 @@
 		2A5C34455A1885532FE546A584382691 /* cache.cc */ = {isa = PBXFileReference; includeInIndex = 1; name = cache.cc; path = util/cache.cc; sourceTree = "<group>"; };
 		2A5D5AB107AB6FCD5B2E4E9B3EDA6EA0 /* FTupleTransaction.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FTupleTransaction.h; path = FirebaseDatabase/Sources/Utilities/Tuples/FTupleTransaction.h; sourceTree = "<group>"; };
 		2AA23EE22B2DED7D6C2747170836CC22 /* FLeafNode.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FLeafNode.h; path = FirebaseDatabase/Sources/Snapshot/FLeafNode.h; sourceTree = "<group>"; };
-		2AA81DF75028E70DC7BFCCDC2373518E /* just_audio-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "just_audio-umbrella.h"; sourceTree = "<group>"; };
 		2AB089D7D36F74875F258754EEB83E51 /* FTupleTSN.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FTupleTSN.m; path = FirebaseDatabase/Sources/Utilities/Tuples/FTupleTSN.m; sourceTree = "<group>"; };
 		2B0BDBFF9C56EFDBFE5E95DDF74EC1E4 /* DKPhotoGalleryInteractiveTransition.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DKPhotoGalleryInteractiveTransition.swift; path = DKPhotoGallery/Transition/DKPhotoGalleryInteractiveTransition.swift; sourceTree = "<group>"; };
 		2B5B7557418B81075CE3FF094241ACFE /* FLTWebViewFlutterPlugin.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FLTWebViewFlutterPlugin.h; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/webview_flutter-2.0.13/ios/Classes/FLTWebViewFlutterPlugin.h"; sourceTree = "<group>"; };
@@ -1907,14 +1911,12 @@
 		2E2D1D5A9C09F6A03833D87E317FAA14 /* FIRCoreDiagnosticsInterop.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FIRCoreDiagnosticsInterop.h; path = Interop/CoreDiagnostics/Public/FIRCoreDiagnosticsInterop.h; sourceTree = "<group>"; };
 		2E709F4C8E07F675C70888A242D96F55 /* FTupleNodePath.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FTupleNodePath.m; path = FirebaseDatabase/Sources/Utilities/Tuples/FTupleNodePath.m; sourceTree = "<group>"; };
 		2EC30B8B169B229A1CC60E414BEED469 /* sqflite-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "sqflite-prefix.pch"; sourceTree = "<group>"; };
-		2ECA33667CDAEBBFF1A5169F66E849A2 /* BetterEventChannel.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = BetterEventChannel.m; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/just_audio-0.9.12/ios/Classes/BetterEventChannel.m"; sourceTree = "<group>"; };
 		2F2DC3FD58185F5047A595469BEBE5FE /* nanopb.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = nanopb.modulemap; sourceTree = "<group>"; };
 		2F338DF916191E5F05E4EC3A46576283 /* it.lproj */ = {isa = PBXFileReference; includeInIndex = 1; name = it.lproj; path = Sources/DKImagePickerController/Resource/Resources/it.lproj; sourceTree = "<group>"; };
 		2F5D7CFB436D5A41C363B2DB64C01572 /* leveldb-library-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "leveldb-library-dummy.m"; sourceTree = "<group>"; };
 		2F8360C0078A899C6E1000860DF250F3 /* db_impl.cc */ = {isa = PBXFileReference; includeInIndex = 1; name = db_impl.cc; path = db/db_impl.cc; sourceTree = "<group>"; };
 		2F877F1199C4D8BA84E418D60F251554 /* SDDiskCache.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SDDiskCache.h; path = SDWebImage/Core/SDDiskCache.h; sourceTree = "<group>"; };
 		2F9E4A4DFBB3FA382E47DEEF13A9ED68 /* webview_flutter.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = webview_flutter.framework; path = webview_flutter.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		2FA1F49D36052696696B31A6784D03EF /* LoopingAudioSource.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = LoopingAudioSource.m; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/just_audio-0.9.12/ios/Classes/LoopingAudioSource.m"; sourceTree = "<group>"; };
 		2FD33136BBC2F48C9AF49EC6352C4967 /* FRepoInfo.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FRepoInfo.m; path = FirebaseDatabase/Sources/Core/FRepoInfo.m; sourceTree = "<group>"; };
 		2FEDA036F4FD854AC69CC0D57F398117 /* SDWebImageIndicator.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SDWebImageIndicator.h; path = SDWebImage/Core/SDWebImageIndicator.h; sourceTree = "<group>"; };
 		2FEFE5AAEAAAAB2E4C26B09E682B79A2 /* share_plus.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = share_plus.modulemap; sourceTree = "<group>"; };
@@ -1929,7 +1931,6 @@
 		30FD87C36DC558517E44635B64D70785 /* open_file.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = open_file.modulemap; sourceTree = "<group>"; };
 		31616D4AB4516F2BE69AABEA7C8C0AF2 /* PromisesObjC.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = PromisesObjC.debug.xcconfig; sourceTree = "<group>"; };
 		317C26B9A7CEDD34ADE8F37FAAB7AC20 /* Pods-Runner-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Runner-frameworks.sh"; sourceTree = "<group>"; };
-		318108E4AC3A4340EBCD808C75ADA4F1 /* just_audio-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "just_audio-dummy.m"; sourceTree = "<group>"; };
 		31C7A199DD35D3E8E78932A793F1E05E /* FlutterIsolatePlugin.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FlutterIsolatePlugin.m; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/flutter_isolate-2.0.0/ios/Classes/FlutterIsolatePlugin.m"; sourceTree = "<group>"; };
 		3222A72FCECC992F3B8480278EBB52EA /* DKImagePickerController-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "DKImagePickerController-umbrella.h"; sourceTree = "<group>"; };
 		32294B35E2C3C62A3EC9EA9E15EF88A5 /* image_picker-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "image_picker-Info.plist"; sourceTree = "<group>"; };
@@ -1939,6 +1940,7 @@
 		3337774E80E1423EA00F8962E7987EB4 /* DKPhotoPlayerPreviewVC.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DKPhotoPlayerPreviewVC.swift; path = DKPhotoGallery/Preview/PlayerPreview/DKPhotoPlayerPreviewVC.swift; sourceTree = "<group>"; };
 		3347A1AB6546F0A3977529B8F199DC41 /* FBLPromises.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = FBLPromises.framework; path = PromisesObjC.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		335C0026B03FA22B67ADA32DCC62D6DD /* dbformat.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = dbformat.h; path = db/dbformat.h; sourceTree = "<group>"; };
+		3363B219878911E3F26F178BCCDB9C81 /* AudioSource.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AudioSource.m; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/just_audio-0.9.14/ios/Classes/AudioSource.m"; sourceTree = "<group>"; };
 		344406EEEF8AE1D36C1C9C92268CF780 /* FTreeSortedDictionaryEnumerator.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FTreeSortedDictionaryEnumerator.m; path = FirebaseDatabase/Sources/third_party/FImmutableSortedDictionary/FImmutableSortedDictionary/FTreeSortedDictionaryEnumerator.m; sourceTree = "<group>"; };
 		344AA9D9BBED68E6D85E18E945722A9B /* PermissionHandlerPlugin.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = PermissionHandlerPlugin.m; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/permission_handler-8.1.6/ios/Classes/PermissionHandlerPlugin.m"; sourceTree = "<group>"; };
 		3451E61900A6041B4FA58026A51B1578 /* FBLPromise+Then.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "FBLPromise+Then.m"; path = "Sources/FBLPromises/FBLPromise+Then.m"; sourceTree = "<group>"; };
@@ -1959,7 +1961,6 @@
 		377EEEB7A0E94AA4F1737749F3A780EF /* leveldb.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = leveldb.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		37C14BFCBFA81554F39E54D5907CE399 /* FBLPromise+All.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "FBLPromise+All.h"; path = "Sources/FBLPromises/include/FBLPromise+All.h"; sourceTree = "<group>"; };
 		38414ABBDC34CB20F47AB2DB6CE7D07C /* FKeepSyncedEventRegistration.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FKeepSyncedEventRegistration.m; path = FirebaseDatabase/Sources/Core/View/FKeepSyncedEventRegistration.m; sourceTree = "<group>"; };
-		38524C7C45A460AF18B7D0B997B1C212 /* just_audio-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "just_audio-prefix.pch"; sourceTree = "<group>"; };
 		38C00AEA47388E2C3FDD62D17144AD4D /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; name = LICENSE; path = "../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/file_picker-4.1.3/LICENSE"; sourceTree = "<group>"; };
 		39034E1DBA58E653D10C333A05CB6CD6 /* FListenComplete.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FListenComplete.m; path = FirebaseDatabase/Sources/FListenComplete.m; sourceTree = "<group>"; };
 		39407059A21C26DA6A5576DA8E503FBA /* firebase_database.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = firebase_database.release.xcconfig; sourceTree = "<group>"; };
@@ -1992,7 +1993,6 @@
 		404471C176F713F8956E4621863E93C6 /* FIRDatabaseReference_Private.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FIRDatabaseReference_Private.h; path = FirebaseDatabase/Sources/Api/Private/FIRDatabaseReference_Private.h; sourceTree = "<group>"; };
 		405B8A6CFA8F888DABD54C8C5479DE04 /* package_info.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = package_info.podspec; path = "../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/package_info-2.0.2/ios/package_info.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		40C754FB3573204DED447DB704BE86F0 /* FRepoInfo.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FRepoInfo.h; path = FirebaseDatabase/Sources/Core/FRepoInfo.h; sourceTree = "<group>"; };
-		40CBD04774A087561C6D2BA5F65034E5 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; name = LICENSE; path = "../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/just_audio-0.9.12/LICENSE"; sourceTree = "<group>"; };
 		40D9B0C053516A23F286D0E348427D4B /* SDInternalMacros.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SDInternalMacros.h; path = SDWebImage/Private/SDInternalMacros.h; sourceTree = "<group>"; };
 		40F0C3232D1C882965F8D68F28281E3C /* bloom.cc */ = {isa = PBXFileReference; includeInIndex = 1; name = bloom.cc; path = util/bloom.cc; sourceTree = "<group>"; };
 		40FF7B22E9440FF48EEE33A01053B245 /* FirebaseCoreDiagnostics-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "FirebaseCoreDiagnostics-umbrella.h"; sourceTree = "<group>"; };
@@ -2002,7 +2002,6 @@
 		41887960C21444E9D468FE9663F7BF00 /* FImmutableSortedSet.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FImmutableSortedSet.h; path = FirebaseDatabase/Sources/third_party/FImmutableSortedDictionary/FImmutableSortedDictionary/FImmutableSortedSet.h; sourceTree = "<group>"; };
 		41EBB8DE9FBF1C133B48AA6C8BEE88D7 /* write_batch.cc */ = {isa = PBXFileReference; includeInIndex = 1; name = write_batch.cc; path = db/write_batch.cc; sourceTree = "<group>"; };
 		420769B78EBC0896CBC295E995619D4B /* FMDatabasePool.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FMDatabasePool.h; path = src/fmdb/FMDatabasePool.h; sourceTree = "<group>"; };
-		423730756221DD56AF5B1EDCEFC63D3E /* BetterEventChannel.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = BetterEventChannel.h; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/just_audio-0.9.12/ios/Classes/BetterEventChannel.h"; sourceTree = "<group>"; };
 		4273853D093588DA0EDB6C1C809E590C /* SDWebImagePrefetcher.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDWebImagePrefetcher.m; path = SDWebImage/Core/SDWebImagePrefetcher.m; sourceTree = "<group>"; };
 		42773EE242A8DBE5B88A97CCAEE4E507 /* env_windows_test_helper.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = env_windows_test_helper.h; path = util/env_windows_test_helper.h; sourceTree = "<group>"; };
 		42870E91AB2071AF3F3E9C528E850DC9 /* Firebase.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Firebase.release.xcconfig; sourceTree = "<group>"; };
@@ -2034,6 +2033,7 @@
 		48A5294D3B38D287070CA02BB63FE6AF /* FCacheNode.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FCacheNode.h; path = FirebaseDatabase/Sources/Core/View/FCacheNode.h; sourceTree = "<group>"; };
 		48D38B7BA64F3EA86202D7FBBB354BCC /* port_example.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = port_example.h; path = port/port_example.h; sourceTree = "<group>"; };
 		48E00F0045A427999D45568837F9FAAF /* nanopb-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "nanopb-umbrella.h"; sourceTree = "<group>"; };
+		495D45010E3984DD650CEF79DA5C9D08 /* ConcatenatingAudioSource.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ConcatenatingAudioSource.h; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/just_audio-0.9.14/ios/Classes/ConcatenatingAudioSource.h"; sourceTree = "<group>"; };
 		4982508E013D0614463108B4ECE11718 /* GDTCORConsoleLogger.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GDTCORConsoleLogger.h; path = GoogleDataTransport/GDTCORLibrary/Public/GoogleDataTransport/GDTCORConsoleLogger.h; sourceTree = "<group>"; };
 		49A5C832EC3515CC5B8D9FAC16278EFD /* otp_autofill.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = otp_autofill.framework; path = otp_autofill.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		49A90EAA8BF72D659A9B1EC3EB63E8A1 /* da.lproj */ = {isa = PBXFileReference; includeInIndex = 1; name = da.lproj; path = Sources/DKImagePickerController/Resource/Resources/da.lproj; sourceTree = "<group>"; };
@@ -2042,7 +2042,6 @@
 		4A37952DA467CF5EC16C10D4B06E9929 /* package_info.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = package_info.debug.xcconfig; sourceTree = "<group>"; };
 		4A42A9D183C4F4AD4073EFF4E6B75E06 /* FValueIndex.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FValueIndex.m; path = FirebaseDatabase/Sources/FValueIndex.m; sourceTree = "<group>"; };
 		4A9615142C8CF504979A6E7105EF1FFB /* FirebaseCore.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = FirebaseCore.release.xcconfig; sourceTree = "<group>"; };
-		4B316F1BD583027430F59AAF346A3CF1 /* UriAudioSource.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = UriAudioSource.h; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/just_audio-0.9.12/ios/Classes/UriAudioSource.h"; sourceTree = "<group>"; };
 		4B4423176E3CFA284FB49B0A49B8D6A8 /* FilePickerPlugin.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FilePickerPlugin.m; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/file_picker-4.1.3/ios/Classes/FilePickerPlugin.m"; sourceTree = "<group>"; };
 		4BBC1D6DEC74C06702B8730E76B0159B /* firebase_database-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "firebase_database-Info.plist"; sourceTree = "<group>"; };
 		4BBF180A039753B75971C567F282CF2F /* GDTCORLifecycle.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GDTCORLifecycle.h; path = GoogleDataTransport/GDTCORLibrary/Internal/GDTCORLifecycle.h; sourceTree = "<group>"; };
@@ -2118,6 +2117,7 @@
 		59437F1C13A012D7794DA7EF248E8FAD /* FBLPromise+Race.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "FBLPromise+Race.m"; path = "Sources/FBLPromises/FBLPromise+Race.m"; sourceTree = "<group>"; };
 		5964CE4E22063521C4FFCFC416F855B1 /* device_info.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = device_info.release.xcconfig; sourceTree = "<group>"; };
 		59654F4811A3B7C7CEDFC7FCE0D06537 /* FLTImagePickerImageUtil.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FLTImagePickerImageUtil.m; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/image_picker-0.8.4+1/ios/Classes/FLTImagePickerImageUtil.m"; sourceTree = "<group>"; };
+		5970CD659E37627AAF1CE8C3941E9D61 /* BetterEventChannel.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = BetterEventChannel.h; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/just_audio-0.9.14/ios/Classes/BetterEventChannel.h"; sourceTree = "<group>"; };
 		597AD711DE11DA0AA96FBA0EE0E9385E /* UIImage+GIF.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIImage+GIF.h"; path = "SDWebImage/Core/UIImage+GIF.h"; sourceTree = "<group>"; };
 		59E1C326ACBDFB38053EB83BB1738AB9 /* path_provider-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "path_provider-prefix.pch"; sourceTree = "<group>"; };
 		59EB6C6F1A4EA9C2BEE28D5F36F0DBD1 /* env.cc */ = {isa = PBXFileReference; includeInIndex = 1; name = env.cc; path = util/env.cc; sourceTree = "<group>"; };
@@ -2166,6 +2166,7 @@
 		61CDA6EE556B3B0F11336F624663F498 /* firebase_core-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "firebase_core-prefix.pch"; sourceTree = "<group>"; };
 		61E0952E99F2345D341125D355CE4245 /* FIRAppCheckInterop.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FIRAppCheckInterop.h; path = FirebaseAppCheck/Sources/Interop/FIRAppCheckInterop.h; sourceTree = "<group>"; };
 		61E2951239BA865EA1BA7E7638CDFAC5 /* DKAssetGroupGridLayout.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DKAssetGroupGridLayout.swift; path = Sources/DKImagePickerController/View/DKAssetGroupGridLayout.swift; sourceTree = "<group>"; };
+		6208198198866FC1D8CC5D807E98EA16 /* JustAudioPlugin.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = JustAudioPlugin.h; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/just_audio-0.9.14/ios/Classes/JustAudioPlugin.h"; sourceTree = "<group>"; };
 		62235F06CE24C63463974907E2108A55 /* SwiftOTPPlugin.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SwiftOTPPlugin.swift; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/otp_autofill-1.1.0/ios/Classes/SwiftOTPPlugin.swift"; sourceTree = "<group>"; };
 		626AFE7642F8E0167398D143C91E83EA /* firebase_core.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = firebase_core.podspec; path = "../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-1.7.0/ios/firebase_core.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		6295F276C9A60C1B4A243EA88E6600B6 /* block_builder.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = block_builder.h; path = table/block_builder.h; sourceTree = "<group>"; };
@@ -2174,6 +2175,7 @@
 		62C4F87AE43CD55EB1B76B58B49ABC2B /* FirebaseDatabase-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "FirebaseDatabase-umbrella.h"; sourceTree = "<group>"; };
 		633BCB92BF8DA2C348D841517C15FB98 /* FWriteTree.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FWriteTree.h; path = FirebaseDatabase/Sources/Core/FWriteTree.h; sourceTree = "<group>"; };
 		634FACAFDD67ED5B88DFD1F9A729C4DA /* FTupleSetIdPath.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FTupleSetIdPath.h; path = FirebaseDatabase/Sources/Utilities/Tuples/FTupleSetIdPath.h; sourceTree = "<group>"; };
+		6356833BDF07C6E86E6CDDCB51EE2CCD /* LoadControl.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = LoadControl.m; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/just_audio-0.9.14/ios/Classes/LoadControl.m"; sourceTree = "<group>"; };
 		63627ACD310A865B04A2EBE116529CCC /* es.lproj */ = {isa = PBXFileReference; includeInIndex = 1; name = es.lproj; path = Sources/DKImagePickerController/Resource/Resources/es.lproj; sourceTree = "<group>"; };
 		63773CF7E245D4B9E253E8016AD3A784 /* FirebaseCoreDiagnostics.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = FirebaseCoreDiagnostics.modulemap; sourceTree = "<group>"; };
 		638E421A16C5447D5C1E678695740DE7 /* SDMemoryCache.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SDMemoryCache.h; path = SDWebImage/Core/SDMemoryCache.h; sourceTree = "<group>"; };
@@ -2183,6 +2185,7 @@
 		6441E038B0C2B6F5A23053EED0A61464 /* share_plus.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = share_plus.podspec; path = "../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/share_plus-2.2.0/ios/share_plus.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		64A92B65D7B76C02A3168320DD455C35 /* path_provider-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "path_provider-umbrella.h"; sourceTree = "<group>"; };
 		64B10E882BDE6B4AB14354415898A3C3 /* SDAsyncBlockOperation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SDAsyncBlockOperation.h; path = SDWebImage/Private/SDAsyncBlockOperation.h; sourceTree = "<group>"; };
+		6532811972F95F1E1337F273748E7039 /* just_audio.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = just_audio.release.xcconfig; sourceTree = "<group>"; };
 		65338D6895E9BAB17F24087B0CDE5D09 /* FirebaseCore-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "FirebaseCore-Info.plist"; sourceTree = "<group>"; };
 		6557D7A9A26014B105DC94BF2F102809 /* FTupleNodePath.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FTupleNodePath.h; path = FirebaseDatabase/Sources/Utilities/Tuples/FTupleNodePath.h; sourceTree = "<group>"; };
 		656DD760A9051AF030669116BF284016 /* firebasecore.nanopb.c */ = {isa = PBXFileReference; includeInIndex = 1; name = firebasecore.nanopb.c; path = Firebase/CoreDiagnostics/FIRCDLibrary/Protogen/nanopb/firebasecore.nanopb.c; sourceTree = "<group>"; };
@@ -2199,6 +2202,7 @@
 		67500AB25866D09ABA4AE44ACE1DA925 /* FAtomicNumber.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FAtomicNumber.h; path = FirebaseDatabase/Sources/Utilities/FAtomicNumber.h; sourceTree = "<group>"; };
 		67A3EFC88A72954ECA2E43209039B807 /* SDWebImageCompat.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SDWebImageCompat.h; path = SDWebImage/Core/SDWebImageCompat.h; sourceTree = "<group>"; };
 		67D54D267E216B9A8A125D70CC8E6A29 /* FCompoundHash.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FCompoundHash.m; path = FirebaseDatabase/Sources/Core/FCompoundHash.m; sourceTree = "<group>"; };
+		67DA5EA7D66A32BBAD8BC469DE09B681 /* LoadControl.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = LoadControl.h; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/just_audio-0.9.14/ios/Classes/LoadControl.h"; sourceTree = "<group>"; };
 		6812FBD5AA28B9DFC5D906EE7F42CD70 /* SDWebImageDownloaderResponseModifier.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDWebImageDownloaderResponseModifier.m; path = SDWebImage/Core/SDWebImageDownloaderResponseModifier.m; sourceTree = "<group>"; };
 		6869684750FAC2BBAFC25FE2EEC795CB /* SDImageLoadersManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDImageLoadersManager.m; path = SDWebImage/Core/SDImageLoadersManager.m; sourceTree = "<group>"; };
 		6880602D234ED067D7C8DACC2979450D /* FIRDependency.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FIRDependency.m; path = FirebaseCore/Sources/FIRDependency.m; sourceTree = "<group>"; };
@@ -2290,7 +2294,6 @@
 		76D9EB63692A868C71524AADE2CCCEB4 /* FImmutableSortedDictionary.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FImmutableSortedDictionary.h; path = FirebaseDatabase/Sources/third_party/FImmutableSortedDictionary/FImmutableSortedDictionary/FImmutableSortedDictionary.h; sourceTree = "<group>"; };
 		76FBA0876BC95551CCC25A7FD15D427A /* FlutterWebView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FlutterWebView.m; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/webview_flutter-2.0.13/ios/Classes/FlutterWebView.m"; sourceTree = "<group>"; };
 		7712562D91975ADCD6FB8B48B72A8B56 /* SDWebImageDownloaderResponseModifier.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SDWebImageDownloaderResponseModifier.h; path = SDWebImage/Core/SDWebImageDownloaderResponseModifier.h; sourceTree = "<group>"; };
-		772EAA021EBB79941FA7917DB8603802 /* IndexedPlayerItem.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = IndexedPlayerItem.h; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/just_audio-0.9.12/ios/Classes/IndexedPlayerItem.h"; sourceTree = "<group>"; };
 		77358E9779143B7F8E63257E1064C9D0 /* FConnection.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FConnection.h; path = FirebaseDatabase/Sources/Realtime/FConnection.h; sourceTree = "<group>"; };
 		77441370562D8849DAB7F005D2B5DFF0 /* FIRAnalyticsConfiguration.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FIRAnalyticsConfiguration.m; path = FirebaseCore/Sources/FIRAnalyticsConfiguration.m; sourceTree = "<group>"; };
 		774B21A52751767056B22C2D82F17DD9 /* FRepoManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FRepoManager.m; path = FirebaseDatabase/Sources/Core/FRepoManager.m; sourceTree = "<group>"; };
@@ -2298,12 +2301,10 @@
 		77BFD20CF052487AC01A074172D6AC2E /* package_info-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "package_info-Info.plist"; sourceTree = "<group>"; };
 		77CC99EFAD3D96D700DA7B8D068B03BF /* FPendingPut.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FPendingPut.h; path = FirebaseDatabase/Sources/Persistence/FPendingPut.h; sourceTree = "<group>"; };
 		77E27CFCF436B1242361AAC125EF0F73 /* GULLogger.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GULLogger.h; path = GoogleUtilities/Logger/Public/GoogleUtilities/GULLogger.h; sourceTree = "<group>"; };
-		780CB92083218F27B561D6EC8DD45C3D /* AudioPlayer.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AudioPlayer.h; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/just_audio-0.9.12/ios/Classes/AudioPlayer.h"; sourceTree = "<group>"; };
 		785A8AED9A85CB198953152D22C147A6 /* FChildChangeAccumulator.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FChildChangeAccumulator.m; path = FirebaseDatabase/Sources/Core/View/Filter/FChildChangeAccumulator.m; sourceTree = "<group>"; };
 		78916752D41DD288F043128A0CADF0F1 /* PermissionStrategy.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = PermissionStrategy.h; path = "../../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/permission_handler-8.1.6/ios/Classes/strategies/PermissionStrategy.h"; sourceTree = "<group>"; };
 		7892BDD39C1DC51552F185E7AFE0AAEC /* on_audio_query.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = on_audio_query.podspec; path = "../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/on_audio_query-2.5.2/ios/on_audio_query.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		78A70B6B55BC47A31A2ABA541A8BC761 /* package_info.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = package_info.release.xcconfig; sourceTree = "<group>"; };
-		790DF269E9D15DA5FBF912650596FA99 /* just_audio.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = just_audio.modulemap; sourceTree = "<group>"; };
 		79120B563F5AF4CAB9D4FA1232B574AC /* GDTCORPlatform.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GDTCORPlatform.m; path = GoogleDataTransport/GDTCORLibrary/GDTCORPlatform.m; sourceTree = "<group>"; };
 		791CA8F41F24B6733567818788C4ADE6 /* SDInternalMacros.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDInternalMacros.m; path = SDWebImage/Private/SDInternalMacros.m; sourceTree = "<group>"; };
 		7936C45610922152162CF34ACAC86C67 /* FIRConfiguration.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FIRConfiguration.m; path = FirebaseCore/Sources/FIRConfiguration.m; sourceTree = "<group>"; };
@@ -2325,8 +2326,8 @@
 		7B32F156BA14F62E968CE93AB51526E9 /* FirebaseDatabase-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "FirebaseDatabase-dummy.m"; sourceTree = "<group>"; };
 		7B3C932BD54DBB963102A89E0F9E3948 /* Pods-Runner-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-Runner-dummy.m"; sourceTree = "<group>"; };
 		7B59507E62377AB079C6170DC9C17A8A /* FWriteRecord.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FWriteRecord.h; path = FirebaseDatabase/Sources/Core/FWriteRecord.h; sourceTree = "<group>"; };
-		7B675B7BA252D4CBCDB3F497BF859EF2 /* JustAudioPlugin.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = JustAudioPlugin.h; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/just_audio-0.9.12/ios/Classes/JustAudioPlugin.h"; sourceTree = "<group>"; };
 		7B940A40E58B250A279B5569BEBEB2AB /* DKImagePickerController-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "DKImagePickerController-prefix.pch"; sourceTree = "<group>"; };
+		7BCB32D7E0655E84B2BE91A2F0CB8993 /* ClippingAudioSource.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = ClippingAudioSource.m; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/just_audio-0.9.14/ios/Classes/ClippingAudioSource.m"; sourceTree = "<group>"; };
 		7C03F44103EEBA3D424D6A57476F9DE7 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; name = LICENSE; path = "../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/image_picker-0.8.4+1/LICENSE"; sourceTree = "<group>"; };
 		7CB6CD92E2B1D8D6E63157B2CD68E2DB /* SDImageCacheConfig.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDImageCacheConfig.m; path = SDWebImage/Core/SDImageCacheConfig.m; sourceTree = "<group>"; };
 		7CC8D75162E4B4D09E7F4467146BD33F /* DKPhotoGallery.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DKPhotoGallery.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2365,7 +2366,6 @@
 		826DDE8C538EB9BBDBD1F489B077B413 /* fr.lproj */ = {isa = PBXFileReference; includeInIndex = 1; name = fr.lproj; path = Sources/DKImagePickerController/Resource/Resources/fr.lproj; sourceTree = "<group>"; };
 		82B5117C99CB505C7E4651C4F6E328C5 /* url_launcher.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = url_launcher.podspec; path = "../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/url_launcher-6.0.10/ios/url_launcher.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		82E59F73EFCFED5A91D21FE6046A6F0A /* image_picker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = image_picker.framework; path = image_picker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		83042472BAAF84CF0A3F30CA4D5C9D25 /* ConcatenatingAudioSource.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = ConcatenatingAudioSource.m; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/just_audio-0.9.12/ios/Classes/ConcatenatingAudioSource.m"; sourceTree = "<group>"; };
 		8388A5F5C41CED406B74EE8470BAAC41 /* BluetoothPermissionStrategy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = BluetoothPermissionStrategy.m; path = "../../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/permission_handler-8.1.6/ios/Classes/strategies/BluetoothPermissionStrategy.m"; sourceTree = "<group>"; };
 		83A319DD14DF233F306276D213295776 /* UnknownPermissionStrategy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = UnknownPermissionStrategy.m; path = "../../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/permission_handler-8.1.6/ios/Classes/strategies/UnknownPermissionStrategy.m"; sourceTree = "<group>"; };
 		83CD7727DA169D5A10848A8F0E69DFEE /* UIView+WebCacheOperation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIView+WebCacheOperation.m"; path = "SDWebImage/Core/UIView+WebCacheOperation.m"; sourceTree = "<group>"; };
@@ -2397,6 +2397,7 @@
 		88EC02A86BE396FF13438D8746A59D4C /* FIRVersion.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FIRVersion.m; path = FirebaseCore/Sources/FIRVersion.m; sourceTree = "<group>"; };
 		891552A68FCAEA615070E5A7670D58DA /* FAtomicNumber.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FAtomicNumber.m; path = FirebaseDatabase/Sources/Utilities/FAtomicNumber.m; sourceTree = "<group>"; };
 		8970C28C2AD352B0A8B11338C9052D2D /* FMDatabaseQueue.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FMDatabaseQueue.h; path = src/fmdb/FMDatabaseQueue.h; sourceTree = "<group>"; };
+		8ACF1083227F3AD1F83F56169B35CA67 /* UriAudioSource.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = UriAudioSource.m; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/just_audio-0.9.14/ios/Classes/UriAudioSource.m"; sourceTree = "<group>"; };
 		8AD284D0F9AD1CB9F97F894D11799C29 /* otp_autofill-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "otp_autofill-Info.plist"; sourceTree = "<group>"; };
 		8AF3F1613F78DC81FC5562764ACA69E3 /* url_launcher-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "url_launcher-prefix.pch"; sourceTree = "<group>"; };
 		8B2333A78126920015F0E174E3BFCE86 /* GoogleDataTransport-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "GoogleDataTransport-umbrella.h"; sourceTree = "<group>"; };
@@ -2448,7 +2449,6 @@
 		94B98BCAAF50EF33D4EE084836BE6A0F /* FTupleOnDisconnect.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FTupleOnDisconnect.m; path = FirebaseDatabase/Sources/Utilities/Tuples/FTupleOnDisconnect.m; sourceTree = "<group>"; };
 		94D535167F5414ACCEA7D39A8882D8F3 /* testutil.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = testutil.h; path = util/testutil.h; sourceTree = "<group>"; };
 		95205614CAE314FA6460E9D5838D264A /* audio_service-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "audio_service-umbrella.h"; sourceTree = "<group>"; };
-		9545942BD684D9B868B1008A163ECE12 /* just_audio.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = just_audio.release.xcconfig; sourceTree = "<group>"; };
 		95525BCFEBC1AD36862A406F171EB1C1 /* dumpfile.cc */ = {isa = PBXFileReference; includeInIndex = 1; name = dumpfile.cc; path = db/dumpfile.cc; sourceTree = "<group>"; };
 		9574CC720A1A7942DE3FC36D53F892C2 /* FValidation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FValidation.m; path = FirebaseDatabase/Sources/Utilities/FValidation.m; sourceTree = "<group>"; };
 		95CC2E87B9AEE1EBE9EDEE94E0DF7BBD /* DKImagePickerControllerResource.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DKImagePickerControllerResource.swift; path = Sources/DKImagePickerController/Resource/DKImagePickerControllerResource.swift; sourceTree = "<group>"; };
@@ -2463,10 +2463,8 @@
 		97512E3004C6D642B4B2E03F823A3E20 /* GDTCORReachability_Private.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GDTCORReachability_Private.h; path = GoogleDataTransport/GDTCORLibrary/Private/GDTCORReachability_Private.h; sourceTree = "<group>"; };
 		976C80CA98C95151D6C4A5252D1359B2 /* FLTFirebaseDatabasePlugin.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FLTFirebaseDatabasePlugin.m; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_database-8.0.0/ios/Classes/FLTFirebaseDatabasePlugin.m"; sourceTree = "<group>"; };
 		97A231D2BE696F7A098F15020674A278 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; name = LICENSE; path = "../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/share_plus-2.2.0/LICENSE"; sourceTree = "<group>"; };
-		97A5AB7BE1005CC7EC82110CE3B56B37 /* UriAudioSource.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = UriAudioSource.m; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/just_audio-0.9.12/ios/Classes/UriAudioSource.m"; sourceTree = "<group>"; };
 		97CE432ED3BDC6E86D60F70ED80745FE /* FIRFirebaseUserAgent.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FIRFirebaseUserAgent.h; path = FirebaseCore/Sources/FIRFirebaseUserAgent.h; sourceTree = "<group>"; };
 		97E05809DD92F529739C4C4507FFA2E4 /* SDWebImageDownloaderRequestModifier.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDWebImageDownloaderRequestModifier.m; path = SDWebImage/Core/SDWebImageDownloaderRequestModifier.m; sourceTree = "<group>"; };
-		9871F3C748DFB1FE388FACB6F59CFE8E /* LoadControl.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = LoadControl.h; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/just_audio-0.9.12/ios/Classes/LoadControl.h"; sourceTree = "<group>"; };
 		98BFC0B02FD61FDF43BA2E3000E16F2B /* env_posix.cc */ = {isa = PBXFileReference; includeInIndex = 1; name = env_posix.cc; path = util/env_posix.cc; sourceTree = "<group>"; };
 		98E5DAF4CEA933B8D5616757DB1F0809 /* FTupleUserCallback.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FTupleUserCallback.m; path = FirebaseDatabase/Sources/Utilities/Tuples/FTupleUserCallback.m; sourceTree = "<group>"; };
 		99136CDCF9134E861EB0E9731D9495FC /* SDImageAPNGCoder.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SDImageAPNGCoder.h; path = SDWebImage/Core/SDImageAPNGCoder.h; sourceTree = "<group>"; };
@@ -2482,6 +2480,7 @@
 		9AA9D4E9EB63DD430DC7879F05429E87 /* otp_autofill.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = otp_autofill.release.xcconfig; sourceTree = "<group>"; };
 		9AC0F62D5AA022E78B7BC308980CEB08 /* FServerValues.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FServerValues.m; path = FirebaseDatabase/Sources/Core/FServerValues.m; sourceTree = "<group>"; };
 		9ACEAA7CD37B00FECCA2480F30722873 /* Codec.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = Codec.m; path = "../../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/permission_handler-8.1.6/ios/Classes/util/Codec.m"; sourceTree = "<group>"; };
+		9B00CE4DE32DDA21900FC5C8170DB1BF /* just_audio-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "just_audio-dummy.m"; sourceTree = "<group>"; };
 		9B255B12C5F51682034C9A4ED6D4A5F8 /* FLTPathProviderPlugin.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FLTPathProviderPlugin.h; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/path_provider-2.0.4/ios/Classes/FLTPathProviderPlugin.h"; sourceTree = "<group>"; };
 		9B680A43992EA5E09AC9DABD660671FC /* SwiftyGifManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SwiftyGifManager.swift; path = SwiftyGif/SwiftyGifManager.swift; sourceTree = "<group>"; };
 		9B8B9F8443D24152C4561AD075FFD0C3 /* secure_application.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = secure_application.modulemap; sourceTree = "<group>"; };
@@ -2492,12 +2491,12 @@
 		9D7F3D57745170C77BC61A95A299A0A2 /* FBLPromise+All.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "FBLPromise+All.m"; path = "Sources/FBLPromises/FBLPromise+All.m"; sourceTree = "<group>"; };
 		9D940727FF8FB9C785EB98E56350EF41 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		9E0632524B4561DD919DCB1AE7BCC742 /* SDWebImageOperation.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SDWebImageOperation.h; path = SDWebImage/Core/SDWebImageOperation.h; sourceTree = "<group>"; };
-		9E0ABDCAFCA75186AE80A2C906B96572 /* IndexedAudioSource.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = IndexedAudioSource.m; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/just_audio-0.9.12/ios/Classes/IndexedAudioSource.m"; sourceTree = "<group>"; };
 		9E13B87AAA5C8F0774AED0EA9C2A7071 /* FRepoManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FRepoManager.h; path = FirebaseDatabase/Sources/Core/FRepoManager.h; sourceTree = "<group>"; };
 		9E52CE4B1CAB49AC3837800079D165B0 /* OTPPlugin.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = OTPPlugin.h; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/otp_autofill-1.1.0/ios/Classes/OTPPlugin.h"; sourceTree = "<group>"; };
 		9E8AE271C4F1D9EF651F3AC9D2095FC9 /* secure_application-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "secure_application-dummy.m"; sourceTree = "<group>"; };
 		9E8DAA0FDB9AE741AC497E1AE0E6FF80 /* ur.lproj */ = {isa = PBXFileReference; includeInIndex = 1; name = ur.lproj; path = Sources/DKImagePickerController/Resource/Resources/ur.lproj; sourceTree = "<group>"; };
 		9E9EB133492DC79C42EE099F247E62D0 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; name = LICENSE; path = "../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/sqflite-2.0.0+4/LICENSE"; sourceTree = "<group>"; };
+		9EB2EAF1E1704871EDCEFAADB58D3992 /* ConcatenatingAudioSource.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = ConcatenatingAudioSource.m; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/just_audio-0.9.14/ios/Classes/ConcatenatingAudioSource.m"; sourceTree = "<group>"; };
 		9EC958D68E5A8D0C52DA1883B3ED8F65 /* Firebase.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = Firebase.h; path = CoreOnly/Sources/Firebase.h; sourceTree = "<group>"; };
 		9EF0B0A0157B4BEE55A7C1A37A8033FF /* pb_common.c */ = {isa = PBXFileReference; includeInIndex = 1; path = pb_common.c; sourceTree = "<group>"; };
 		9EFBD1A01A5C0A1D09153AB56E51885C /* AudioSessionPlugin.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AudioSessionPlugin.h; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/audio_session-0.1.6+1/ios/Classes/AudioSessionPlugin.h"; sourceTree = "<group>"; };
@@ -2507,7 +2506,6 @@
 		9FBDA5FA2C38AE24C3FCA3DBC12E9821 /* FirebaseCore.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = FirebaseCore.debug.xcconfig; sourceTree = "<group>"; };
 		A0040A690C72A54E5453CF937447A16F /* FTreeSortedDictionary.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FTreeSortedDictionary.h; path = FirebaseDatabase/Sources/third_party/FImmutableSortedDictionary/FImmutableSortedDictionary/FTreeSortedDictionary.h; sourceTree = "<group>"; };
 		A007DEC7E7823F4BC0F9B5BA5E7E2676 /* firebase_database-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "firebase_database-dummy.m"; sourceTree = "<group>"; };
-		A020FC783CD0739BF9EF2C8F9FF86C81 /* IndexedAudioSource.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = IndexedAudioSource.h; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/just_audio-0.9.12/ios/Classes/IndexedAudioSource.h"; sourceTree = "<group>"; };
 		A0578185572EDA423CB45308B5AB3BA8 /* DKImagePickerController-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "DKImagePickerController-Info.plist"; sourceTree = "<group>"; };
 		A0869040C9AAAB72A20DD2DC311400EB /* leveldb-library.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = "leveldb-library.modulemap"; sourceTree = "<group>"; };
 		A0A18F00B0A43BBABD81CA92945D5F04 /* FLTDeviceInfoPlugin.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FLTDeviceInfoPlugin.m; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/device_info-2.0.2/ios/Classes/FLTDeviceInfoPlugin.m"; sourceTree = "<group>"; };
@@ -2531,7 +2529,6 @@
 		A55F414DD8CC52B6A41B237FC488C5F7 /* db_impl.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = db_impl.h; path = db/db_impl.h; sourceTree = "<group>"; };
 		A587976421236251406AEEADD889E3DA /* sqflite-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "sqflite-umbrella.h"; sourceTree = "<group>"; };
 		A59EB3480CF67A60C01721A04D39FFD2 /* FIRDatabaseConfig.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FIRDatabaseConfig.h; path = FirebaseDatabase/Sources/Api/FIRDatabaseConfig.h; sourceTree = "<group>"; };
-		A5A4158F124158A4059F2BD09442DAB1 /* just_audio.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = just_audio.podspec; path = "../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/just_audio-0.9.12/ios/just_audio.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		A63132D0245826AECB94A081A3AF9409 /* GDTCORClock.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GDTCORClock.m; path = GoogleDataTransport/GDTCORLibrary/GDTCORClock.m; sourceTree = "<group>"; };
 		A6AB52B5A5D7D073101252FE50A341E2 /* DKPhotoBaseImagePreviewVC.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DKPhotoBaseImagePreviewVC.swift; path = DKPhotoGallery/Preview/ImagePreview/DKPhotoBaseImagePreviewVC.swift; sourceTree = "<group>"; };
 		A6C590A9F421BEC7A828E3C5F126BCAA /* GULAppEnvironmentUtil.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GULAppEnvironmentUtil.h; path = GoogleUtilities/Environment/Public/GoogleUtilities/GULAppEnvironmentUtil.h; sourceTree = "<group>"; };
@@ -2540,7 +2537,9 @@
 		A72B54D4DB4DD5705053B3ADAFB97481 /* FCacheNode.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FCacheNode.m; path = FirebaseDatabase/Sources/Core/View/FCacheNode.m; sourceTree = "<group>"; };
 		A79D0C86958B5F74F337D2BC481B7600 /* FIRApp.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FIRApp.m; path = FirebaseCore/Sources/FIRApp.m; sourceTree = "<group>"; };
 		A7F29FB425FC1E1466633C3BB0C45666 /* FTupleCallbackStatus.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FTupleCallbackStatus.m; path = FirebaseDatabase/Sources/Utilities/Tuples/FTupleCallbackStatus.m; sourceTree = "<group>"; };
+		A87E1C09F0A638B70F588D462156DC21 /* just_audio.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = just_audio.debug.xcconfig; sourceTree = "<group>"; };
 		A8883DB13B4092998212DC47B6C59346 /* SDWebImagePrefetcher.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SDWebImagePrefetcher.h; path = SDWebImage/Core/SDWebImagePrefetcher.h; sourceTree = "<group>"; };
+		A8A96CC731C57BCBE5D8359585D8F980 /* AudioSource.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AudioSource.h; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/just_audio-0.9.14/ios/Classes/AudioSource.h"; sourceTree = "<group>"; };
 		A900426DED1EC95760B4FAEB208BEBF9 /* device_info.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = device_info.framework; path = device_info.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A946B2E1D15B1D90F453535425CE24E8 /* NotificationPermissionStrategy.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = NotificationPermissionStrategy.h; path = "../../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/permission_handler-8.1.6/ios/Classes/strategies/NotificationPermissionStrategy.h"; sourceTree = "<group>"; };
 		A94A40C264372A35D15F7E698D931AC1 /* DarwinAudioSession.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = DarwinAudioSession.m; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/audio_session-0.1.6+1/ios/Classes/DarwinAudioSession.m"; sourceTree = "<group>"; };
@@ -2557,6 +2556,7 @@
 		ABF53B0D0F3EC9E9B76D68A4513DCBA4 /* UIButton+WebCache.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIButton+WebCache.m"; path = "SDWebImage/Core/UIButton+WebCache.m"; sourceTree = "<group>"; };
 		AC0018912DBC01F42791B2EF4A964CF3 /* SwiftSecureApplicationPlugin.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SwiftSecureApplicationPlugin.swift; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/secure_application-3.7.3/ios/Classes/SwiftSecureApplicationPlugin.swift"; sourceTree = "<group>"; };
 		AC0FD4751B10E885BB43B6D88F0925E0 /* FirebaseDatabase-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "FirebaseDatabase-Info.plist"; sourceTree = "<group>"; };
+		AC191B75FAF14453E3F0E043AA5C3E8A /* just_audio-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "just_audio-prefix.pch"; sourceTree = "<group>"; };
 		AC5A1619DD4E4FB73322056023FE3F6A /* DKAsset.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DKAsset.swift; path = Sources/DKImageDataManager/Model/DKAsset.swift; sourceTree = "<group>"; };
 		AC767FD35184176DA365A0391A61270A /* FValueEventRegistration.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FValueEventRegistration.m; path = FirebaseDatabase/Sources/Core/View/FValueEventRegistration.m; sourceTree = "<group>"; };
 		ACF0321EE4870F2D261BC19975C2A25E /* SDWebImageTransition.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDWebImageTransition.m; path = SDWebImage/Core/SDWebImageTransition.m; sourceTree = "<group>"; };
@@ -2604,7 +2604,6 @@
 		B442020DAC0261AC793E11A9D519DF53 /* builder.cc */ = {isa = PBXFileReference; includeInIndex = 1; name = builder.cc; path = db/builder.cc; sourceTree = "<group>"; };
 		B470E0C9860B0EFB70541F2D4666EDC3 /* cct.nanopb.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = cct.nanopb.h; path = GoogleDataTransport/GDTCCTLibrary/Protogen/nanopb/cct.nanopb.h; sourceTree = "<group>"; };
 		B4B2E76957F58B6E519A3262D4A9BA4A /* image_picker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = image_picker.debug.xcconfig; sourceTree = "<group>"; };
-		B4E5CB029EA889A30F9C60855473376A /* just_audio.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = just_audio.debug.xcconfig; sourceTree = "<group>"; };
 		B6481CFE9DD63093B3B087536DAD7099 /* AudioServicePlugin.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AudioServicePlugin.m; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/audio_service-0.17.1/darwin/Classes/AudioServicePlugin.m"; sourceTree = "<group>"; };
 		B67B005839804BFEFC3390E762C7BE3F /* FIRAppCheckTokenResultInterop.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FIRAppCheckTokenResultInterop.h; path = FirebaseAppCheck/Sources/Interop/FIRAppCheckTokenResultInterop.h; sourceTree = "<group>"; };
 		B67FCB95E50DC428899C79794D59CA3C /* FServerValues.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FServerValues.h; path = FirebaseDatabase/Sources/Core/FServerValues.h; sourceTree = "<group>"; };
@@ -2651,7 +2650,6 @@
 		BDE3F0C251DB393123732701FEC3519E /* FIRDatabase_Private.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FIRDatabase_Private.h; path = FirebaseDatabase/Sources/Api/Private/FIRDatabase_Private.h; sourceTree = "<group>"; };
 		BDE9420573A319BC3939478EEBD68EB1 /* DKImagePickerControllerBaseUIDelegate.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DKImagePickerControllerBaseUIDelegate.swift; path = Sources/DKImagePickerController/DKImagePickerControllerBaseUIDelegate.swift; sourceTree = "<group>"; };
 		BDF3E319F883E837731EFA4099344DF3 /* PromisesObjC-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "PromisesObjC-umbrella.h"; sourceTree = "<group>"; };
-		BDF843616D646FCC0A250DF2CF58FC82 /* ClippingAudioSource.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = ClippingAudioSource.h; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/just_audio-0.9.12/ios/Classes/ClippingAudioSource.h"; sourceTree = "<group>"; };
 		BE6C1644E35C8B372A267323D0D5C6AE /* FTupleOnDisconnect.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FTupleOnDisconnect.h; path = FirebaseDatabase/Sources/Utilities/Tuples/FTupleOnDisconnect.h; sourceTree = "<group>"; };
 		BE873E4C9701C2A0AC0D07834E97528C /* FCachePolicy.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FCachePolicy.h; path = FirebaseDatabase/Sources/Persistence/FCachePolicy.h; sourceTree = "<group>"; };
 		BE8BC2DEF556E9049EDAD7E4C962CA5A /* NSButton+WebCache.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "NSButton+WebCache.m"; path = "SDWebImage/Core/NSButton+WebCache.m"; sourceTree = "<group>"; };
@@ -2682,7 +2680,6 @@
 		C3D9B7A2DCD930F54CF07170D6F28D1D /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		C41D3F59AFD71A8440B5AF28CDAA32E1 /* FTupleStringNode.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FTupleStringNode.m; path = FirebaseDatabase/Sources/Utilities/Tuples/FTupleStringNode.m; sourceTree = "<group>"; };
 		C50D4E4D2DA811AAC1EF670B4839A448 /* share_plus-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "share_plus-prefix.pch"; sourceTree = "<group>"; };
-		C5296F1B735B8FF7214347F0D17366A6 /* IndexedPlayerItem.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = IndexedPlayerItem.m; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/just_audio-0.9.12/ios/Classes/IndexedPlayerItem.m"; sourceTree = "<group>"; };
 		C545A5D565768CDC0A67BAD57E680991 /* FIndexedFilter.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FIndexedFilter.m; path = FirebaseDatabase/Sources/Core/View/Filter/FIndexedFilter.m; sourceTree = "<group>"; };
 		C59AA09FDACF096FB02A0BF41F27F212 /* block_builder.cc */ = {isa = PBXFileReference; includeInIndex = 1; name = block_builder.cc; path = table/block_builder.cc; sourceTree = "<group>"; };
 		C5A20B3B0E1F4BBC68C02E82514AC2CB /* FIRRetryHelper.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FIRRetryHelper.h; path = FirebaseDatabase/Sources/Core/Utilities/FIRRetryHelper.h; sourceTree = "<group>"; };
@@ -2725,11 +2722,9 @@
 		CF3FAC59A22D5319BEE8520DC9A25E4C /* FViewCache.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FViewCache.h; path = FirebaseDatabase/Sources/Core/View/FViewCache.h; sourceTree = "<group>"; };
 		CF453D2B79CF2AB2856192BE7D2D67C5 /* SDAnimatedImageView+WebCache.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "SDAnimatedImageView+WebCache.m"; path = "SDWebImage/Core/SDAnimatedImageView+WebCache.m"; sourceTree = "<group>"; };
 		CF60F9014ED067B3037E72FC8E88F585 /* FSRWebSocket.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FSRWebSocket.h; path = FirebaseDatabase/Sources/third_party/SocketRocket/FSRWebSocket.h; sourceTree = "<group>"; };
-		CF84CDA55FAAFFAD4DC24CD581853B56 /* AudioPlayer.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AudioPlayer.m; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/just_audio-0.9.12/ios/Classes/AudioPlayer.m"; sourceTree = "<group>"; };
 		CF927EE1BABE1A8001DEA97439D5168F /* write_batch.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = write_batch.h; path = include/leveldb/write_batch.h; sourceTree = "<group>"; };
 		CF9AA1A826940434D947D6A3AF4713DB /* WithFiltersType.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = WithFiltersType.swift; path = "../../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/on_audio_query-2.5.2/ios/Classes/types/WithFiltersType.swift"; sourceTree = "<group>"; };
 		CF9D1FD3A6133D07C117CFCDD0830265 /* FTupleUserCallback.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FTupleUserCallback.h; path = FirebaseDatabase/Sources/Utilities/Tuples/FTupleUserCallback.h; sourceTree = "<group>"; };
-		CFD5253F8989AD3B7326B930EB172126 /* ClippingAudioSource.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = ClippingAudioSource.m; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/just_audio-0.9.12/ios/Classes/ClippingAudioSource.m"; sourceTree = "<group>"; };
 		D01CC82E19220700A9DFA3F93167E78A /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; name = LICENSE; path = "../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/otp_autofill-1.1.0/LICENSE"; sourceTree = "<group>"; };
 		D02FBA3AB65DB4EF3172D76DCE53D401 /* FEventRaiser.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FEventRaiser.m; path = FirebaseDatabase/Sources/Core/View/FEventRaiser.m; sourceTree = "<group>"; };
 		D05CA20FBD9E49D26647AC9D1572EEA2 /* env.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = env.h; path = include/leveldb/env.h; sourceTree = "<group>"; };
@@ -2739,11 +2734,11 @@
 		D18A47051A36679428C823AC5C79D9FD /* GDTCORUploader.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GDTCORUploader.h; path = GoogleDataTransport/GDTCORLibrary/Internal/GDTCORUploader.h; sourceTree = "<group>"; };
 		D1B4977F61873559BFFD4976F0C2D0C0 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/AVKit.framework; sourceTree = DEVELOPER_DIR; };
 		D25A29C5699027B9F8C27C9A3CC99FE2 /* SDWeakProxy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDWeakProxy.m; path = SDWebImage/Private/SDWeakProxy.m; sourceTree = "<group>"; };
-		D26F670FCD24BC0D8BEDAB88D708A56B /* LoopingAudioSource.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = LoopingAudioSource.h; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/just_audio-0.9.12/ios/Classes/LoopingAudioSource.h"; sourceTree = "<group>"; };
 		D275ECB7400C856749E66DDB16F23740 /* GDTCORFlatFileStorage+Promises.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "GDTCORFlatFileStorage+Promises.m"; path = "GoogleDataTransport/GDTCORLibrary/GDTCORFlatFileStorage+Promises.m"; sourceTree = "<group>"; };
 		D288D1ACDF4B7CD8AF99BFFE982A5009 /* FMDatabaseAdditions.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FMDatabaseAdditions.h; path = src/fmdb/FMDatabaseAdditions.h; sourceTree = "<group>"; };
 		D28D5DEC4122CCC332E0CA7C5F00128D /* device_info.podspec */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; indentWidth = 2; lastKnownFileType = text; name = device_info.podspec; path = "../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/device_info-2.0.2/ios/device_info.podspec"; sourceTree = "<group>"; tabWidth = 2; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		D29D882328F45B91DDEAF13A82532D66 /* SDImageTransformer.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SDImageTransformer.h; path = SDWebImage/Core/SDImageTransformer.h; sourceTree = "<group>"; };
+		D2D8A63C840097EFBB2F12326F1D6ABA /* IndexedAudioSource.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = IndexedAudioSource.m; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/just_audio-0.9.14/ios/Classes/IndexedAudioSource.m"; sourceTree = "<group>"; };
 		D2FA70CA298C392CB8332ADEEDD1CE85 /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
 		D350C87F2AC2997C28D2DE910B7F0B85 /* url_launcher.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = url_launcher.release.xcconfig; sourceTree = "<group>"; };
 		D3A83E599876223EF37017A909AD6602 /* FQuerySpec.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FQuerySpec.h; path = FirebaseDatabase/Sources/Core/FQuerySpec.h; sourceTree = "<group>"; };
@@ -2772,6 +2767,7 @@
 		D86FFB5AC1B9C7F6CDB748DD100511C8 /* FIRAppAssociationRegistration.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FIRAppAssociationRegistration.m; path = FirebaseCore/Sources/FIRAppAssociationRegistration.m; sourceTree = "<group>"; };
 		D87736262330F49208B02DB1739B6115 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; name = LICENSE; path = "../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/secure_application-3.7.3/LICENSE"; sourceTree = "<group>"; };
 		D89C67389189178DC1E8E9D55C97BEAC /* FAckUserWrite.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FAckUserWrite.h; path = FirebaseDatabase/Sources/Core/Operation/FAckUserWrite.h; sourceTree = "<group>"; };
+		D8B75D5932C2D3DB36456D6A776D193E /* AudioPlayer.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AudioPlayer.m; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/just_audio-0.9.14/ios/Classes/AudioPlayer.m"; sourceTree = "<group>"; };
 		D8E575276312EB86A23A79B2F4D4A4FA /* NSData+SRB64Additions.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSData+SRB64Additions.h"; path = "FirebaseDatabase/Sources/third_party/SocketRocket/NSData+SRB64Additions.h"; sourceTree = "<group>"; };
 		D93E04B0B08BF4C4180063E34BFFC1A0 /* testharness.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = testharness.h; path = util/testharness.h; sourceTree = "<group>"; };
 		D94272FA5B1F3B2782ED57AB2F2957B9 /* SDAnimatedImage.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SDAnimatedImage.h; path = SDWebImage/Core/SDAnimatedImage.h; sourceTree = "<group>"; };
@@ -2789,7 +2785,6 @@
 		DAEA6E8CA07834DF809F7ECE8752215D /* SDAssociatedObject.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDAssociatedObject.m; path = SDWebImage/Private/SDAssociatedObject.m; sourceTree = "<group>"; };
 		DB0F7C8BEB79ADF529EDD2373DEE8B0E /* FTypedefs.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FTypedefs.h; path = FirebaseDatabase/Sources/Utilities/FTypedefs.h; sourceTree = "<group>"; };
 		DC0CA2CC55430C31EAF655E31F3C8D23 /* flutter_isolate-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "flutter_isolate-prefix.pch"; sourceTree = "<group>"; };
-		DC239AD7A92AAA0A9E05F7807D408455 /* AudioSource.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AudioSource.m; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/just_audio-0.9.12/ios/Classes/AudioSource.m"; sourceTree = "<group>"; };
 		DC4DD1725832FC50FAED8FD20C75CD3E /* audio_session.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = audio_session.debug.xcconfig; sourceTree = "<group>"; };
 		DC545F4E01A48D1B5DB5459902902E90 /* FLTFirebasePlugin.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FLTFirebasePlugin.m; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-1.7.0/ios/Classes/FLTFirebasePlugin.m"; sourceTree = "<group>"; };
 		DC811FB26219A52B48D8ACABDAADE689 /* SDWebImageDefine.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDWebImageDefine.m; path = SDWebImage/Core/SDWebImageDefine.m; sourceTree = "<group>"; };
@@ -2811,6 +2806,7 @@
 		E055BC9236CD206A84AC672BA25B2EB8 /* SDGraphicsImageRenderer.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SDGraphicsImageRenderer.h; path = SDWebImage/Core/SDGraphicsImageRenderer.h; sourceTree = "<group>"; };
 		E0BDE42CB6AABFA4B679855F7E490732 /* PermissionManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = PermissionManager.h; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/permission_handler-8.1.6/ios/Classes/PermissionManager.h"; sourceTree = "<group>"; };
 		E0E6EDD46BB3912D3BBB2B4DCFF0683C /* GDTCCTUploadOperation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GDTCCTUploadOperation.m; path = GoogleDataTransport/GDTCCTLibrary/GDTCCTUploadOperation.m; sourceTree = "<group>"; };
+		E0EFB85DDE66B8C7132B5DE77E82BB72 /* UriAudioSource.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = UriAudioSource.h; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/just_audio-0.9.14/ios/Classes/UriAudioSource.h"; sourceTree = "<group>"; };
 		E0F61D7972D8159493C648CD58E9DF41 /* FLTPHPickerSaveImageToPathOperation.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FLTPHPickerSaveImageToPathOperation.m; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/image_picker-0.8.4+1/ios/Classes/FLTPHPickerSaveImageToPathOperation.m"; sourceTree = "<group>"; };
 		E103645750D3677E1EB2887E4FBF584F /* SwiftyGif.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = SwiftyGif.debug.xcconfig; sourceTree = "<group>"; };
 		E11F810FCFF5ECDC634E93447619AD76 /* FLevelDBStorageEngine.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FLevelDBStorageEngine.m; path = FirebaseDatabase/Sources/Persistence/FLevelDBStorageEngine.m; sourceTree = "<group>"; };
@@ -2826,18 +2822,21 @@
 		E2F679744A1D01EE0867C5C413BB7A2D /* otp_autofill.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = otp_autofill.debug.xcconfig; sourceTree = "<group>"; };
 		E30F843E6532B5B591FB07DFD5A5971F /* FBLPromise+Catch.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "FBLPromise+Catch.h"; path = "Sources/FBLPromises/include/FBLPromise+Catch.h"; sourceTree = "<group>"; };
 		E382DBBC898E8ECDBC849D4B60267B32 /* FirebaseDatabase.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = FirebaseDatabase.modulemap; sourceTree = "<group>"; };
+		E3F34FBFB5645301284AE193AAA5A471 /* IndexedPlayerItem.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = IndexedPlayerItem.m; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/just_audio-0.9.14/ios/Classes/IndexedPlayerItem.m"; sourceTree = "<group>"; };
 		E4855EB7A19F39C1395AA4679C9A152A /* FMerge.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FMerge.h; path = FirebaseDatabase/Sources/Core/Operation/FMerge.h; sourceTree = "<group>"; };
 		E48D35328DB7A4DD7AFBC61222117247 /* FBLPromise.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FBLPromise.h; path = Sources/FBLPromises/include/FBLPromise.h; sourceTree = "<group>"; };
+		E4DADEBD2C893D52CF6B28712D67C094 /* IndexedAudioSource.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = IndexedAudioSource.h; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/just_audio-0.9.14/ios/Classes/IndexedAudioSource.h"; sourceTree = "<group>"; };
 		E4F24F22772126B2B8414850497A947B /* ImageIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ImageIO.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/System/Library/Frameworks/ImageIO.framework; sourceTree = DEVELOPER_DIR; };
+		E5050FF7B66195AB0ECC375DA59831D8 /* just_audio.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = just_audio.modulemap; sourceTree = "<group>"; };
 		E516A4709A29695D50C2D96C4CCAF9EE /* BluetoothPermissionStrategy.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = BluetoothPermissionStrategy.h; path = "../../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/permission_handler-8.1.6/ios/Classes/strategies/BluetoothPermissionStrategy.h"; sourceTree = "<group>"; };
 		E574836E5DE1EA992B4939B64104BE7E /* url_launcher-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "url_launcher-umbrella.h"; sourceTree = "<group>"; };
 		E59931F67D543987918BB4572544B100 /* FListenComplete.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FListenComplete.h; path = FirebaseDatabase/Sources/FListenComplete.h; sourceTree = "<group>"; };
 		E59D96FD2D5CD9824597E47728D5C94F /* FTupleSetIdPath.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FTupleSetIdPath.m; path = FirebaseDatabase/Sources/Utilities/Tuples/FTupleSetIdPath.m; sourceTree = "<group>"; };
-		E5A7036C99E54BD6004A3224DEB76250 /* AudioSource.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AudioSource.h; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/just_audio-0.9.12/ios/Classes/AudioSource.h"; sourceTree = "<group>"; };
 		E5BAE4DCCFB3E2E05A795FA8C08C6512 /* SDImageLoadersManager.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SDImageLoadersManager.h; path = SDWebImage/Core/SDImageLoadersManager.h; sourceTree = "<group>"; };
 		E5C407F234B70E7277E225ED94D9ADE6 /* FLTFirebasePluginRegistry.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FLTFirebasePluginRegistry.m; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-1.7.0/ios/Classes/FLTFirebasePluginRegistry.m"; sourceTree = "<group>"; };
 		E5E3B304A9E86D25B11978842DED726D /* AppTrackingTransparencyPermissionStrategy.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AppTrackingTransparencyPermissionStrategy.h; path = "../../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/permission_handler-8.1.6/ios/Classes/strategies/AppTrackingTransparencyPermissionStrategy.h"; sourceTree = "<group>"; };
 		E5EA073B5447FE41FB7BA9E0D8CA9D72 /* FIRComponentType.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FIRComponentType.h; path = FirebaseCore/Sources/Private/FIRComponentType.h; sourceTree = "<group>"; };
+		E6999208F9C425DEFB4F0350E6783420 /* just_audio-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "just_audio-Info.plist"; sourceTree = "<group>"; };
 		E6CF66CF41ADFBE234CADF4D4F1374EB /* coding.cc */ = {isa = PBXFileReference; includeInIndex = 1; name = coding.cc; path = util/coding.cc; sourceTree = "<group>"; };
 		E70989D53DCE649C51C32CCD8333757F /* hash.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = hash.h; path = util/hash.h; sourceTree = "<group>"; };
 		E712C3467B85C16708F0683F426D954B /* filter_block.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = filter_block.h; path = table/filter_block.h; sourceTree = "<group>"; };
@@ -2871,6 +2870,7 @@
 		EBAA0F1A1657C4672CD8BE884D2AE119 /* SDImageCoder.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDImageCoder.m; path = SDWebImage/Core/SDImageCoder.m; sourceTree = "<group>"; };
 		EBBFADD25B10DD98D0766DCEDC32CC8F /* flutter_forbidshot-Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "flutter_forbidshot-Info.plist"; sourceTree = "<group>"; };
 		EBE7FA6B8041641226B85FE5AD78587F /* FIRComponentType.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FIRComponentType.h; path = FirebaseCore/Sources/Private/FIRComponentType.h; sourceTree = "<group>"; };
+		EC29DC998876DAF3A937E17A6E9C9BF0 /* IndexedPlayerItem.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = IndexedPlayerItem.h; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/just_audio-0.9.14/ios/Classes/IndexedPlayerItem.h"; sourceTree = "<group>"; };
 		EC7CAC22D472E1CAF98A99D48C7C3270 /* GDTCOREvent+GDTCCTSupport.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "GDTCOREvent+GDTCCTSupport.m"; path = "GoogleDataTransport/GDTCCTLibrary/GDTCOREvent+GDTCCTSupport.m"; sourceTree = "<group>"; };
 		ECB5CE3D5B45F0A05457246A40D2521E /* SDImageGIFCoder.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SDImageGIFCoder.h; path = SDWebImage/Core/SDImageGIFCoder.h; sourceTree = "<group>"; };
 		ECB833B1549D153CB0584C29C58803D2 /* SqflitePlugin.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SqflitePlugin.h; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/sqflite-2.0.0+4/ios/Classes/SqflitePlugin.h"; sourceTree = "<group>"; };
@@ -2929,7 +2929,6 @@
 		F8432E41CB6BF142FC4FE6227062EE0F /* UnknownPermissionStrategy.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = UnknownPermissionStrategy.h; path = "../../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/permission_handler-8.1.6/ios/Classes/strategies/UnknownPermissionStrategy.h"; sourceTree = "<group>"; };
 		F86371B62F6102E72B9F1C4D0AC68C08 /* version_edit.cc */ = {isa = PBXFileReference; includeInIndex = 1; name = version_edit.cc; path = db/version_edit.cc; sourceTree = "<group>"; };
 		F87EFE1522F86808119374E102710841 /* FLTWKProgressionDelegate.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FLTWKProgressionDelegate.m; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/webview_flutter-2.0.13/ios/Classes/FLTWKProgressionDelegate.m"; sourceTree = "<group>"; };
-		F89D0DBFB3AB7F75A445A442E98F9FB5 /* LoadControl.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = LoadControl.m; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/just_audio-0.9.12/ios/Classes/LoadControl.m"; sourceTree = "<group>"; };
 		F8A886A4C81E6FEB5AF2BB13752F4CDE /* GDTCOREndpoints.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GDTCOREndpoints.m; path = GoogleDataTransport/GDTCORLibrary/GDTCOREndpoints.m; sourceTree = "<group>"; };
 		F8B04A0EAA850345A2E95CB8554F0FD9 /* FIRComponent.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = FIRComponent.m; path = FirebaseCore/Sources/FIRComponent.m; sourceTree = "<group>"; };
 		F8B22A35ED757B194A8AA8B84CEE0A67 /* FBLPromise+Retry.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "FBLPromise+Retry.m"; path = "Sources/FBLPromises/FBLPromise+Retry.m"; sourceTree = "<group>"; };
@@ -2957,6 +2956,7 @@
 		FDA14A4F723BAE68415BCC79112F65F4 /* DKPhotoGallery-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "DKPhotoGallery-dummy.m"; sourceTree = "<group>"; };
 		FDB856B054D9E188DA13F624CCC669F1 /* SDWebImageTransitionInternal.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SDWebImageTransitionInternal.h; path = SDWebImage/Private/SDWebImageTransitionInternal.h; sourceTree = "<group>"; };
 		FDBFD57F9AF4EBB0289D30CC29E95E9E /* FBLPromise+Testing.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "FBLPromise+Testing.m"; path = "Sources/FBLPromises/FBLPromise+Testing.m"; sourceTree = "<group>"; };
+		FDD01F02831DCE27447875FF7250F73D /* AudioPlayer.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AudioPlayer.h; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/just_audio-0.9.14/ios/Classes/AudioPlayer.h"; sourceTree = "<group>"; };
 		FDF7B41AC84EF4E255BE6C2740460782 /* AudioServicePlugin.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = AudioServicePlugin.h; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/audio_service-0.17.1/ios/Classes/AudioServicePlugin.h"; sourceTree = "<group>"; };
 		FE679D8C644BB566AC84F58C530B158E /* FileInfo.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = FileInfo.h; path = "../../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/file_picker-4.1.3/ios/Classes/FileInfo.h"; sourceTree = "<group>"; };
 		FEDC1DA859561A0E83C1016AA7F038F1 /* on_audio_query-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "on_audio_query-dummy.m"; sourceTree = "<group>"; };
@@ -3344,15 +3344,6 @@
 			path = ../.symlinks/plugins/secure_application/ios;
 			sourceTree = "<group>";
 		};
-		0263451DD7D206E98A4F76575EB1D05B /* just_audio */ = {
-			isa = PBXGroup;
-			children = (
-				AE2B920C29C567D702D836B7201FC0FC /* ios */,
-			);
-			name = just_audio;
-			path = just_audio;
-			sourceTree = "<group>";
-		};
 		02BC5D34EEF48BB8097599B855CB4E00 /* .symlinks */ = {
 			isa = PBXGroup;
 			children = (
@@ -3485,15 +3476,6 @@
 			name = Pod;
 			sourceTree = "<group>";
 		};
-		0CA775F6ECE05C8889E830DEB1E3FFF0 /* ilhewl */ = {
-			isa = PBXGroup;
-			children = (
-				A17C20F7A3B11AF7AC902F2F01DCC22F /* ios */,
-			);
-			name = ilhewl;
-			path = ilhewl;
-			sourceTree = "<group>";
-		};
 		0D00F085B417DE8735A417BD8F4F5B0F /* .. */ = {
 			isa = PBXGroup;
 			children = (
@@ -3580,6 +3562,15 @@
 			path = Classes;
 			sourceTree = "<group>";
 		};
+		0E70056DEE3570CF47E246B300BAE379 /* .. */ = {
+			isa = PBXGroup;
+			children = (
+				73E0044A75797443E82C329A5BF5EC72 /* .. */,
+			);
+			name = ..;
+			path = ..;
+			sourceTree = "<group>";
+		};
 		0EAE765C64D64F33AA8984657EE89D65 /* ios */ = {
 			isa = PBXGroup;
 			children = (
@@ -3652,6 +3643,15 @@
 			path = ios;
 			sourceTree = "<group>";
 		};
+		143CA543C2157CEB02E078596213E72E /* ios */ = {
+			isa = PBXGroup;
+			children = (
+				8B2D3D2EB337D9D381141688B2721059 /* .symlinks */,
+			);
+			name = ios;
+			path = ios;
+			sourceTree = "<group>";
+		};
 		14937F0263FC7714DDFFD62EEE553FBA /* .. */ = {
 			isa = PBXGroup;
 			children = (
@@ -3716,36 +3716,6 @@
 			path = ..;
 			sourceTree = "<group>";
 		};
-		17BA24DF24DFB43E6D8C303A10225056 /* Classes */ = {
-			isa = PBXGroup;
-			children = (
-				780CB92083218F27B561D6EC8DD45C3D /* AudioPlayer.h */,
-				CF84CDA55FAAFFAD4DC24CD581853B56 /* AudioPlayer.m */,
-				E5A7036C99E54BD6004A3224DEB76250 /* AudioSource.h */,
-				DC239AD7A92AAA0A9E05F7807D408455 /* AudioSource.m */,
-				423730756221DD56AF5B1EDCEFC63D3E /* BetterEventChannel.h */,
-				2ECA33667CDAEBBFF1A5169F66E849A2 /* BetterEventChannel.m */,
-				BDF843616D646FCC0A250DF2CF58FC82 /* ClippingAudioSource.h */,
-				CFD5253F8989AD3B7326B930EB172126 /* ClippingAudioSource.m */,
-				299A597DC3B931C7D47BFD6943A2BBAE /* ConcatenatingAudioSource.h */,
-				83042472BAAF84CF0A3F30CA4D5C9D25 /* ConcatenatingAudioSource.m */,
-				A020FC783CD0739BF9EF2C8F9FF86C81 /* IndexedAudioSource.h */,
-				9E0ABDCAFCA75186AE80A2C906B96572 /* IndexedAudioSource.m */,
-				772EAA021EBB79941FA7917DB8603802 /* IndexedPlayerItem.h */,
-				C5296F1B735B8FF7214347F0D17366A6 /* IndexedPlayerItem.m */,
-				7B675B7BA252D4CBCDB3F497BF859EF2 /* JustAudioPlugin.h */,
-				25EB2A0E88C553DD92AC82BCD99E8D3E /* JustAudioPlugin.m */,
-				9871F3C748DFB1FE388FACB6F59CFE8E /* LoadControl.h */,
-				F89D0DBFB3AB7F75A445A442E98F9FB5 /* LoadControl.m */,
-				D26F670FCD24BC0D8BEDAB88D708A56B /* LoopingAudioSource.h */,
-				2FA1F49D36052696696B31A6784D03EF /* LoopingAudioSource.m */,
-				4B316F1BD583027430F59AAF346A3CF1 /* UriAudioSource.h */,
-				97A5AB7BE1005CC7EC82110CE3B56B37 /* UriAudioSource.m */,
-			);
-			name = Classes;
-			path = Classes;
-			sourceTree = "<group>";
-		};
 		1827750FF6A1CB6A633879FC370776C0 /* otp_autofill */ = {
 			isa = PBXGroup;
 			children = (
@@ -3755,6 +3725,15 @@
 			);
 			name = otp_autofill;
 			path = ../.symlinks/plugins/otp_autofill/ios;
+			sourceTree = "<group>";
+		};
+		1849BDDB83FDEC49F3AE9D9A1BF8C3EC /* ilhewl */ = {
+			isa = PBXGroup;
+			children = (
+				48C89206DB26DCC21FDC0E9FEB912759 /* ilhewl */,
+			);
+			name = ilhewl;
+			path = ilhewl;
 			sourceTree = "<group>";
 		};
 		18DBAFFC87BB1EE22598AF4BDF4785FE /* Classes */ = {
@@ -3774,15 +3753,6 @@
 				3BD953BBF76CA6F2B14FC6B38CE6E0EE /* webview_flutter.podspec */,
 			);
 			name = Pod;
-			sourceTree = "<group>";
-		};
-		19F428D5AEABCE8284981602991AF796 /* .. */ = {
-			isa = PBXGroup;
-			children = (
-				EB6E3256F42926FDBCE8CAAFCCD80D2B /* .. */,
-			);
-			name = ..;
-			path = ..;
 			sourceTree = "<group>";
 		};
 		19FC3DDCC2FBD0D3C932864303DD4DA0 /* Support Files */ = {
@@ -3922,6 +3892,15 @@
 			path = .symlinks;
 			sourceTree = "<group>";
 		};
+		2322560A0E75FC2C60A925B44D690CB9 /* .. */ = {
+			isa = PBXGroup;
+			children = (
+				47BEED32B202F581F92E0F4366EE3518 /* .. */,
+			);
+			name = ..;
+			path = ..;
+			sourceTree = "<group>";
+		};
 		2378D629651D094735318EDDF1DF32C8 /* .. */ = {
 			isa = PBXGroup;
 			children = (
@@ -3968,13 +3947,13 @@
 			path = flutter_forbidshot;
 			sourceTree = "<group>";
 		};
-		25EF744B12804FBDC988C97CE91D13AB /* Pod */ = {
+		2637DB3FA3836974C7048A909B29EF44 /* plugins */ = {
 			isa = PBXGroup;
 			children = (
-				A5A4158F124158A4059F2BD09442DAB1 /* just_audio.podspec */,
-				40CBD04774A087561C6D2BA5F65034E5 /* LICENSE */,
+				2DBF9EB2142A0AA8250694159E172F05 /* just_audio */,
 			);
-			name = Pod;
+			name = plugins;
+			path = plugins;
 			sourceTree = "<group>";
 		};
 		277D46CEF317EB8DFCEBEE9C7BCB66F1 /* bech */ = {
@@ -4074,6 +4053,15 @@
 			);
 			name = ..;
 			path = ..;
+			sourceTree = "<group>";
+		};
+		2DBF9EB2142A0AA8250694159E172F05 /* just_audio */ = {
+			isa = PBXGroup;
+			children = (
+				75EB2B192FA7CE6451308950EB0309C2 /* ios */,
+			);
+			name = just_audio;
+			path = just_audio;
 			sourceTree = "<group>";
 		};
 		2E3F547B1956EA7F97FF654D144584B6 /* ilhewl */ = {
@@ -4531,6 +4519,15 @@
 			name = Pod;
 			sourceTree = "<group>";
 		};
+		47BEED32B202F581F92E0F4366EE3518 /* .. */ = {
+			isa = PBXGroup;
+			children = (
+				0E70056DEE3570CF47E246B300BAE379 /* .. */,
+			);
+			name = ..;
+			path = ..;
+			sourceTree = "<group>";
+		};
 		481ED57929C8A67893D6A91D7DE21B77 /* .symlinks */ = {
 			isa = PBXGroup;
 			children = (
@@ -4544,6 +4541,15 @@
 			isa = PBXGroup;
 			children = (
 				78DE35125595AFDD1271865AC415BA33 /* ios */,
+			);
+			name = ilhewl;
+			path = ilhewl;
+			sourceTree = "<group>";
+		};
+		48C89206DB26DCC21FDC0E9FEB912759 /* ilhewl */ = {
+			isa = PBXGroup;
+			children = (
+				143CA543C2157CEB02E078596213E72E /* ios */,
 			);
 			name = ilhewl;
 			path = ilhewl;
@@ -4817,6 +4823,17 @@
 			path = Classes;
 			sourceTree = "<group>";
 		};
+		523155108DEF2202F3B6B8B3C5C25EE4 /* just_audio */ = {
+			isa = PBXGroup;
+			children = (
+				D8792903DF63BBCBC398A93FF5F043DD /* .. */,
+				EF58341EC84620C2AC505F06723B33D9 /* Pod */,
+				AC49959BE7F4890818FA86AF45C29D0F /* Support Files */,
+			);
+			name = just_audio;
+			path = ../.symlinks/plugins/just_audio/ios;
+			sourceTree = "<group>";
+		};
 		525C7FFA00A4E509E0EE6D492DE8FF17 /* .. */ = {
 			isa = PBXGroup;
 			children = (
@@ -4870,6 +4887,36 @@
 			);
 			name = sqflite;
 			path = sqflite;
+			sourceTree = "<group>";
+		};
+		55FC9170D22CD73217C865F65BEF3C22 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				FDD01F02831DCE27447875FF7250F73D /* AudioPlayer.h */,
+				D8B75D5932C2D3DB36456D6A776D193E /* AudioPlayer.m */,
+				A8A96CC731C57BCBE5D8359585D8F980 /* AudioSource.h */,
+				3363B219878911E3F26F178BCCDB9C81 /* AudioSource.m */,
+				5970CD659E37627AAF1CE8C3941E9D61 /* BetterEventChannel.h */,
+				28331914EB081D3A680A4B80504D7C4E /* BetterEventChannel.m */,
+				0AA2D6E068F535A73851A513F583CA46 /* ClippingAudioSource.h */,
+				7BCB32D7E0655E84B2BE91A2F0CB8993 /* ClippingAudioSource.m */,
+				495D45010E3984DD650CEF79DA5C9D08 /* ConcatenatingAudioSource.h */,
+				9EB2EAF1E1704871EDCEFAADB58D3992 /* ConcatenatingAudioSource.m */,
+				E4DADEBD2C893D52CF6B28712D67C094 /* IndexedAudioSource.h */,
+				D2D8A63C840097EFBB2F12326F1D6ABA /* IndexedAudioSource.m */,
+				EC29DC998876DAF3A937E17A6E9C9BF0 /* IndexedPlayerItem.h */,
+				E3F34FBFB5645301284AE193AAA5A471 /* IndexedPlayerItem.m */,
+				6208198198866FC1D8CC5D807E98EA16 /* JustAudioPlugin.h */,
+				017E6E8E65878CAF6EB1D15583E8727C /* JustAudioPlugin.m */,
+				67DA5EA7D66A32BBAD8BC469DE09B681 /* LoadControl.h */,
+				6356833BDF07C6E86E6CDDCB51EE2CCD /* LoadControl.m */,
+				15FE14153FBEBF3AA561C558556AD713 /* LoopingAudioSource.h */,
+				12DF86CF509E1A6CBA7F5695FFA02515 /* LoopingAudioSource.m */,
+				E0EFB85DDE66B8C7132B5DE77E82BB72 /* UriAudioSource.h */,
+				8ACF1083227F3AD1F83F56169B35CA67 /* UriAudioSource.m */,
+			);
+			name = Classes;
+			path = Classes;
 			sourceTree = "<group>";
 		};
 		56B2983F283C8B556732C64A16864482 /* .symlinks */ = {
@@ -5377,15 +5424,6 @@
 			path = ilhewl;
 			sourceTree = "<group>";
 		};
-		62043E8C0899C497BC249DF7493DA779 /* .. */ = {
-			isa = PBXGroup;
-			children = (
-				986420859C65A4A3DB9B453844D3A4B7 /* .. */,
-			);
-			name = ..;
-			path = ..;
-			sourceTree = "<group>";
-		};
 		621B433DAE944D21607604A8CA48EDE1 /* Pod */ = {
 			isa = PBXGroup;
 			children = (
@@ -5478,17 +5516,6 @@
 			path = ..;
 			sourceTree = "<group>";
 		};
-		68738C47FD35AC229AB88D21D32A1EE1 /* just_audio */ = {
-			isa = PBXGroup;
-			children = (
-				F393E999983412B6276C33D22C9EF1A9 /* .. */,
-				25EF744B12804FBDC988C97CE91D13AB /* Pod */,
-				8810C00B9A811B80C69D663E58DE18D4 /* Support Files */,
-			);
-			name = just_audio;
-			path = ../.symlinks/plugins/just_audio/ios;
-			sourceTree = "<group>";
-		};
 		68D838060F982AEF77097740929995CD /* .. */ = {
 			isa = PBXGroup;
 			children = (
@@ -5543,6 +5570,15 @@
 			path = "../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core-1.7.0/ios";
 			sourceTree = "<group>";
 		};
+		6B6B9C3360325150AE210080EF84E59F /* .. */ = {
+			isa = PBXGroup;
+			children = (
+				BF13457B1D817A1A97757EC10F5B49D6 /* bech */,
+			);
+			name = ..;
+			path = ..;
+			sourceTree = "<group>";
+		};
 		6BFD6A7F49B1317F28337D9B93331836 /* .. */ = {
 			isa = PBXGroup;
 			children = (
@@ -5577,6 +5613,15 @@
 			);
 			name = ilhewl;
 			path = ilhewl;
+			sourceTree = "<group>";
+		};
+		6D8AFE7D6B3A4C8A94F98637360224FB /* .. */ = {
+			isa = PBXGroup;
+			children = (
+				6B6B9C3360325150AE210080EF84E59F /* .. */,
+			);
+			name = ..;
+			path = ..;
 			sourceTree = "<group>";
 		};
 		6E7DA9A19DA00919E54681864D36F355 /* flutter_forbidshot */ = {
@@ -5682,6 +5727,15 @@
 			path = ../.symlinks/plugins/webview_flutter/ios;
 			sourceTree = "<group>";
 		};
+		73E0044A75797443E82C329A5BF5EC72 /* .. */ = {
+			isa = PBXGroup;
+			children = (
+				EBD4DD9ACAC73E29FD35851AB399E899 /* .. */,
+			);
+			name = ..;
+			path = ..;
+			sourceTree = "<group>";
+		};
 		74197F9EC2D1559D03957A0A11994BC7 /* .. */ = {
 			isa = PBXGroup;
 			children = (
@@ -5735,6 +5789,15 @@
 				405B8A6CFA8F888DABD54C8C5479DE04 /* package_info.podspec */,
 			);
 			name = Pod;
+			sourceTree = "<group>";
+		};
+		75EB2B192FA7CE6451308950EB0309C2 /* ios */ = {
+			isa = PBXGroup;
+			children = (
+				55FC9170D22CD73217C865F65BEF3C22 /* Classes */,
+			);
+			name = ios;
+			path = ios;
 			sourceTree = "<group>";
 		};
 		7610A3C83086358375A4974DC390C375 /* bech */ = {
@@ -6113,21 +6176,6 @@
 			path = ..;
 			sourceTree = "<group>";
 		};
-		8810C00B9A811B80C69D663E58DE18D4 /* Support Files */ = {
-			isa = PBXGroup;
-			children = (
-				790DF269E9D15DA5FBF912650596FA99 /* just_audio.modulemap */,
-				318108E4AC3A4340EBCD808C75ADA4F1 /* just_audio-dummy.m */,
-				1DE5A1D310FFF0A98A40D5C78DF1DA5E /* just_audio-Info.plist */,
-				38524C7C45A460AF18B7D0B997B1C212 /* just_audio-prefix.pch */,
-				2AA81DF75028E70DC7BFCCDC2373518E /* just_audio-umbrella.h */,
-				B4E5CB029EA889A30F9C60855473376A /* just_audio.debug.xcconfig */,
-				9545942BD684D9B868B1008A163ECE12 /* just_audio.release.xcconfig */,
-			);
-			name = "Support Files";
-			path = "../../../../Pods/Target Support Files/just_audio";
-			sourceTree = "<group>";
-		};
 		88C6A8206CD9D823F1A34F08B5C020F9 /* Support Files */ = {
 			isa = PBXGroup;
 			children = (
@@ -6177,6 +6225,15 @@
 			);
 			name = nanopb;
 			path = nanopb;
+			sourceTree = "<group>";
+		};
+		8B2D3D2EB337D9D381141688B2721059 /* .symlinks */ = {
+			isa = PBXGroup;
+			children = (
+				2637DB3FA3836974C7048A909B29EF44 /* plugins */,
+			);
+			name = .symlinks;
+			path = .symlinks;
 			sourceTree = "<group>";
 		};
 		8B7857929B93C2421E7A53298F57D195 /* Support Files */ = {
@@ -6329,24 +6386,6 @@
 			);
 			name = ..;
 			path = ..;
-			sourceTree = "<group>";
-		};
-		986420859C65A4A3DB9B453844D3A4B7 /* .. */ = {
-			isa = PBXGroup;
-			children = (
-				F18FEFE38B5BC8BD321882B158262548 /* .. */,
-			);
-			name = ..;
-			path = ..;
-			sourceTree = "<group>";
-		};
-		98D5D93500D7F26EAC75C9B07DA97473 /* bech */ = {
-			isa = PBXGroup;
-			children = (
-				C0C61BCC5DF06EF920B7F1D2F1D621E1 /* ilhewl */,
-			);
-			name = bech;
-			path = bech;
 			sourceTree = "<group>";
 		};
 		99310B31DD1C9D55E6423FCC00D2AF9F /* Support Files */ = {
@@ -6516,15 +6555,6 @@
 			path = ..;
 			sourceTree = "<group>";
 		};
-		A17C20F7A3B11AF7AC902F2F01DCC22F /* ios */ = {
-			isa = PBXGroup;
-			children = (
-				E0C05BBF77452C3FDE13BF13082255B5 /* .symlinks */,
-			);
-			name = ios;
-			path = ios;
-			sourceTree = "<group>";
-		};
 		A1AB14D2E5B85DF079A2A7206668E7FA /* bech */ = {
 			isa = PBXGroup;
 			children = (
@@ -6532,15 +6562,6 @@
 			);
 			name = bech;
 			path = bech;
-			sourceTree = "<group>";
-		};
-		A228F97A93B9C8D593073E9834175F34 /* .. */ = {
-			isa = PBXGroup;
-			children = (
-				19F428D5AEABCE8284981602991AF796 /* .. */,
-			);
-			name = ..;
-			path = ..;
 			sourceTree = "<group>";
 		};
 		A47162FACB87924CC973D7E7EBED3FFF /* bech */ = {
@@ -6623,15 +6644,6 @@
 			path = bech;
 			sourceTree = "<group>";
 		};
-		A7B831C34A1E8926CB8834D0A02EA653 /* .. */ = {
-			isa = PBXGroup;
-			children = (
-				62043E8C0899C497BC249DF7493DA779 /* .. */,
-			);
-			name = ..;
-			path = ..;
-			sourceTree = "<group>";
-		};
 		A8FB3310249E6CB0179BF088AEAABD3E /* .. */ = {
 			isa = PBXGroup;
 			children = (
@@ -6675,6 +6687,21 @@
 			);
 			name = ..;
 			path = ..;
+			sourceTree = "<group>";
+		};
+		AC49959BE7F4890818FA86AF45C29D0F /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				E5050FF7B66195AB0ECC375DA59831D8 /* just_audio.modulemap */,
+				9B00CE4DE32DDA21900FC5C8170DB1BF /* just_audio-dummy.m */,
+				E6999208F9C425DEFB4F0350E6783420 /* just_audio-Info.plist */,
+				AC191B75FAF14453E3F0E043AA5C3E8A /* just_audio-prefix.pch */,
+				1A154159EF2349C119524F6122E7EE27 /* just_audio-umbrella.h */,
+				A87E1C09F0A638B70F588D462156DC21 /* just_audio.debug.xcconfig */,
+				6532811972F95F1E1337F273748E7039 /* just_audio.release.xcconfig */,
+			);
+			name = "Support Files";
+			path = "../../../../Pods/Target Support Files/just_audio";
 			sourceTree = "<group>";
 		};
 		ACC04FE2AAC7C751387F32D322463782 /* .. */ = {
@@ -6765,15 +6792,6 @@
 			);
 			name = Classes;
 			path = Classes;
-			sourceTree = "<group>";
-		};
-		AE2B920C29C567D702D836B7201FC0FC /* ios */ = {
-			isa = PBXGroup;
-			children = (
-				17BA24DF24DFB43E6D8C303A10225056 /* Classes */,
-			);
-			name = ios;
-			path = ios;
 			sourceTree = "<group>";
 		};
 		AE6125B19E7F75B128421A89648982DB /* .. */ = {
@@ -7389,6 +7407,15 @@
 			path = "../../../../Pods/Target Support Files/share_plus";
 			sourceTree = "<group>";
 		};
+		BF13457B1D817A1A97757EC10F5B49D6 /* bech */ = {
+			isa = PBXGroup;
+			children = (
+				1849BDDB83FDEC49F3AE9D9A1BF8C3EC /* ilhewl */,
+			);
+			name = bech;
+			path = bech;
+			sourceTree = "<group>";
+		};
 		BF65F6C798375AF689BBCE0F823A381C /* Support Files */ = {
 			isa = PBXGroup;
 			children = (
@@ -7401,15 +7428,6 @@
 			);
 			name = "Support Files";
 			path = "../Target Support Files/FirebaseCore";
-			sourceTree = "<group>";
-		};
-		C0C61BCC5DF06EF920B7F1D2F1D621E1 /* ilhewl */ = {
-			isa = PBXGroup;
-			children = (
-				0CA775F6ECE05C8889E830DEB1E3FFF0 /* ilhewl */,
-			);
-			name = ilhewl;
-			path = ilhewl;
 			sourceTree = "<group>";
 		};
 		C1734FA5585F28E8B1892EFE3815FE10 /* DKPhotoGallery */ = {
@@ -7993,6 +8011,15 @@
 			path = ../.symlinks/plugins/sqflite/ios;
 			sourceTree = "<group>";
 		};
+		D8792903DF63BBCBC398A93FF5F043DD /* .. */ = {
+			isa = PBXGroup;
+			children = (
+				2322560A0E75FC2C60A925B44D690CB9 /* .. */,
+			);
+			name = ..;
+			path = "../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/just_audio-0.9.14/ios";
+			sourceTree = "<group>";
+		};
 		D8A1726AB34EF67EF302A51D0C7D540F /* ilhewl */ = {
 			isa = PBXGroup;
 			children = (
@@ -8118,15 +8145,6 @@
 				E8EF6DFD9D33F33B7BA4B61B6B9E6BAF /* DKImageExtensionGallery.swift */,
 			);
 			name = PhotoGallery;
-			sourceTree = "<group>";
-		};
-		E0C05BBF77452C3FDE13BF13082255B5 /* .symlinks */ = {
-			isa = PBXGroup;
-			children = (
-				ED33400FD947DD0F170F8A0AFDCCC7E6 /* plugins */,
-			);
-			name = .symlinks;
-			path = .symlinks;
 			sourceTree = "<group>";
 		};
 		E0EEEC8E19DBD1236B11887CF169F672 /* .. */ = {
@@ -8386,15 +8404,6 @@
 			path = ..;
 			sourceTree = "<group>";
 		};
-		EB6E3256F42926FDBCE8CAAFCCD80D2B /* .. */ = {
-			isa = PBXGroup;
-			children = (
-				98D5D93500D7F26EAC75C9B07DA97473 /* bech */,
-			);
-			name = ..;
-			path = ..;
-			sourceTree = "<group>";
-		};
 		EB7063E07E8C60ABB011789B6C22BC52 /* .symlinks */ = {
 			isa = PBXGroup;
 			children = (
@@ -8431,6 +8440,15 @@
 			path = ios;
 			sourceTree = "<group>";
 		};
+		EBD4DD9ACAC73E29FD35851AB399E899 /* .. */ = {
+			isa = PBXGroup;
+			children = (
+				6D8AFE7D6B3A4C8A94F98637360224FB /* .. */,
+			);
+			name = ..;
+			path = ..;
+			sourceTree = "<group>";
+		};
 		ED224D0C62BA15FA79CF7DCD247659B2 /* ios */ = {
 			isa = PBXGroup;
 			children = (
@@ -8438,15 +8456,6 @@
 			);
 			name = ios;
 			path = ios;
-			sourceTree = "<group>";
-		};
-		ED33400FD947DD0F170F8A0AFDCCC7E6 /* plugins */ = {
-			isa = PBXGroup;
-			children = (
-				0263451DD7D206E98A4F76575EB1D05B /* just_audio */,
-			);
-			name = plugins;
-			path = plugins;
 			sourceTree = "<group>";
 		};
 		ED696124CC1005A10B2AC2D83358322E /* .. */ = {
@@ -8510,6 +8519,15 @@
 			path = "../../../../Pods/Target Support Files/device_info";
 			sourceTree = "<group>";
 		};
+		EF58341EC84620C2AC505F06723B33D9 /* Pod */ = {
+			isa = PBXGroup;
+			children = (
+				11EDBB904A5F9FCCDE686679657F52B3 /* just_audio.podspec */,
+				261BCB316A79D85DC9C3DC63D0535433 /* LICENSE */,
+			);
+			name = Pod;
+			sourceTree = "<group>";
+		};
 		EFA458A1F5D48E121B33045793BF7F66 /* plugins */ = {
 			isa = PBXGroup;
 			children = (
@@ -8538,15 +8556,6 @@
 			path = ..;
 			sourceTree = "<group>";
 		};
-		F18FEFE38B5BC8BD321882B158262548 /* .. */ = {
-			isa = PBXGroup;
-			children = (
-				A228F97A93B9C8D593073E9834175F34 /* .. */,
-			);
-			name = ..;
-			path = ..;
-			sourceTree = "<group>";
-		};
 		F1C088246BC17E2F15ECBEBF63B562BE /* bech */ = {
 			isa = PBXGroup;
 			children = (
@@ -8563,15 +8572,6 @@
 			);
 			name = bech;
 			path = bech;
-			sourceTree = "<group>";
-		};
-		F393E999983412B6276C33D22C9EF1A9 /* .. */ = {
-			isa = PBXGroup;
-			children = (
-				A7B831C34A1E8926CB8834D0A02EA653 /* .. */,
-			);
-			name = ..;
-			path = "../../../../../../../../Dev/flutter/.pub-cache/hosted/pub.dartlang.org/just_audio-0.9.12/ios";
 			sourceTree = "<group>";
 		};
 		F3B3F93253FA6D2CC8417A460987A825 /* .symlinks */ = {
@@ -8659,7 +8659,7 @@
 				6E7DA9A19DA00919E54681864D36F355 /* flutter_forbidshot */,
 				4BAFC960E35A2885B0E509824B25E10D /* flutter_isolate */,
 				76B67AF7C8EB2294289C6FFB940F67FC /* image_picker */,
-				68738C47FD35AC229AB88D21D32A1EE1 /* just_audio */,
+				523155108DEF2202F3B6B8B3C5C25EE4 /* just_audio */,
 				C2636F0E81B28A31E117647C296F6CD7 /* on_audio_query */,
 				AD7B252203A5C5B79EDA72FA46BA3C2F /* open_file */,
 				1827750FF6A1CB6A633879FC370776C0 /* otp_autofill */,
@@ -9026,18 +9026,18 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C3308E941515948290AD2C3493344F47 /* AudioPlayer.h in Headers */,
-				87252CAF3A5E2E28BF29764C4A80C83D /* AudioSource.h in Headers */,
-				E8B459150B288F3379A2622220FE3B34 /* BetterEventChannel.h in Headers */,
-				4BD0CBF607C30E1A066385E16878F4DB /* ClippingAudioSource.h in Headers */,
-				9ECCD38230F7B97F8D557658C979ED7C /* ConcatenatingAudioSource.h in Headers */,
-				08BE6FABE3586BB467BCFE61957096BD /* IndexedAudioSource.h in Headers */,
-				62C10C22D8F9157EB21BF49566F135FB /* IndexedPlayerItem.h in Headers */,
+				DA7E3E0A6C136107DDF315B237615711 /* AudioPlayer.h in Headers */,
+				1B20009B92219E3B3CF6D56DAFF4B226 /* AudioSource.h in Headers */,
+				808631AA7A3B193F51CE9C3014717302 /* BetterEventChannel.h in Headers */,
+				34CFE6111BA85A177800BB0CC8FB399A /* ClippingAudioSource.h in Headers */,
+				2B28F93AAECEF95010E8D652479D6482 /* ConcatenatingAudioSource.h in Headers */,
+				9C1929FBD7E813A85BF8C4D3C276C819 /* IndexedAudioSource.h in Headers */,
+				5FDD2966769787648A075D3B28469EC7 /* IndexedPlayerItem.h in Headers */,
 				6507E405BE216BCAA53A10AF8ABC5461 /* just_audio-umbrella.h in Headers */,
-				777A4BF587AE51B00AA488A51F4FFF7E /* JustAudioPlugin.h in Headers */,
-				A9BD72F3EE4D8D81EA752192DA063C0A /* LoadControl.h in Headers */,
-				C4A35B4B5F83BF6DF2B80E2026F5B95A /* LoopingAudioSource.h in Headers */,
-				4BCA0F736A0B9C3DA53CE8C77048D73A /* UriAudioSource.h in Headers */,
+				AE14DA6E1F4F12805C962826A8E0CE2C /* JustAudioPlugin.h in Headers */,
+				77D7BE29B088583B397E9256E569E598 /* LoadControl.h in Headers */,
+				E10CFF1A31A9531879E46F758C617B88 /* LoopingAudioSource.h in Headers */,
+				283947091AFCE66782252595E648B8B1 /* UriAudioSource.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -11242,18 +11242,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4CA189EC25FA5F2791D0EE4D1A382099 /* AudioPlayer.m in Sources */,
-				D87A9AD4C4E6A98ABF8C8705E53CA196 /* AudioSource.m in Sources */,
-				D4D91AF77DD44AA86BD76B1FA852819F /* BetterEventChannel.m in Sources */,
-				7CD3BB8385B7F7FCB5ACD8A93D71F993 /* ClippingAudioSource.m in Sources */,
-				634F77847349FBFF97E4F1FA366C0432 /* ConcatenatingAudioSource.m in Sources */,
-				AA1307D7B5B092890EB928EBB3467120 /* IndexedAudioSource.m in Sources */,
-				541E4B76B7CEC14B1693424E87E4304F /* IndexedPlayerItem.m in Sources */,
+				80DCB2D3088236078EDB0F3C2D63A924 /* AudioPlayer.m in Sources */,
+				54A9BC8EDDAA0F2AB0BA617AAEC6771C /* AudioSource.m in Sources */,
+				02D0149E1E0B234A82DFE43E9DA2B9CD /* BetterEventChannel.m in Sources */,
+				F6F692B368ABA51D8EDCAF2490C7E985 /* ClippingAudioSource.m in Sources */,
+				9774AF9BCC52C4A2D61BE2ACEF0C35B0 /* ConcatenatingAudioSource.m in Sources */,
+				F41F59F7DBA93AF206CB7DF6C31007BE /* IndexedAudioSource.m in Sources */,
+				88B3114ABB7FE0A334290E43C95F5243 /* IndexedPlayerItem.m in Sources */,
 				C8259B619555194B1ED3B4D11ADDDBF0 /* just_audio-dummy.m in Sources */,
-				72DE3A257DB805AB675EA664F505A400 /* JustAudioPlugin.m in Sources */,
-				630E49EC8061D92DEB5AAE0A572F4563 /* LoadControl.m in Sources */,
-				5E440E4BA4564940E2E9EF5185CD4149 /* LoopingAudioSource.m in Sources */,
-				277CB3BBA7DE6120D557D184405B729E /* UriAudioSource.m in Sources */,
+				22C986AFE1467F65F490A43C9DB12578 /* JustAudioPlugin.m in Sources */,
+				04A3D979F9DAC258959E9AF21563F0F2 /* LoadControl.m in Sources */,
+				28063A95B14981E123998814DC15A622 /* LoopingAudioSource.m in Sources */,
+				CF2AEE4452D3610634E3D719609CE45C /* UriAudioSource.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -12261,7 +12261,7 @@
 		};
 		1A541AF0596404791D19719A62C257BC /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B4E5CB029EA889A30F9C60855473376A /* just_audio.debug.xcconfig */;
+			baseConfigurationReference = A87E1C09F0A638B70F588D462156DC21 /* just_audio.debug.xcconfig */;
 			buildSettings = {
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = NO;
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
@@ -13468,7 +13468,7 @@
 		};
 		4FCA1B27B0D05BF4FD8E912368901FEF /* Profile */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9545942BD684D9B868B1008A163ECE12 /* just_audio.release.xcconfig */;
+			baseConfigurationReference = 6532811972F95F1E1337F273748E7039 /* just_audio.release.xcconfig */;
 			buildSettings = {
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = NO;
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
@@ -13661,7 +13661,7 @@
 		};
 		5F40D35C9DC47E5D841ED02526CE28D2 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9545942BD684D9B868B1008A163ECE12 /* just_audio.release.xcconfig */;
+			baseConfigurationReference = 6532811972F95F1E1337F273748E7039 /* just_audio.release.xcconfig */;
 			buildSettings = {
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = NO;
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";

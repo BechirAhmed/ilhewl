@@ -72,8 +72,7 @@ class _DownloadsState extends State<Downloads>
         file.writeAsBytesSync(image);
       }
     } catch (e) {
-      final HttpClientRequest request2 =
-          await HttpClient().getUrl(Uri.parse(url));
+      final HttpClientRequest request2 = await HttpClient().getUrl(Uri.parse(url));
       final HttpClientResponse response2 = await request2.close();
       final bytes2 = await consolidateHttpClientResponseBytes(response2);
       await file.writeAsBytes(bytes2);

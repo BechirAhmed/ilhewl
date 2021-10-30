@@ -26,12 +26,11 @@ class Download with ChangeNotifier {
   bool download = true;
 
   Future<String> getLyrics(Map data) async {
-    if (data['has_lyrics'] == 'true') {
-      return data['extras']['lyrics_snippet'];
-      return Lyrics().getSaavnLyrics(data['id'].toString());
+    if (data['has_lyrics'] == 'true' || data['has_lyrics']) {
+      return data['lyrics_snippet'];
     } else {
-    return data['extras']['lyrics_snippet'];
-      return Lyrics().getLyrics(data['title'].toString(), data['artist'].toString());
+    return data['title'];
+    // return data['extras']['lyrics_snippet'];
     }
   }
 
@@ -52,8 +51,7 @@ class Download with ChangeNotifier {
     final RegExp avoid = RegExp(r'[\.\\\*\:\"\?#/;\|]');
     data['title'] = data['title'].toString().split('(From')[0].trim();
     String filename = '${data["title"]} - ${data["artist"]}';
-    String dlPath =
-    Hive.box('settings').get('downloadPath', defaultValue: '') as String;
+    String dlPath = Hive.box('settings').get('downloadPath', defaultValue: '') as String;
     if (filename.length > 200) {
       final String temp = filename.substring(0, 200);
       final List tempList = temp.split(', ');
@@ -262,8 +260,7 @@ class Download with ChangeNotifier {
     // debugPrint('Audio path $filepath');
     // debugPrint('Image path $filepath2');
 
-    final String kUrl = data['url'].toString().replaceAll(
-        '_96.', "_${preferredDownloadQuality.replaceAll(' kbps', '')}.");
+    final String kUrl = data['url'].toString().replaceAll('_96.', "_${preferredDownloadQuality.replaceAll(' kbps', '')}.");
     final client = Client();
     final response = await client.send(Request('GET', Uri.parse(kUrl)));
     final int total = response.contentLength ?? 0;
@@ -294,7 +291,7 @@ class Download with ChangeNotifier {
 
         await file2.writeAsBytes(bytes2);
         try {
-          lyrics = downloadLyrics ? await getLyrics(data) : '';
+          lyrics = downloadLyrics ? await getLyrics(data) : 'null';
         } catch (e) {
           // print('Error fetching lyrics: $e');
           lyrics = '';
@@ -338,17 +335,14 @@ class Download with ChangeNotifier {
         final songData = {
           'id': data['id'].toString(),
           'title': data['title'].toString(),
-          'subtitle': data['subtitle'].toString(),
           'artist': data['artist'].toString(),
           'albumArtist': data['album_artist']?.toString() ?? data['artist']?.toString().split(', ')[0],
           'album': data['album'].toString(),
           'genre': data['genre'].toString(),
-          'year': data['year'].toString(),
-          'lyrics_snippet': lyrics,
+          'has_lyrics': data['has_lyrics'].toString(),
+          'lyrics_snippet': lyrics != null || lyrics != '' ? lyrics : data['title'].toString(),
           'duration': data['duration'],
           'release_date': data['release_date'].toString(),
-          'album_id': data['album_id'].toString(),
-          'perma_url': data['perma_url'].toString(),
           'quality': preferredDownloadQuality,
           'path': filepath,
           'image': filepath2,

@@ -4,7 +4,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ilhewl/APIs/saavnApi.dart';
 import 'package:ilhewl/CustomWidgets/gradientContainers.dart';
 import 'package:ilhewl/Helpers/playlist.dart';
-import 'package:ilhewl/Services/youtube_services.dart';
 import 'package:youtube_explode_dart/youtube_explode_dart.dart';
 
 class SearchAddPlaylist {
@@ -12,20 +11,6 @@ class SearchAddPlaylist {
     final String link = '$inLink&';
     try {
       final RegExpMatch id = RegExp(r'.*list\=(.*?)&').firstMatch(link);
-      if (id != null) {
-        final Playlist metadata =
-        await YouTubeServices().getPlaylistDetails(id[1]);
-        final List<Video> tracks =
-        await YouTubeServices().getPlaylistSongs(id[1]);
-        return {
-          'title': metadata.title,
-          'image': metadata.thumbnails.standardResUrl,
-          'author': metadata.author,
-          'description': metadata.description,
-          'tracks': tracks,
-          'count': tracks.length,
-        };
-      }
       return {};
     } catch (e) {
       return {};

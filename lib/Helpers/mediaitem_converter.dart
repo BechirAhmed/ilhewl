@@ -63,7 +63,6 @@ class MediaItemConverter {
         genre: song['genre'].toString(),
         extras: {
           'url': song['path'].toString(),
-          'genre': song['genre'],
           "has_lyrics": song['has_lyrics'],
           "lyrics_snippet": song['lyrics_snippet'],
           'release_date': song['release_date'],

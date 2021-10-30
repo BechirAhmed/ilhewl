@@ -288,7 +288,6 @@ class _PlayScreenState extends State<PlayScreen> with StreamSubscriber {
       } else {
         setState(() {
           _start--;
-          // print(_start);
         });
       }
     });
@@ -328,8 +327,7 @@ class _PlayScreenState extends State<PlayScreen> with StreamSubscriber {
     String filePath;
     if (response['image'] != null) {
       try {
-        final File file =
-        File('${tempDir.path}/${response["_display_name_wo_ext"]}.jpg');
+        final File file = File('${tempDir.path}/${response["_display_name_wo_ext"]}.jpg');
         filePath = file.path;
         if (!await file.exists()) {
           await file.create();
@@ -361,8 +359,7 @@ class _PlayScreenState extends State<PlayScreen> with StreamSubscriber {
     defaultCover = file.path;
     if (await file.exists()) return file.path;
     final byteData = await rootBundle.load('assets/cover.jpg');
-    await file.writeAsBytes(byteData.buffer
-        .asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
+    await file.writeAsBytes(byteData.buffer.asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
     return file.path;
   }
 
@@ -409,8 +406,7 @@ class _PlayScreenState extends State<PlayScreen> with StreamSubscriber {
 
   void setDownValues(List response) {
     globalQueue.addAll(
-      response
-          .map((song) => MediaItemConverter().downMapToMediaItem(song as Map)),
+      response.map((song) => MediaItemConverter().downMapToMediaItem(song as Map)),
     );
     fetched = true;
     updateNplay();
@@ -436,6 +432,7 @@ class _PlayScreenState extends State<PlayScreen> with StreamSubscriber {
     BuildContext scaffoldContext;
     Map data = widget.data;
     if (response == data['response'] && globalIndex == data['index']) {
+      print(same);
       same = true;
     }
     response = data['response'];
@@ -516,11 +513,7 @@ class _PlayScreenState extends State<PlayScreen> with StreamSubscriber {
                           icon: Icon(Icons.expand_more_rounded),
                           color: Theme.of(context).iconTheme.color,
                           onPressed: () {
-                            if (widget.fromMiniplayer) {
-                              widget.controller.animateToHeight(state: PanelState.MIN);
-                            } else {
-                              Navigator.pop(context);
-                            }
+                            Navigator.pop(context);
                           }),
                       actions: [
                         PopupMenuButton(
@@ -836,9 +829,7 @@ class _PlayScreenState extends State<PlayScreen> with StreamSubscriber {
                                                         fit: BoxFit.cover,
                                                         height: MediaQuery.of(context).size.width * 0.85,
                                                         gaplessPlayback: true,
-                                                        image:
-                                                        FileImage(File(mediaItem.artUri.toFilePath(),
-                                                        )))
+                                                        image: FileImage(File(mediaItem.artUri.toFilePath(),)))
                                                         : CachedNetworkImage(
                                                       fit: BoxFit.cover,
                                                       height: MediaQuery.of(context).size.width * 0.75,
@@ -1588,12 +1579,8 @@ class _PlayScreenState extends State<PlayScreen> with StreamSubscriber {
                                                       onDismissed:
                                                           (dir) {
                                                         setState(() {
-                                                          AudioService
-                                                              .removeQueueItem(
-                                                              queue[index]);
-                                                          queue.remove(
-                                                              queue[
-                                                              index]);
+                                                          AudioService.removeQueueItem(queue[index]);
+                                                          queue.remove(queue[index]);
                                                         });
                                                       },
                                                       child:

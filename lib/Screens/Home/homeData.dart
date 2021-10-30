@@ -12,7 +12,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:hive/hive.dart';
 import 'package:ilhewl/APIs/saavnApi.dart';
-import 'package:ilhewl/Services/song_provider.dart';
 import 'package:provider/provider.dart';
 
 bool fetched = false;
@@ -27,8 +26,6 @@ class HomeData extends StatefulWidget {
 }
 
 class _HomeDataState extends State<HomeData> {
-  List recentList = Hive.box('recentlyPlayed').get('recentSongs', defaultValue: []);
-
   double walletBalance = 0.0;
   bool walletLoading = true;
 
@@ -38,7 +35,6 @@ class _HomeDataState extends State<HomeData> {
 
   void getHomePageData() async {
 
-    SongProvider songProvider = context.watch();
     // Hive.box('cache').delete('cachedDownloadedSongs');
 
     EasyLoading.show(status: "Loading...");
@@ -48,7 +44,6 @@ class _HomeDataState extends State<HomeData> {
       Hive.box('cache').put('homepage', recievedData);
       data = recievedData;
       lists = [...?data["collections"]];
-      songProvider.init(data['latests']);
       // lists = ["recent", ...?data["collections"]];
     }
     setState(() {});
@@ -221,7 +216,6 @@ class _HomeDataState extends State<HomeData> {
   }
 
   Future<void> _pullRefresh() async {
-    Provider.of<SongProvider>(context, listen: false);
     getHomePageData();
   }
 

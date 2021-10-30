@@ -34,8 +34,6 @@ import 'package:audio_service/audio_service.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:ilhewl/Services/data_provider.dart';
-import 'package:ilhewl/Services/song_provider.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:ilhewl/Screens/About/about.dart';
 import 'package:ilhewl/Screens/Home/home.dart';
@@ -53,96 +51,46 @@ import 'package:secure_application/secure_application.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
-  try {
-    await Hive.openBox('settings');
-  } catch (e) {
-    print('Failed to open Settings Box');
-    print("Error: $e");
-    var dir = await getApplicationDocumentsDirectory();
-    String dirPath = dir.path;
-    String boxName = "settings";
-    File dbFile = File('$dirPath/$boxName.hive');
-    File lockFile = File('$dirPath/$boxName.lock');
-    await dbFile.delete();
-    await lockFile.delete();
-    await Hive.openBox("settings");
-  }
-  try {
-    await Hive.openBox('downloads');
-  } catch (e) {
-    print('Failed to open downloads Box');
-    print("Error: $e");
-    var dir = await getApplicationDocumentsDirectory();
-    String dirPath = dir.path;
-    String boxName = "downloads";
-    File dbFile = File('$dirPath/$boxName.hive');
-    File lockFile = File('$dirPath/$boxName.lock');
-    await dbFile.delete();
-    await lockFile.delete();
-    await Hive.openBox("downloads");
-  }
-  try {
-    await Hive.openBox('cache');
-  } catch (e) {
-    print('Failed to open Cache Box');
-    print("Error: $e");
-    var dir = await getApplicationDocumentsDirectory();
-    String dirPath = dir.path;
-    String boxName = "cache";
-    File dbFile = File('$dirPath/$boxName.hive');
-    File lockFile = File('$dirPath/$boxName.lock');
-    await dbFile.delete();
-    await lockFile.delete();
-    await Hive.openBox("cache");
-  }
-  try {
-    await Hive.openBox('recentlyPlayed');
-  } catch (e) {
-    print('Failed to open Recent Box');
-    print("Error: $e");
-    var dir = await getApplicationDocumentsDirectory();
-    String dirPath = dir.path;
-    String boxName = "recentlyPlayed";
-    File dbFile = File('$dirPath/$boxName.hive');
-    File lockFile = File('$dirPath/$boxName.lock');
-    await dbFile.delete();
-    await lockFile.delete();
-    await Hive.openBox("recentlyPlayed");
-  }
-  try {
-    final box = await Hive.openBox('songDetails');
-    // clear box if it grows large
-    // each song detail is about 3.9KB so it's <5MB
-    if (box.length > 1200) {
-      box.clear();
-    }
-    await Hive.openBox('songDetails');
-  } catch (e) {
-    print('Failed to open songDetails Box');
-    print("Error: $e");
-    var dir = await getApplicationDocumentsDirectory();
-    String dirPath = dir.path;
-    String boxName = "songDetails";
-    File dbFile = File('$dirPath/$boxName.hive');
-    File lockFile = File('$dirPath/$boxName.lock');
-    await dbFile.delete();
-    await lockFile.delete();
-    await Hive.openBox("songDetails");
-  }
-  try {
-    await Firebase.initializeApp();
-  } catch (e) {
-    print('Failed to initialize Firebase');
-  }
+
+  await openHiveBox('settings');
+  await openHiveBox('downloads');
+  await openHiveBox('Favorite Songs');
+  await openHiveBox('cache', limit: true);
 
   Paint.enableDithering = true;
-  runApp(
-      MultiProvider(
-        providers: _providers,
-        child: MyApp()
-      )
-  );
+  runApp(MyApp());
   configLoading();
+}
+
+Future<void> openHiveBox(String boxName, {bool limit = false}) async {
+  if (limit) {
+    final box = await Hive.openBox(boxName).onError((error, stackTrace) async {
+      final Directory dir = await getApplicationDocumentsDirectory();
+      final String dirPath = dir.path;
+      final File dbFile = File('$dirPath/$boxName.hive');
+      final File lockFile = File('$dirPath/$boxName.lock');
+      await dbFile.delete();
+      await lockFile.delete();
+      await Hive.openBox(boxName);
+      throw 'Failed to open $boxName Box\nError: $error';
+    });
+    // clear box if it grows large
+    if (box.length > 500) {
+      box.clear();
+    }
+    await Hive.openBox(boxName);
+  } else {
+    await Hive.openBox(boxName).onError((error, stackTrace) async {
+      final Directory dir = await getApplicationDocumentsDirectory();
+      final String dirPath = dir.path;
+      final File dbFile = File('$dirPath/$boxName.hive');
+      final File lockFile = File('$dirPath/$boxName.lock');
+      await dbFile.delete();
+      await lockFile.delete();
+      await Hive.openBox(boxName);
+      throw 'Failed to open $boxName Box\nError: $error';
+    });
+  }
 }
 
 void configLoading() {
@@ -312,9 +260,6 @@ class _MyAppState extends State<MyApp> {
         '/setting': (context) => SettingPage(),
         '/wallet': (context) => WalletPage(),
         '/about': (context) => AboutScreen(),
-        '/playlists': (context) => PlaylistScreen(),
-        '/localplaylists': (context) => LocalPlaylistScreen(),
-        '/mymusic': (context) => MyMusicPage(),
         '/nowplaying': (context) => NowPlaying(),
         '/recent': (context) => RecentlyPlayed(),
         '/downloads': (context) => const Downloads(),
@@ -323,18 +268,3 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
-
-List<SingleChildWidget> _providers = [
-
-  ChangeNotifierProvider(create: (_) => CacheProvider()),
-  Provider(
-    create: (context) => SongProvider(
-      cacheProvider: context.read<CacheProvider>(),
-    ),
-  ),
-  ChangeNotifierProvider(
-    create: (context) => DataProvider(
-      songProvider: context.read<SongProvider>(),
-    ),
-  ),
-];

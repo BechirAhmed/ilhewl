@@ -1,3 +1,4 @@
+import 'package:audio_service/audio_service.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/services.dart';
 import 'package:ilhewl/CustomWidgets/custom_physics.dart';
@@ -194,6 +195,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    AppConfig().init(context);
     return GradientContainer(
       child: Scaffold(
           resizeToAvoidBottomInset: false,
@@ -266,19 +268,6 @@ class _HomePageState extends State<HomePage> {
                               },
                             ),
                             ListTile(
-                              title: Text(AppLocalizations.of(context).myMusic),
-                              contentPadding:
-                              const EdgeInsets.symmetric(horizontal: 20.0),
-                              leading: Icon(
-                                MdiIcons.folderMusic,
-                                color: Theme.of(context).iconTheme.color,
-                              ),
-                              onTap: () {
-                                Navigator.pop(context);
-                                Navigator.pushNamed(context, '/mymusic');
-                              },
-                            ),
-                            ListTile(
                               title: Text(AppLocalizations.of(context).downs),
                               contentPadding:
                               const EdgeInsets.symmetric(horizontal: 20.0),
@@ -289,20 +278,6 @@ class _HomePageState extends State<HomePage> {
                               onTap: () {
                                 Navigator.pop(context);
                                 Navigator.pushNamed(context, '/downloads');
-                              },
-                            ),
-                            ListTile(
-                              title:
-                              Text(AppLocalizations.of(context).playlists),
-                              contentPadding:
-                              const EdgeInsets.symmetric(horizontal: 20.0),
-                              leading: Icon(
-                                Icons.playlist_play_rounded,
-                                color: Theme.of(context).iconTheme.color,
-                              ),
-                              onTap: () {
-                                Navigator.pop(context);
-                                Navigator.pushNamed(context, '/playlists');
                               },
                             ),
                             ListTile(
@@ -351,7 +326,7 @@ class _HomePageState extends State<HomePage> {
                                 color: Theme.of(context).iconTheme.color,
                               ),
                               onTap: () {
-                                _logout();
+                                _handleLogoutDlg();
                               },
                             ),
                             ListTile(
@@ -372,7 +347,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ],
                   ),
-                  Padding(
+                  artistId == 0 ? Padding(
                     padding: const EdgeInsets.only(left: 10, right: 10),
                     child: Container(
                         padding: EdgeInsets.only(top: 5, bottom: 5, left: 10, right: 10),
@@ -396,14 +371,14 @@ class _HomePageState extends State<HomePage> {
                           },
                         )
                     ),
-                  ),
+                  ) : SizedBox(),
                   Padding(
                     padding: const EdgeInsets.fromLTRB(5, 30, 5, 20),
                     child: Center(
                       child: Text(
                         'Made with ♥ by Mauritanian Artists',
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 12),
+                        style: TextStyle(fontSize: AppConfig.screenWidth * .03),
                       ),
                     ),
                   ),
@@ -918,13 +893,36 @@ class _HomePageState extends State<HomePage> {
 
   void _logout() async {
     EasyLoading.show(status: "Loading...");
-    Hive.box('settings').delete('userID');
-    Hive.box('settings').delete('artistId');
-    Hive.box('settings').delete('name');
-    Hive.box('settings').delete('phone');
-    Hive.box('settings').delete('token');
-    Hive.box('settings').delete('currency');
+    await Hive.box('settings').clear();
+    await Hive.box('downloads').clear();
+    await Hive.box('cache').clear();
+    await Hive.box('Favorite Songs').clear();
+    AudioService.stop();
+    AudioService.disconnect();
     EasyLoading.dismiss();
     Navigator.popAndPushNamed(context, '/');
+  }
+
+  Future<dynamic> _handleLogoutDlg() {
+    return showCupertinoDialog(
+        context: context,
+        builder: (context) => CupertinoAlertDialog(
+          title: Text("Are you sure?"),
+          content: Text("When you disconnect all of your data will be deleted, including downloaded songs...!"),
+          actions: [
+            TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text("CANCEL")),
+            TextButton(
+                onPressed: () {
+                  _logout();
+                  Navigator.pop(context);
+                },
+                child: Text("YES")
+            ),
+          ],
+        ));
   }
 }

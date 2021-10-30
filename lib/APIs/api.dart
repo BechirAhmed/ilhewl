@@ -146,7 +146,7 @@ class Api {
           'Authorization': 'Bearer $token'
         }
       );
-print(res.body);
+
       if(res.statusCode == 200){
         final body = json.decode(res.body);
         result = body;
