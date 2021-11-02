@@ -5,7 +5,7 @@ import 'package:hive/hive.dart';
 import 'package:ilhewl/APIs/api.dart';
 import 'package:ilhewl/CustomWidgets/add_queue.dart';
 import 'package:ilhewl/CustomWidgets/downloadButton.dart';
-import 'package:ilhewl/Screens/Player/audioplayer.dart';
+import 'package:ilhewl/Screens/Player/oldaudioplayer.dart';
 import 'package:ilhewl/CustomWidgets/gradientContainers.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +13,7 @@ import 'package:ilhewl/CustomWidgets/emptyScreen.dart';
 import 'package:ilhewl/CustomWidgets/miniplayer.dart';
 import 'package:ilhewl/APIs/saavnApi.dart';
 import 'package:html_unescape/html_unescape_small.dart';
+import 'package:ilhewl/Screens/Player/audioplayer.dart';
 import 'package:ilhewl/Screens/Wallet/wallet.dart';
 
 class SongsListPage extends StatefulWidget {

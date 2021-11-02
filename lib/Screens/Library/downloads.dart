@@ -206,7 +206,6 @@ class _DownloadsState extends State<Downloads>
     }
     _genres[_songs[index]['genre']].remove(_songs[index]);
 
-    _songs.remove(_songs[index]);
     try {
       audioFile.delete();
       if (await imageFile.exists()) {
@@ -216,6 +215,7 @@ class _DownloadsState extends State<Downloads>
         context,
         'Deleted ${_songs[index]['title']}',
       );
+      _songs.remove(_songs[index]);
     } catch (e) {
       ShowSnackBar().showSnackBar(
         context,

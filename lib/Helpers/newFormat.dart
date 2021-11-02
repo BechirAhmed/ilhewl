@@ -90,7 +90,6 @@ class NewFormatResponse {
 
       Map info = {
         "id": response["id"],
-        "cacheKey": formatString("CACHE_${response['id']}"),
         "type": response["type"],
         "album": response["album"] == null || response["album"] == "null" ? formatString("ilhewl") : formatString(response["album"]["title"]),
         // .split('(')

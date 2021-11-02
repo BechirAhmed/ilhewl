@@ -4,7 +4,6 @@ class MediaItemConverter {
   Map mediaItemtoMap(MediaItem mediaItem) {
     return {
       'id': mediaItem.id.toString(),
-      'cacheKey': mediaItem.extras['cacheKey'].toString(),
       'album': mediaItem.album.toString(),
       'artist': mediaItem.artist.toString(),
       'duration': mediaItem.duration.inSeconds.toString(),
@@ -23,7 +22,7 @@ class MediaItemConverter {
     };
   }
 
-  MediaItem mapToMediaItem(Map song) {
+  MediaItem mapToMediaItem(Map song, {bool addedByAutoplay = false, bool autoplay = true}) {
     return MediaItem(
         id: song['id'].toString(),
         album: song['album'],
@@ -39,7 +38,6 @@ class MediaItemConverter {
         extras: {
           "url": song["url"],
           "has_lyrics": song['has_lyrics'],
-          "cacheKey": song['cacheKey'],
           "lyrics_snippet": song['lyrics_snippet'],
           "release_date": song["release_date"],
           "price": song["price"],

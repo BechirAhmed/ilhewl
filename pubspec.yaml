@@ -28,10 +28,10 @@ dependencies:
 
   # Audio related
   audiotagger: ^2.2.1
-  audio_service: ^0.17.1
-  audio_session: ^0.1.5
-  just_audio: ^0.9.7
-  on_audio_query: ^2.5.0
+  audio_service: ^0.18.1
+  audio_session: ^0.1.6+1
+  just_audio: ^0.9.15
+  on_audio_query: ^2.5.2
 
 
   # Productivity
@@ -66,6 +66,8 @@ dependencies:
 
   flutter_easyloading: ^3.0.0
   otp_text_field: ^1.1.1
+  flip_card: ^0.6.0
+  palette_generator: ^0.3.2
 
 
   # Database related

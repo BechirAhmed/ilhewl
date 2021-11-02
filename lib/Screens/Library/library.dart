@@ -92,36 +92,6 @@ class _LibraryPageState extends State<LibraryPage> {
           },
         ),
         ListTile(
-          title: Text('My Music'),
-          leading: Icon(
-            MdiIcons.folderMusic,
-            color: Theme.of(context).brightness == Brightness.dark
-                ? null
-                : Colors.grey[700],
-          ),
-          onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => DownloadedSongs(type: 'all')));
-          },
-        ),
-        ListTile(
-          title: Text('Downloads'),
-          leading: Icon(
-            Icons.download_done_rounded,
-            color: Theme.of(context).brightness == Brightness.dark
-                ? null
-                : Colors.grey[700],
-          ),
-          onTap: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => DownloadedSongs(type: 'downloaded')));
-          },
-        ),
-        ListTile(
           title: Text('Playlists'),
           leading: Icon(
             Icons.playlist_play_rounded,

@@ -20,6 +20,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:ilhewl/main.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:ilhewl/CustomWidgets/miniplayer.dart';
@@ -897,8 +898,9 @@ class _HomePageState extends State<HomePage> {
     await Hive.box('downloads').clear();
     await Hive.box('cache').clear();
     await Hive.box('Favorite Songs').clear();
-    AudioService.stop();
-    AudioService.disconnect();
+    audioHandler.stop();
+    // AudioService.stop();
+    // AudioService.disconnect();
     EasyLoading.dismiss();
     Navigator.popAndPushNamed(context, '/');
   }

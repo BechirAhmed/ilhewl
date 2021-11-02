@@ -22,6 +22,7 @@ import 'package:flutter_forbidshot/flutter_forbidshot.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:ilhewl/Helpers/cache_provider.dart';
 import 'package:ilhewl/Helpers/config.dart';
+import 'package:ilhewl/Helpers/route_handler.dart';
 import 'package:ilhewl/Screens/Artist/ClaimProfile.dart';
 import 'package:ilhewl/Screens/Library/downloads.dart';
 import 'package:ilhewl/Screens/Library/nowplaying.dart';
@@ -29,8 +30,10 @@ import 'package:ilhewl/Screens/Library/playlists.dart';
 import 'package:ilhewl/Screens/Library/recent.dart';
 import 'package:ilhewl/Screens/LocalMusic/localplaylists.dart';
 import 'package:ilhewl/Screens/LocalMusic/my_music.dart';
+import 'package:ilhewl/Screens/Player/audioplayer.dart';
 import 'package:ilhewl/Screens/Wallet/wallet.dart';
 import 'package:audio_service/audio_service.dart';
+import 'package:ilhewl/Services/audioService.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -48,6 +51,8 @@ import 'package:provider/single_child_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:secure_application/secure_application.dart';
 
+AudioPlayerHandler audioHandler;
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
@@ -58,8 +63,25 @@ void main() async {
   await openHiveBox('cache', limit: true);
 
   Paint.enableDithering = true;
+  await startService();
   runApp(MyApp());
   configLoading();
+}
+
+Future<void> startService() async {
+  audioHandler = await AudioService.init(
+    builder: () => AudioPlayerHandlerImpl(),
+    config: AudioServiceConfig(
+      // androidNotificationChannelId: 'com.shadow.ilhewl.channel.audio',
+      // androidNotificationChannelName: 'ilhewl',
+      // androidNotificationOngoing: true,
+      // androidNotificationIcon: 'drawable/ic_stat_music_note',
+      // androidShowNotificationBadge: true,
+      // androidStopForegroundOnPause: Hive.box('settings')
+      // .get('stopServiceOnPause', defaultValue: true) as bool,
+      notificationColor: Colors.grey[900],
+    ),
+  );
 }
 
 Future<void> openHiveBox(String boxName, {bool limit = false}) async {
@@ -112,6 +134,8 @@ void configLoading() {
 class MyApp extends StatefulWidget {
   @override
   _MyAppState createState() => _MyAppState();
+
+  static _MyAppState of(BuildContext context) => context.findAncestorStateOfType<_MyAppState>();
 }
 
 class _MyAppState extends State<MyApp> {
@@ -153,18 +177,18 @@ class _MyAppState extends State<MyApp> {
       isCaptured = isCapture;
     });
     if(isCapture){
-      AudioService.customAction("setVolume", 0.0);
+      audioHandler.setVolume(0.0);
     }else{
-      AudioService.customAction("setVolume", 1.0);
+      audioHandler.setVolume(1.0);
     }
     subscription = FlutterForbidshot.iosShotChange.listen((event) {
       setState(() {
         isCaptured = !isCaptured;
       });
       if(isCaptured){
-        AudioService.customAction("setVolume", 0.0);
+        audioHandler.setVolume(0.0);
       }else{
-        AudioService.customAction("setVolume", 1.0);
+        audioHandler.setVolume(1.0);
       }
     });
   }
@@ -177,7 +201,7 @@ class _MyAppState extends State<MyApp> {
 
   initialFuntion() {
     return Hive.box('settings').get('token') != null
-        ? AudioServiceWidget(child: HomePage())
+        ? HomePage()
         : AuthScreen();
   }
 
@@ -195,6 +219,7 @@ class _MyAppState extends State<MyApp> {
 
     return MaterialApp(
       title: 'ilhewl',
+      restorationScopeId: 'ilhewl',
       debugShowCheckedModeBanner: false,
       themeMode: currentTheme.currentTheme(), //system,
       theme: ThemeData(
@@ -262,8 +287,12 @@ class _MyAppState extends State<MyApp> {
         '/about': (context) => AboutScreen(),
         '/nowplaying': (context) => NowPlaying(),
         '/recent': (context) => RecentlyPlayed(),
+        '/playlists': (context) => PlaylistScreen(),
         '/downloads': (context) => const Downloads(),
         '/claim_artist_profile': (context) => ClaimArtistProfile(),
+      },
+      onGenerateRoute: (RouteSettings settings) {
+        return HandleRoute().handleRoute(settings.name);
       },
     );
   }

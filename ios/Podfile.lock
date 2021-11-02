@@ -66,8 +66,6 @@ PODS:
   - Flutter (1.0.0)
   - flutter_forbidshot (0.0.1):
     - Flutter
-  - flutter_isolate (0.0.1):
-    - Flutter
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
@@ -127,7 +125,6 @@ DEPENDENCIES:
   - firebase_database (from `.symlinks/plugins/firebase_database/ios`)
   - Flutter (from `Flutter`)
   - flutter_forbidshot (from `.symlinks/plugins/flutter_forbidshot/ios`)
-  - flutter_isolate (from `.symlinks/plugins/flutter_isolate/ios`)
   - image_picker (from `.symlinks/plugins/image_picker/ios`)
   - just_audio (from `.symlinks/plugins/just_audio/ios`)
   - on_audio_query (from `.symlinks/plugins/on_audio_query/ios`)
@@ -176,8 +173,6 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_forbidshot:
     :path: ".symlinks/plugins/flutter_forbidshot/ios"
-  flutter_isolate:
-    :path: ".symlinks/plugins/flutter_isolate/ios"
   image_picker:
     :path: ".symlinks/plugins/image_picker/ios"
   just_audio:
@@ -220,7 +215,6 @@ SPEC CHECKSUMS:
   FirebaseDatabase: afc82291f9ed94ff949cec1b9505e8c3b944bc0f
   Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
   flutter_forbidshot: feac5273065c5b7b6b57a9c6ec4936e3be473523
-  flutter_isolate: 0edf5081826d071adf21759d1eb10ff5c24503b5
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   GoogleDataTransport: 85fd18ff3019bb85d3f2c551d04c481dedf71fc9
   GoogleUtilities: 8de2a97a17e15b6b98e38e8770e2d129a57c0040

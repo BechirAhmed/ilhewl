@@ -119,11 +119,6 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>flutter_isolate.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
 		<key>image_picker.xcscheme</key>
 		<dict>
 			<key>isShown</key>

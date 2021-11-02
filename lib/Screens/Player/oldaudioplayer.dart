@@ -1,0 +1,1838 @@
+import 'dart:async';
+import 'dart:typed_data';
+import 'package:audio_session/audio_session.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_forbidshot/flutter_forbidshot.dart';
+import 'package:ilhewl/APIs/api.dart';
+import 'package:ilhewl/CustomWidgets/add_playlist.dart';
+import 'package:ilhewl/CustomWidgets/downloadButton.dart';
+import 'package:ilhewl/CustomWidgets/equalizer.dart';
+import 'package:ilhewl/CustomWidgets/gradientContainers.dart';
+import 'package:ilhewl/CustomWidgets/like_button.dart';
+import 'package:ilhewl/CustomWidgets/song_cache_icon.dart';
+import 'package:ilhewl/Helpers/app_config.dart';
+import 'package:ilhewl/Helpers/cache_provider.dart';
+import 'package:ilhewl/Helpers/config.dart';
+import 'package:ilhewl/Helpers/lyrics.dart';
+import 'package:ilhewl/Helpers/mediaitem_converter.dart';
+import 'package:ilhewl/Screens/Wallet/wallet.dart';
+import 'package:ilhewl/Services/audioService.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:audio_service/audio_service.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:ilhewl/Services/stream_subscriber.dart';
+import 'package:just_audio/just_audio.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:miniplayer/miniplayer.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:rxdart/rxdart.dart';
+import 'dart:io';
+import 'package:hive/hive.dart';
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:ilhewl/CustomWidgets/emptyScreen.dart';
+import 'package:ilhewl/CustomWidgets/seekBar.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+class OldPlayScreen extends StatefulWidget {
+  final Map data;
+  final controller;
+  final bool fromMiniplayer;
+
+  OldPlayScreen(
+      {Key key,
+      @required this.data,
+      @required this.fromMiniplayer,
+      this.controller})
+      : super(key: key);
+
+  @override
+  _OldPlayScreenState createState() => _OldPlayScreenState();
+}
+
+class _OldPlayScreenState extends State<OldPlayScreen> with StreamSubscriber {
+  bool fromMiniplayer = false;
+  String preferredQuality = Hive.box('settings').get('streamingQuality') ?? '96 kbps';
+  String preferredDownloadQuality = Hive.box('settings').get('downloadQuality') ?? '320 kbps';
+  String repeatMode = Hive.box('settings').get('repeatMode') ?? 'None';
+  bool stopServiceOnPause = Hive.box('settings').get('stopServiceOnPause') ?? true;
+  bool shuffle = Hive.box('settings').get('shuffle') ?? false;
+  bool useImageColor = Hive.box('settings').get('useImageColor', defaultValue: true) as bool;
+  bool enforceRepeat = Hive.box('settings').get('enforceRepeat', defaultValue: false) as bool;
+  List<MediaItem> globalQueue = [];
+  int globalIndex = 0;
+  bool same = false;
+  List response = [];
+  bool fetched = false;
+  bool offline = false;
+  bool downloaded = false;
+  bool fromYT = false;
+  String defaultCover = '';
+  MediaItem playItem;
+  static const double minExtent = 0.1;
+  static const double maxExtent = 1;
+  bool isExpanded = false;
+  double initialExtent = minExtent;
+  int oldIndex;
+
+  bool playCountRegistered = false;
+
+  final ValueNotifier<Color> gradientColor = ValueNotifier<Color>(currentTheme.playGradientColor);
+
+  // final _controller = PageController();
+  // sleepTimer(0) cancels the timer
+  void sleepTimer(int time) {
+    AudioService.customAction('sleepTimer', {"value": time});
+  }
+
+  Duration _time;
+  Timer screenTimer;
+
+  double walletBalance = 0.0;
+  bool walletLoading = true;
+  String currency = Hive.box('settings').get('currency') ?? "MRU";
+
+  Future fetchWallet() async {
+    Map wallet = await Api().fetchWalletData();
+    walletBalance = double.parse(wallet["balance"]);
+    walletLoading = false;
+    setState(() {});
+  }
+
+  void callback() {
+    setState(() {});
+  }
+
+  _handlePurchaseDialog(item) async {
+    EasyLoading.show(status: "loading...");
+    await fetchWallet();
+    EasyLoading.dismiss();
+    return showModalBottomSheet(
+        isScrollControlled: true,
+        context: context,
+        builder: (context) {
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              CachedNetworkImage(
+                fit: BoxFit.cover,
+                width: MediaQuery.of(context).size.width,
+                errorWidget: (BuildContext context, _, __) => Image(
+                  image: AssetImage('assets/cover.jpg'),
+                ),
+                placeholder: (BuildContext context, _) => Image(
+                  image: AssetImage('assets/cover.jpg'),
+                ),
+                imageUrl: item.artUri != null ? item.artUri.toString() : "",
+              ),
+              ListTile(
+                leading: new Icon(Icons.music_note),
+                title: new Text(item.title),
+                subtitle: Text(item.artist),
+                trailing: Container(
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Theme.of(context).accentColor,
+                        ),
+                        color: Theme.of(context).accentColor,
+                        borderRadius: BorderRadius.all(Radius.circular(7))),
+                    padding: EdgeInsets.only(left: 3.0, right: 3.0),
+                    child: Text(
+                      "${item.extras['price']} $currency",
+                      style: TextStyle(color: Colors.black),
+                    )),
+              ),
+              ListTile(
+                tileColor: Theme.of(context).accentColor,
+                leading: walletLoading
+                    ? SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          color: Colors.black,
+                        ))
+                    : new Icon(Icons.account_balance_wallet_outlined),
+                title: new Text(
+                  '$walletBalance $currency',
+                  style: TextStyle(
+                      color: walletBalance < double.parse(item.extras['price'])
+                          ? Colors.red
+                          : Colors.black54),
+                ),
+                subtitle: Text(
+                  walletBalance < double.parse(item.extras['price'])
+                      ? "Recharge your wallet"
+                      : "Your Wallet Balance",
+                  style: TextStyle(color: Colors.black54),
+                ),
+                trailing: walletBalance < double.parse(item.extras['price'])
+                    ? TextButton(
+                        child: Text(
+                          "Wallet",
+                          style: TextStyle(
+                              color: Colors.black54,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      WalletPage(callback: callback)));
+                        },
+                      )
+                    : TextButton(
+                        child: Text(
+                          "Buy",
+                          style: TextStyle(
+                              color: Colors.black54,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        onPressed: () {
+                          _handlePurchaseSong(item);
+                        },
+                      ),
+                onTap: () {
+                  _handlePurchaseSong(item);
+                },
+              ),
+              SizedBox(
+                height: 50,
+              )
+            ],
+          );
+        });
+  }
+
+  Future<dynamic> _handlePurchaseSong(item) {
+    return showCupertinoDialog(
+        context: context,
+        builder: (context) => CupertinoAlertDialog(
+              title: Text("Are you sure?"),
+              content: Text("You Want to buy " +
+                  item.title +
+                  " for " +
+                  item.extras['price'] +
+                  " " +
+                  currency +
+                  " ?"),
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text("CANCEL")),
+                TextButton(
+                    onPressed: () {
+                      _purchase(item);
+                      Navigator.pop(context);
+                    },
+                    child: Text("YES")),
+              ],
+            ));
+  }
+
+  void _purchase(item) async {
+    EasyLoading.show(status: "Wait...");
+    Map result = await Api().purchaseSong(item);
+    if (result['success']) {
+      AudioService.skipToQueueItem(item.id);
+      // Navigator.popUntil(context, (route) => route.settings.name == '/');
+    }
+    EasyLoading.dismiss();
+  }
+
+  String getSubTitle(Map item) {
+    final type = item['type'];
+    if (type == 'genres') {
+      return formatString(item['name']);
+    } else if (type == 'moods') {
+      return formatString(item['name']);
+    } else if (type == 'radio_station') {
+      return "Artist Radio";
+    } else if (type == "song") {
+      return formatString(item["artist"]);
+    } else {
+      return formatString(item['name']);
+      // final artists = item['artists']
+      //     .map((artist) => artist['name'])
+      //     .toList();
+      // return formatString(artists.join(', '));
+    }
+  }
+
+  String formatString(String text) {
+    return text == null
+        ? ''
+        : text
+            .toString()
+            .replaceAll("&amp;", "&")
+            .replaceAll("&#039;", "'")
+            .replaceAll("&quot;", "\"")
+            .trim();
+  }
+
+  // Timer for playin few seconds of the song
+  Timer _timer;
+  int _start = 30;
+
+  void _startTimer() {
+    const oneSec = const Duration(seconds: 1);
+    _timer = new Timer.periodic(oneSec, (Timer timer) {
+      if (_start == 0) {
+        setState(() {
+          timer.cancel();
+        });
+      } else {
+        setState(() {
+          _start--;
+        });
+      }
+    });
+  }
+
+  // End of the timer
+
+  void main() async {
+    await Hive.openBox('Favorite Songs');
+    // _startTimer();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    main();
+  }
+
+  @override
+  void dispose() {
+    // _timer.cancel();
+    super.dispose();
+  }
+
+  Future<MediaItem> setTags(Map response, Directory tempDir) async {
+    String playTitle = response['title'].toString();
+    playTitle == ''
+        ? playTitle = response['_display_name_wo_ext'].toString()
+        : playTitle = response['title'].toString();
+    String playArtist = response['artist'].toString();
+    playArtist == '<unknown>'
+        ? playArtist = 'Unknown'
+        : playArtist = response['artist'].toString();
+
+    final String playAlbum = response['album'].toString();
+    final int playDuration = response['duration'] as int ?? 180000;
+    String filePath;
+    if (response['image'] != null) {
+      try {
+        final File file = File('${tempDir.path}/${response["_display_name_wo_ext"]}.jpg');
+        filePath = file.path;
+        if (!await file.exists()) {
+          await file.create();
+          file.writeAsBytesSync(response['image'] as Uint8List);
+        }
+      } catch (e) {
+        filePath = null;
+      }
+    } else {
+      filePath = await getImageFileFromAssets();
+    }
+
+    final MediaItem tempDict = MediaItem(
+        id: response['_id'].toString(),
+        album: playAlbum,
+        duration: Duration(milliseconds: playDuration),
+        title: playTitle != null ? playTitle.split('(')[0] : 'Unknown',
+        artist: playArtist ?? 'Unknown',
+        artUri: Uri.file(filePath),
+        extras: {
+          'url': response['_data'].toString(),
+        });
+    return tempDict;
+  }
+
+  Future<String> getImageFileFromAssets() async {
+    if (defaultCover != '') return defaultCover;
+    final file = File('${(await getTemporaryDirectory()).path}/cover.jpg');
+    defaultCover = file.path;
+    if (await file.exists()) return file.path;
+    final byteData = await rootBundle.load('assets/cover.jpg');
+    await file.writeAsBytes(byteData.buffer.asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
+    return file.path;
+  }
+
+  void setOffValues(List response, {bool downloaed = false}) {
+    getTemporaryDirectory().then((tempDir) async {
+      final File file =
+      File('${(await getTemporaryDirectory()).path}/cover.jpg');
+      if (!await file.exists()) {
+        final byteData = await rootBundle.load('assets/cover.jpg');
+        await file.writeAsBytes(byteData.buffer
+            .asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
+      }
+      for (int i = 0; i < response.length; i++) {
+        globalQueue.add(await setTags(response[i] as Map, tempDir));
+      }
+      fetched = true;
+      updateNplay();
+    });
+  }
+
+  Future<void> updateNplay() async {
+    await AudioService.setShuffleMode(AudioServiceShuffleMode.none);
+    await AudioService.updateQueue(globalQueue);
+    await AudioService.skipToQueueItem(globalIndex.toString());
+    await AudioService.play();
+    if (enforceRepeat) {
+      switch (repeatMode) {
+        case 'None':
+          AudioService.setRepeatMode(AudioServiceRepeatMode.none);
+          break;
+        case 'All':
+          AudioService.setRepeatMode(AudioServiceRepeatMode.all);
+          break;
+        case 'One':
+          AudioService.setRepeatMode(AudioServiceRepeatMode.one);
+          break;
+        default:
+          break;
+      }
+    } else {
+      AudioService.setRepeatMode(AudioServiceRepeatMode.none);
+    }
+  }
+
+  void setDownValues(List response) {
+    globalQueue.addAll(
+      response.map((song) => MediaItemConverter().downMapToMediaItem(song as Map)),
+    );
+    fetched = true;
+    updateNplay();
+  }
+
+  void setValues(List response) {
+    List songs = [];
+    response.forEach((element) {
+      if(element['selling'] == 1 && !element['purchased']){
+
+      }else{
+        songs.add(element);
+      }
+    });
+    globalQueue.addAll(
+      songs.map((song) => MediaItemConverter().mapToMediaItem(song)),
+    );
+    fetched = true;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    BuildContext scaffoldContext;
+    Map data = widget.data;
+    if (response == data['response'] && globalIndex == data['index']) {
+      print(same);
+      same = true;
+    }
+    response = data['response'];
+    globalIndex = data['index'];
+    downloaded = data['downloaded'] as bool ?? false;
+    if (data['offline'] == null) {
+      offline = AudioService.currentMediaItem?.extras['url'].startsWith('http')
+          ? false
+          : true;
+    } else {
+      offline = data['offline'];
+    }
+    if (!fetched) {
+      if (response.length == 0 || same) {
+        fromMiniplayer = true;
+      } else {
+        fromMiniplayer = false;
+        repeatMode = 'None';
+        shuffle = false;
+        Hive.box('settings').put('repeatMode', repeatMode);
+        Hive.box('settings').put('shuffle', shuffle);
+        AudioService.stop();
+        if (offline) {
+          downloaded ? setDownValues(response) : setOffValues(response);
+        } else {
+          setValues(response);
+        }
+      }
+    }
+
+    AppConfig().init(context);
+    Widget container = StreamBuilder<QueueState>(
+        stream: _queueStateStream,
+        builder: (context, snapshot) {
+          final queueState = snapshot.data;
+          final queue = queueState?.queue ?? [];
+          final mediaItem = queueState?.mediaItem;
+          return ValueListenableBuilder(
+            valueListenable: gradientColor,
+            builder: (BuildContext context, Color value, Widget child){
+              return AnimatedContainer(
+                duration: Duration(milliseconds: 600),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: !useImageColor
+                        ? Alignment.topLeft
+                        : Alignment.topCenter,
+                    end: !useImageColor
+                        ? Alignment.bottomRight
+                        : Alignment.center,
+                    colors: !useImageColor
+                        ? Theme.of(context).brightness == Brightness.dark
+                        ? currentTheme.getBackGradient()
+                        : [
+                      const Color(0xfff5f9ff),
+                      Colors.white,
+                    ]
+                        : Theme.of(context).brightness == Brightness.dark
+                        ? [
+                      value ?? Colors.grey[900],
+                      currentTheme.getPlayGradient(),
+                    ]
+                        : [
+                      value ?? const Color(0xfff5f9ff),
+                      Colors.white,
+                    ],
+                  ),
+                ),
+                child: SafeArea(
+                  child: Scaffold(
+                    backgroundColor: Colors.transparent,
+                    appBar: AppBar(
+                      toolbarHeight: 40.0,
+                      elevation: 0,
+                      backgroundColor: Colors.transparent,
+                      centerTitle: true,
+                      leading: IconButton(
+                          icon: Icon(Icons.expand_more_rounded),
+                          color: Theme.of(context).iconTheme.color,
+                          onPressed: () {
+                            Navigator.pop(context);
+                          }),
+                      actions: [
+                        PopupMenuButton(
+                          icon: Icon(
+                            Icons.more_vert_rounded,
+                            color: Theme.of(context).iconTheme.color,
+                          ),
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(7.0))),
+                          onSelected: (value) {
+                            if (value == 2) {
+                              offline
+                                  ? showModalBottomSheet(
+                                  isDismissible: true,
+                                  backgroundColor: Colors.transparent,
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    String lyrics;
+                                    Lyrics().getOffLyrics(mediaItem.extras['url'].toString()).then((value) {
+                                      lyrics = value;
+                                    });
+                                    return BottomGradientContainer(
+                                      padding: EdgeInsets.zero,
+                                      child: Center(
+                                        child: SingleChildScrollView(
+                                          physics: BouncingScrollPhysics(),
+                                          padding: EdgeInsets.fromLTRB(10, 30, 10, 30),
+                                          child: mediaItem.extras["has_lyrics"] == true
+                                              ? SelectableText(
+                                            '$lyrics',
+                                            textAlign:
+                                            TextAlign
+                                                .center,
+                                          )
+                                              : SizedBox(
+                                            height: AppConfig.screenHeight / 2,
+                                            child: EmptyScreen().emptyScreen(context, false, 0, ":( ", 100.0, "Lyrics", 60.0, "Not Available", 20.0),
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  })
+                                  : showModalBottomSheet(
+                                isDismissible: true,
+                                backgroundColor: Colors.transparent,
+                                context: context,
+                                builder: (BuildContext context) {
+                                  final queueState = snapshot.data;
+                                  final mediaItem = queueState?.mediaItem;
+                                  String lyrics = mediaItem.extras['lyrics_snippet'];
+                                  return mediaItem == null
+                                      ? SizedBox()
+                                      : BottomGradientContainer(
+                                    padding: EdgeInsets.zero,
+                                    child: Center(
+                                      child: SingleChildScrollView(
+                                        physics: BouncingScrollPhysics(),
+                                        padding: EdgeInsets.fromLTRB(10, 30, 10, 30),
+                                        child: mediaItem.extras["has_lyrics"] == true
+                                            ? SelectableText(
+                                          mediaItem.extras["lyrics_snippet"],
+                                          textAlign:
+                                          TextAlign
+                                              .center,
+                                        )
+                                            : SizedBox(
+                                          height: AppConfig.screenHeight / 2,
+                                          child: EmptyScreen().emptyScreen(context, false, 0, ":( ", 100.0, "Lyrics", 60.0, "Not Available", 20.0),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
+                            }
+                            if (value == 1) {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return SimpleDialog(
+                                    title: Center(
+                                        child: Text(
+                                          'Select a Duration',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              color: Theme.of(context).accentColor),
+                                        )),
+                                    children: [
+                                      Center(
+                                          child: SizedBox(
+                                            height: 200,
+                                            width: 200,
+                                            child: CupertinoTheme(
+                                              data: CupertinoThemeData(
+                                                primaryColor:
+                                                Theme.of(context).accentColor,
+                                                textTheme: CupertinoTextThemeData(
+                                                  dateTimePickerTextStyle: TextStyle(
+                                                    fontSize: 16,
+                                                    color:
+                                                    Theme.of(context).accentColor,
+                                                  ),
+                                                ),
+                                              ),
+                                              child: CupertinoTimerPicker(
+                                                mode: CupertinoTimerPickerMode.hm,
+                                                onTimerDurationChanged: (value) {
+                                                  setState(() {
+                                                    _time = value;
+                                                  });
+                                                },
+                                              ),
+                                            ),
+                                          )
+                                      ),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.end,
+                                        children: [
+                                          TextButton(
+                                            style: TextButton.styleFrom(
+                                              primary:
+                                              Theme.of(context).accentColor,
+                                            ),
+                                            child: Text('Cancel'),
+                                            onPressed: () {
+                                              sleepTimer(0);
+                                              Navigator.pop(context);
+                                            },
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          TextButton(
+                                            style: TextButton.styleFrom(
+                                              primary: Colors.white,
+                                              backgroundColor:
+                                              Theme.of(context).accentColor,
+                                            ),
+                                            child: Text('Ok'),
+                                            onPressed: () {
+                                              sleepTimer(_time.inMinutes);
+                                              Navigator.pop(context);
+                                              ScaffoldMessenger.of(scaffoldContext)
+                                                  .showSnackBar(
+                                                SnackBar(
+                                                  duration: Duration(seconds: 2),
+                                                  elevation: 6,
+                                                  backgroundColor: Colors.grey[900],
+                                                  behavior:
+                                                  SnackBarBehavior.floating,
+                                                  content: Text(
+                                                    'Sleep timer set for ${_time.inMinutes} minutes',
+                                                    style: TextStyle(
+                                                        color: Colors.white),
+                                                  ),
+                                                  action: SnackBarAction(
+                                                    textColor: Theme.of(context)
+                                                        .accentColor,
+                                                    label: 'Ok',
+                                                    onPressed: () {},
+                                                  ),
+                                                ),
+                                              );
+                                              debugPrint(
+                                                  'Sleep after ${_time.inMinutes}');
+                                            },
+                                          ),
+                                          SizedBox(
+                                            width: 20,
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            }
+                            if (value == 0) {
+                              AddToPlaylist().addToPlaylist(context, mediaItem);
+                            }
+                          },
+                          itemBuilder: (context) => offline
+                              ? [
+                            PopupMenuItem(
+                                value: 1,
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      CupertinoIcons.timer,
+                                      color:
+                                      Theme.of(context).iconTheme.color,
+                                    ),
+                                    Spacer(),
+                                    Text('Sleep Timer'),
+                                    Spacer(),
+                                  ],
+                                )
+                            ),
+                            PopupMenuItem(
+                                value: 2,
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      CupertinoIcons.textformat,
+                                      color:
+                                      Theme.of(context).iconTheme.color,
+                                    ),
+                                    Spacer(),
+                                    Text('Show Lyrics'),
+                                    Spacer(),
+                                  ],
+                                )
+                            ),
+                          ]
+                              : [
+                            PopupMenuItem(
+                                value: 0,
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      Icons.playlist_add_rounded,
+                                      color:
+                                      Theme.of(context).iconTheme.color,
+                                    ),
+                                    Spacer(),
+                                    Text('Add to playlist'),
+                                    Spacer(),
+                                  ],
+                                )),
+                            PopupMenuItem(
+                                value: 1,
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      CupertinoIcons.timer,
+                                      color:
+                                      Theme.of(context).iconTheme.color,
+                                    ),
+                                    Spacer(),
+                                    Text('Sleep Timer'),
+                                    Spacer(),
+                                  ],
+                                )),
+                            PopupMenuItem(
+                                value: 2,
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      CupertinoIcons.textformat,
+                                      color:
+                                      Theme.of(context).iconTheme.color,
+                                    ),
+                                    Spacer(),
+                                    Text('Show Lyrics'),
+                                    Spacer(),
+                                  ],
+                                )
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                    body: Builder(
+                      builder: (BuildContext context) {
+                      scaffoldContext = context;
+                      return StreamBuilder<bool>(
+                          stream: AudioService.runningStream,
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState != ConnectionState.active) {
+                              return SizedBox();
+                            }
+                            final running = snapshot.data ?? false;
+                            return (!running)
+                              ? FutureBuilder(
+                              future: audioPlayerButton(),
+                              builder: (context, AsyncSnapshot spshot) {
+                                if (spshot.hasData) {
+                                  return SizedBox();
+                                } else {
+                                  return Column(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Container(
+                                        height: MediaQuery.of(context).size.width * 0.9,
+                                        child: Align(
+                                          alignment: Alignment.topCenter,
+                                          child: Container(
+                                            height: MediaQuery.of(context).size.width * 0.85,
+                                            width: MediaQuery.of(context).size.width * 0.85,
+                                            child: Card(
+                                              elevation: 10,
+                                              shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(15)
+                                              ),
+                                              clipBehavior: Clip.antiAlias,
+                                              child: Container(
+                                                height: MediaQuery.of(context).size.width * 0.85,
+                                                width: MediaQuery.of(context).size.width * 0.85,
+                                                child: Stack(
+                                                  children: [
+                                                    Image(
+                                                        fit: BoxFit.cover,
+                                                        height: MediaQuery.of(context).size.width * 0.85,
+                                                        image: AssetImage('assets/cover.jpg')
+                                                    ),
+                                                    globalQueue.length <= globalIndex
+                                                        ? Image(
+                                                        fit: BoxFit.cover,
+                                                        height: MediaQuery.of(context).size.width * 0.85,
+                                                        image: AssetImage('assets/cover.jpg')
+                                                    )
+                                                        : offline && (mediaItem != null && mediaItem.artUri.toString().startsWith('file'))
+                                                        ? Image(
+                                                        fit: BoxFit.cover,
+                                                        height: MediaQuery.of(context).size.width * 0.85,
+                                                        gaplessPlayback: true,
+                                                        image: FileImage(File(mediaItem.artUri.toFilePath(),)))
+                                                        : CachedNetworkImage(
+                                                      fit: BoxFit.cover,
+                                                      height: MediaQuery.of(context).size.width * 0.75,
+                                                      errorWidget:
+                                                          (BuildContext context, _, __) =>
+                                                          Image(
+                                                            image: AssetImage(
+                                                                'assets/cover.jpg'),
+                                                          ),
+                                                      placeholder:
+                                                          (BuildContext context,
+                                                          _) =>
+                                                          Image(
+                                                            image: AssetImage(
+                                                                'assets/cover.jpg'),
+                                                          ),
+                                                      imageUrl: globalQueue[
+                                                      globalIndex]
+                                                          .artUri
+                                                          .toString(),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Container(
+                                        height: (MediaQuery.of(context)
+                                            .size
+                                            .height *
+                                            0.875 -
+                                            MediaQuery.of(context)
+                                                .size
+                                                .width *
+                                                0.925) *
+                                            1 /
+                                            4.5,
+                                        child: Padding(
+                                          padding: const EdgeInsets.fromLTRB(
+                                              35, 5, 35, 0),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.end,
+                                            children: [
+                                              Expanded(
+                                                flex: 5,
+                                                child: FittedBox(
+                                                  fit: BoxFit.fitHeight,
+                                                  child: Text(
+                                                    globalQueue.length <=
+                                                        globalIndex
+                                                        ? 'Unknown'
+                                                        : globalQueue[
+                                                    globalIndex]
+                                                        .title
+                                                        .split(' (')[0],
+                                                    textAlign:
+                                                    TextAlign.center,
+                                                    overflow:
+                                                    TextOverflow.fade,
+                                                    maxLines: 1,
+                                                    style: TextStyle(
+                                                        fontSize: 45,
+                                                        fontWeight:
+                                                        FontWeight.bold,
+                                                        color:
+                                                        Theme.of(context)
+                                                            .accentColor),
+                                                  ),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                flex: 2,
+                                                child: FittedBox(
+                                                  child: Text(
+                                                    globalQueue.length <=
+                                                        globalIndex
+                                                        ? 'Unknown'
+                                                        : globalQueue[
+                                                    globalIndex]
+                                                        .artist,
+                                                    textAlign:
+                                                    TextAlign.center,
+                                                    style: TextStyle(
+                                                        fontSize: 18,
+                                                        fontWeight:
+                                                        FontWeight.w500),
+                                                    overflow:
+                                                    TextOverflow.ellipsis,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      SeekBar(
+                                        duration: Duration.zero,
+                                        position: Duration.zero,
+                                        bufferedPosition: Duration.zero,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                        children: [
+                                          Column(
+                                            children: [
+                                              SizedBox(height: 6.0),
+                                              IconButton(
+                                                icon: Icon(
+                                                  Icons.shuffle_rounded,
+                                                ),
+                                                iconSize: 25.0,
+                                                onPressed: null,
+                                              ),
+                                              if (!offline)
+                                                IconButton(
+                                                  icon: Icon(
+                                                    Icons
+                                                        .favorite_border_rounded,
+                                                  ),
+                                                  iconSize: 25.0,
+                                                  onPressed: null,
+                                                ),
+                                            ],
+                                          ),
+                                          IconButton(
+                                            icon: Icon(
+                                                Icons.skip_previous_rounded),
+                                            iconSize: 45.0,
+                                            onPressed: null,
+                                          ),
+                                          Stack(
+                                            children: [
+                                              Center(
+                                                  child: SizedBox(
+                                                    height: 65,
+                                                    width: 65,
+                                                    child:
+                                                    CircularProgressIndicator(
+                                                      valueColor:
+                                                      AlwaysStoppedAnimation<
+                                                          Color>(
+                                                          Theme.of(context)
+                                                              .accentColor),
+                                                    ),
+                                                  )),
+                                              Center(
+                                                child: Container(
+                                                  height: 65,
+                                                  width: 65,
+                                                  child: Center(
+                                                    child: SizedBox(
+                                                      height: 59,
+                                                      width: 59,
+                                                      child: playButton(),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          IconButton(
+                                            icon:
+                                            Icon(Icons.skip_next_rounded),
+                                            iconSize: 45.0,
+                                            onPressed: null,
+                                          ),
+                                          Column(
+                                            children: [
+                                              SizedBox(height: 6.0),
+                                              IconButton(
+                                                icon: Icon(
+                                                    Icons.repeat_rounded),
+                                                iconSize: 25.0,
+                                                onPressed: null,
+                                              ),
+                                              if (!offline)
+                                                IconButton(
+                                                    icon:
+                                                    Icon(Icons.save_alt),
+                                                    iconSize: 25.0,
+                                                    onPressed: null),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  );
+                                }
+                              })
+                              : Stack(
+                              children: [
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Container(
+                                      height: MediaQuery.of(context).size.width * 0.9,
+                                      child: (mediaItem == null || queue.isEmpty)
+                                          ? Align(
+                                        alignment: Alignment.topCenter,
+                                        child: Container(
+                                          height: MediaQuery.of(context).size.width * 0.85,
+                                          width: MediaQuery.of(context).size.width * 0.85,
+                                          child: Card(
+                                            elevation: 10.0,
+                                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+                                            clipBehavior: Clip.antiAlias,
+                                            child: Container(
+                                              height: MediaQuery.of(context).size.width * 0.85,
+                                              width: MediaQuery.of(context).size.width * 0.85,
+                                              child: Stack(
+                                                children: [
+                                                  Image(
+                                                      fit: BoxFit.cover,
+                                                      height: MediaQuery.of(context).size.width * 0.85,
+                                                      image: AssetImage('assets/cover.jpg')),
+                                                  (globalQueue.length > globalIndex)
+                                                      ? offline && (mediaItem != null && mediaItem.artUri.toString().startsWith('file'))
+                                                      ? Image(
+                                                      fit: BoxFit.cover,
+                                                      height: MediaQuery.of(context).size.width * 0.85,
+                                                      gaplessPlayback: true,
+                                                      image: FileImage(
+                                                            File(mediaItem.artUri.toFilePath(),
+                                                          ))
+                                                        )
+                                                      : CachedNetworkImage(
+                                                    fit: BoxFit.cover,
+                                                    errorWidget: (BuildContext context, _, __) => Image(image: AssetImage('assets/cover.jpg'),),
+                                                    placeholder: (BuildContext context, _) => Image(image: AssetImage('assets/cover.jpg'),),
+                                                    imageUrl: globalQueue[globalIndex].artUri.toString(),
+                                                    height: MediaQuery.of(context).size.width * 0.85,
+                                                  )
+                                                      : SizedBox()
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                          : GestureDetector(
+                                        onTap: () {
+                                          if (AudioService.playbackState.playing == true) {
+                                            AudioService.pause();
+                                          } else {
+                                            AudioService.play();
+                                          }
+                                        },
+                                        child: Align(
+                                          alignment: Alignment.topCenter,
+                                          child: Container(
+                                            height: MediaQuery.of(context).size.width * 0.85,
+                                            width: MediaQuery.of(context).size.width * 0.85,
+                                            child: Card(
+                                              elevation: 10.0,
+                                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)),
+                                              clipBehavior: Clip.antiAlias,
+                                              child: Container(
+                                                height: MediaQuery.of(context).size.width * 0.85,
+                                                width: MediaQuery.of(context).size.width * 0.85,
+                                                child: Stack(
+                                                  children: [
+                                                    Image(
+                                                        fit: BoxFit.cover,
+                                                        height: MediaQuery.of(context).size.width * 0.85,
+                                                        image: AssetImage('assets/cover.jpg')
+                                                    ),
+                                                    offline && (mediaItem != null && mediaItem.artUri.toString().startsWith('file'))
+                                                        ? Image(
+                                                        fit: BoxFit.cover,
+                                                        height: MediaQuery.of(context).size.width * 0.85,
+                                                        gaplessPlayback: true,
+                                                        image: FileImage(File(mediaItem.artUri.toFilePath()))
+                                                    )
+                                                        : CachedNetworkImage(
+                                                      fit: BoxFit.cover,
+                                                      errorWidget: (BuildContext context, _, __) => Image(image: AssetImage('assets/cover.jpg'),),
+                                                      placeholder: (BuildContext context, _) => Image(image: AssetImage('assets/cover.jpg'),),
+                                                      imageUrl: mediaItem.artUri.toString(),
+                                                      height: MediaQuery.of(context).size.width * 0.85,
+                                                    )
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    /// Title and subtitle
+                                    Container(
+                                      height: (MediaQuery.of(context).size.height * 0.875 - MediaQuery.of(context).size.width * 0.925) * 1 / 4.5,
+                                      child: Padding(
+                                        padding: const EdgeInsets.fromLTRB(35, 5, 35, 0),
+                                        child: Column(
+                                          mainAxisAlignment:
+                                          MainAxisAlignment.end,
+                                          children: [
+                                            /// Title container
+                                            Expanded(
+                                              flex: 5,
+                                              child: FittedBox(
+                                                child: Text(
+                                                  (mediaItem?.title != null)
+                                                      ? (mediaItem.title
+                                                      .split(" (")[0]
+                                                      .split("|")[0]
+                                                      .trim())
+                                                      : ((globalQueue
+                                                      .length <=
+                                                      globalIndex)
+                                                      ? 'Title'
+                                                      : globalQueue[
+                                                  globalIndex]
+                                                      .title
+                                                      .split(" (")[0]
+                                                      .split("|")[0]
+                                                      .trim()),
+                                                  textAlign: TextAlign.center,
+                                                  overflow: TextOverflow.fade,
+                                                  maxLines: 1,
+                                                  style: TextStyle(
+                                                      fontSize: 45,
+                                                      fontWeight:
+                                                      FontWeight.bold,
+                                                      color: Theme.of(context)
+                                                          .accentColor),
+                                                ),
+                                              ),
+                                            ),
+
+                                            /// Subtitle container
+                                            Expanded(
+                                              flex: 2,
+                                              child: Text(
+                                                (mediaItem?.artist != null)
+                                                    ? (mediaItem.artist)
+                                                    : ((globalQueue.length <=
+                                                    globalIndex)
+                                                    ? ''
+                                                    : globalQueue[
+                                                globalIndex]
+                                                    .artist),
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                    fontSize: 18,
+                                                    fontWeight:
+                                                    FontWeight.w500),
+                                                overflow:
+                                                TextOverflow.ellipsis,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    /// Seekbar starts from here
+                                    StreamBuilder<MediaState>(
+                                      stream: _mediaStateStream,
+                                      builder: (context, snapshot) {
+                                        final mediaState = snapshot.data;
+                                        return SeekBar(
+                                          duration: mediaState
+                                              ?.mediaItem?.duration ??
+                                              Duration.zero,
+                                          position: mediaState?.position ??
+                                              Duration.zero,
+                                          bufferedPosition:
+                                          mediaState?.bufferPosition ??
+                                              Duration.zero,
+                                          onChangeEnd: (newPosition) {
+                                            AudioService.seekTo(newPosition);
+                                          },
+                                        );
+                                      },
+                                    ),
+                                    /// Final row starts from here
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 5.0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        children: [
+                                          Column(
+                                            children: [
+                                              SizedBox(height: 6.0),
+                                              IconButton(
+                                                icon: Icon(
+                                                    Icons.shuffle_rounded),
+                                                iconSize: 25.0,
+                                                color: shuffle
+                                                    ? Theme.of(context)
+                                                    .accentColor
+                                                    : null,
+                                                onPressed: () {
+                                                  shuffle = !shuffle;
+                                                  Hive.box('settings').put(
+                                                      'shuffle', shuffle);
+                                                  if (shuffle)
+                                                    AudioService.setShuffleMode(
+                                                        AudioServiceShuffleMode
+                                                            .all);
+                                                  else
+                                                    AudioService.setShuffleMode(
+                                                        AudioServiceShuffleMode
+                                                            .none);
+                                                },
+                                              ),
+                                              if (!offline)
+                                                mediaItem == null
+                                                    ? IconButton(
+                                                    icon: Icon(Icons
+                                                        .favorite_border_rounded),
+                                                    iconSize: 25.0,
+                                                    onPressed: null)
+                                                    : LikeButton(
+                                                    mediaItem: mediaItem,
+                                                    size: 25.0)
+                                            ],
+                                          ),
+                                          (queue.isNotEmpty)
+                                              ? IconButton(
+                                              icon: Icon(Icons
+                                                  .skip_previous_rounded),
+                                              iconSize: 45.0,
+                                              onPressed: (mediaItem !=
+                                                  null &&
+                                                  (mediaItem !=
+                                                      queue
+                                                          .first ||
+                                                      repeatMode ==
+                                                          'All'))
+                                                  ? () {
+                                                if (mediaItem ==
+                                                    queue.first) {
+                                                  AudioService
+                                                      .skipToQueueItem(
+                                                      queue.last
+                                                          .id);
+                                                } else {
+                                                  AudioService
+                                                      .skipToPrevious();
+                                                }
+                                              }
+                                                  : null)
+                                              : IconButton(
+                                              icon: Icon(Icons
+                                                  .skip_previous_rounded),
+                                              iconSize: 45.0,
+                                              onPressed: null),
+
+                                          /// Play button
+                                          Stack(
+                                            children: [
+                                              Center(
+                                                child: StreamBuilder<
+                                                    AudioProcessingState>(
+                                                  stream: AudioService
+                                                      .playbackStateStream
+                                                      .map((state) => state
+                                                      .processingState)
+                                                      .distinct(),
+                                                  builder: (context, snapshot) {
+                                                    // final processingState = snapshot.data ?? AudioProcessingState.none;
+                                                    final processingState = snapshot.data;
+                                                    return describeEnum(processingState) != 'ready'
+                                                        ? SizedBox(
+                                                      height: 65,
+                                                      width: 65,
+                                                      child: CircularProgressIndicator(
+                                                        valueColor: AlwaysStoppedAnimation<
+                                                            Color>(Theme.of(
+                                                            context)
+                                                            .accentColor),
+                                                      ),
+                                                    )
+                                                        : SizedBox();
+                                                  },
+                                                ),
+                                              ),
+                                              Center(
+                                                child: StreamBuilder<bool>(
+                                                  stream: AudioService
+                                                      .playbackStateStream
+                                                      .map((state) =>
+                                                  state.playing)
+                                                      .distinct(),
+                                                  builder:
+                                                      (context, snapshot) {
+                                                    final playing =
+                                                        snapshot.data ??
+                                                            false;
+                                                    return Container(
+                                                      height: 65,
+                                                      width: 65,
+                                                      child: Center(
+                                                        child: SizedBox(
+                                                          height: 59,
+                                                          width: 59,
+                                                          child: playing
+                                                              ? pauseButton()
+                                                              : playButton(),
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+
+                                          (queue.isNotEmpty)
+                                              ? IconButton(
+                                              icon: Icon(Icons
+                                                  .skip_next_rounded),
+                                              iconSize: 45.0,
+                                              onPressed: (mediaItem !=
+                                                  null &&
+                                                  (mediaItem !=
+                                                      queue
+                                                          .last ||
+                                                      repeatMode ==
+                                                          'All'))
+                                                  ? () {
+                                                if (mediaItem ==
+                                                    queue.last) {
+                                                  AudioService
+                                                      .skipToQueueItem(
+                                                      queue
+                                                          .first
+                                                          .id);
+                                                } else {
+                                                  AudioService
+                                                      .skipToNext();
+                                                }
+                                              }
+                                                  : null)
+                                              : IconButton(
+                                                    icon: Icon(Icons.skip_next_rounded),
+                                                    iconSize: 45.0,
+                                                    onPressed: null
+                                                ),
+
+                                          Column(
+                                            children: [
+                                              SizedBox(height: 6.0),
+                                              IconButton(
+                                                icon: repeatMode == 'One'
+                                                    ? Icon(Icons
+                                                    .repeat_one_rounded)
+                                                    : Icon(
+                                                    Icons.repeat_rounded),
+                                                iconSize: 25.0,
+                                                color: repeatMode == 'None'
+                                                    ? null
+                                                    : Theme.of(context)
+                                                    .accentColor,
+                                                // Icons.repeat_one_rounded
+                                                onPressed: () {
+                                                  if (repeatMode == 'None') {
+                                                    repeatMode = 'All';
+                                                    AudioService.setRepeatMode(
+                                                        AudioServiceRepeatMode
+                                                            .all);
+                                                  } else {
+                                                    if (repeatMode == 'All') {
+                                                      repeatMode = 'One';
+                                                      AudioService.setRepeatMode(
+                                                          AudioServiceRepeatMode
+                                                              .one);
+                                                    } else {
+                                                      repeatMode = 'None';
+                                                      AudioService.setRepeatMode(
+                                                          AudioServiceRepeatMode
+                                                              .none);
+                                                    }
+                                                  }
+                                                  Hive.box('settings').put(
+                                                      'repeatMode',
+                                                      repeatMode);
+
+                                                  setState(() {});
+                                                },
+                                              ),
+                                              if (!offline)
+                                                (mediaItem != null && queue.isNotEmpty)
+                                                // ? SongCacheIcon(song: mediaItem)
+                                                ? DownloadButton(
+                                                    icon: 'download',
+                                                    data: {
+                                                      'id': mediaItem.id.toString(),
+                                                      'artist': mediaItem.artist.toString(),
+                                                      'album': mediaItem.album.toString(),
+                                                      'image': mediaItem.artUri.toString(),
+                                                      'duration': mediaItem.duration.inSeconds.toString(),
+                                                      'title': mediaItem.title.toString(),
+                                                      'url': mediaItem.extras['url'].toString(),
+                                                      'genre': mediaItem.genre.toString(),
+                                                      'has_lyrics': mediaItem.extras['has_lyrics'],
+                                                      'lyrics_snippet': mediaItem.extras['lyrics_snippet'],
+                                                      'release_date': mediaItem.extras['release_date'],
+                                                    })
+                                                    : IconButton(
+                                                    icon: Icon(
+                                                      Icons.save_alt,
+                                                    ),
+                                                    iconSize: 25.0,
+                                                    onPressed: null),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 45,
+                                    ),
+                                  ],
+                                ),
+                                Align(
+                                  alignment: Alignment.bottomCenter,
+                                  child: SizedBox(
+                                    height: 500,
+                                    width: MediaQuery.of(context).size.width * 0.95,
+                                    child: DraggableScrollableActuator(
+                                      child: DraggableScrollableSheet(
+                                          key: Key(initialExtent.toString()),
+                                          minChildSize: minExtent,
+                                          maxChildSize: maxExtent,
+                                          initialChildSize: initialExtent,
+                                          builder: (BuildContext dragContext, ScrollController scrollController) {
+                                            return BottomGradientContainer(
+                                              padding: EdgeInsets.zero,
+                                              margin: EdgeInsets.only(
+                                                  left: 20, right: 20),
+                                              borderRadius: BorderRadius.only(
+                                                  topLeft:
+                                                  Radius.circular(15.0),
+                                                  topRight:
+                                                  Radius.circular(15.0)),
+                                              child: (mediaItem == null ||
+                                                  queue.isEmpty)
+                                                  ? SizedBox()
+                                                  : ReorderableListView
+                                                  .builder(
+                                                  header: SizedBox(
+                                                    key: Key('head'),
+                                                    height: 50,
+                                                    child: Center(
+                                                      child: SizedBox
+                                                          .expand(
+                                                        child: TextButton(
+                                                            style: TextButton.styleFrom(
+                                                              primary: Theme.of(context)
+                                                                  .iconTheme
+                                                                  .color,
+                                                              backgroundColor:
+                                                              Colors.transparent,
+                                                              elevation:
+                                                              0.0,
+                                                            ),
+                                                            child: Text(
+                                                              'Now Playing',
+                                                              textAlign:
+                                                              TextAlign.center,
+                                                              style:
+                                                              TextStyle(
+                                                                fontWeight:
+                                                                FontWeight.w600,
+                                                                fontSize:
+                                                                18,
+                                                              ),
+                                                            ),
+                                                            onPressed: () {
+                                                              setState(
+                                                                      () {
+                                                                    initialExtent = isExpanded
+                                                                        ? minExtent
+                                                                        : maxExtent;
+                                                                    isExpanded =
+                                                                    !isExpanded;
+                                                                  });
+                                                              DraggableScrollableActuator.reset(
+                                                                  dragContext);
+                                                            }),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  scrollController:
+                                                  scrollController,
+                                                  onReorder: (int
+                                                  oldIndex,
+                                                      int newIndex) {
+                                                    setState(() {
+                                                      if (oldIndex <
+                                                          newIndex)
+                                                        newIndex--;
+                                                      final items =
+                                                      queue.removeAt(
+                                                          oldIndex);
+                                                      queue.insert(
+                                                          newIndex,
+                                                          items);
+                                                      // AudioService.customAction(
+                                                      //         'reorder',
+                                                      //         [
+                                                      //       oldIndex,
+                                                      //       newIndex
+                                                      //     ]);
+                                                    });
+                                                  },
+                                                  physics:
+                                                  BouncingScrollPhysics(),
+                                                  padding:
+                                                  EdgeInsets.only(
+                                                      top: 0,
+                                                      bottom: 10),
+                                                  shrinkWrap: true,
+                                                  itemCount:
+                                                  queue.length,
+                                                  itemBuilder:
+                                                      (context,
+                                                      index) {
+                                                    return Dismissible(
+                                                      key: Key(
+                                                          queue[index]
+                                                              .id),
+                                                      direction: queue[
+                                                      index] ==
+                                                          mediaItem
+                                                          ? DismissDirection
+                                                          .none
+                                                          : DismissDirection
+                                                          .horizontal,
+                                                      onDismissed:
+                                                          (dir) {
+                                                        setState(() {
+                                                          AudioService.removeQueueItem(queue[index]);
+                                                          queue.remove(queue[index]);
+                                                        });
+                                                      },
+                                                      child:
+                                                      ListTileTheme(
+                                                        selectedColor:
+                                                        Theme.of(
+                                                            context)
+                                                            .accentColor,
+                                                        child:
+                                                        ListTile(
+                                                          contentPadding: EdgeInsets.only(
+                                                              left:
+                                                              16.0,
+                                                              right:
+                                                              10.0),
+                                                          selected: queue[
+                                                          index] ==
+                                                              mediaItem,
+                                                          trailing: queue[index] ==
+                                                              mediaItem
+                                                              ? IconButton(
+                                                            icon:
+                                                            Icon(
+                                                              Icons.bar_chart_rounded,
+                                                            ),
+                                                            onPressed:
+                                                                () {},
+                                                          )
+                                                              : (queue[index].extras["selling"] == 1 && !queue[index].extras["purchased"]
+                                                              ?
+                                                          Container(
+                                                              decoration: BoxDecoration(
+                                                                  border: Border.all(
+                                                                    color: Theme.of(context).accentColor,
+                                                                  ),
+                                                                  color: Theme.of(context).accentColor,
+                                                                  borderRadius: BorderRadius.all(Radius.circular(7))
+                                                              ),
+                                                              padding: EdgeInsets.only(left: 3.0, right: 3.0),
+                                                              child: Text(
+                                                                "${queue[index].extras['price']} $currency",
+                                                                style: TextStyle(
+                                                                    color: Colors.black
+                                                                ),
+                                                              )
+                                                          )
+                                                              :
+                                                          (
+                                                              offline
+                                                                  ? SizedBox()
+                                                                  : Row(
+                                                                mainAxisSize: MainAxisSize.min,
+                                                                children: [
+                                                                  LikeButton(
+                                                                    mediaItem: queue[index],
+                                                                  ),
+                                                                  // DownloadButton(icon: 'download', data: {
+                                                                  // 'id': queue[index].id.toString(),
+                                                                  // 'artist': queue[index].artist.toString(),
+                                                                  // 'album': queue[index].album.toString(),
+                                                                  // 'image': queue[index].artUri.toString(),
+                                                                  // 'duration': queue[index].duration.inSeconds.toString(),
+                                                                  // 'title': queue[index].title.toString(),
+                                                                  // 'url': queue[index].extras['url'].toString(),
+                                                                  // "year": queue[index].extras["year"].toString(),
+                                                                  // "language": queue[index].extras["language"].toString(),
+                                                                  // "genre": queue[index].genre.toString(),
+                                                                  // "320kbps": queue[index].extras["320kbps"],
+                                                                  // "has_lyrics": queue[index].extras["has_lyrics"],
+                                                                  // "release_date": queue[index].extras["release_date"],
+                                                                  // "album_id": queue[index].extras["album_id"],
+                                                                  // "subtitle": queue[index].extras["subtitle"]
+                                                                  // })
+                                                                ],
+                                                              )
+                                                          )
+                                                          ),
+                                                          leading:
+                                                          Card(
+                                                            elevation:
+                                                            5,
+                                                            shape:
+                                                            RoundedRectangleBorder(
+                                                              borderRadius:
+                                                              BorderRadius.circular(7.0),
+                                                            ),
+                                                            clipBehavior:
+                                                            Clip.antiAlias,
+                                                            child:
+                                                            Stack(
+                                                              children: [
+                                                                Image(
+                                                                  image:
+                                                                  AssetImage('assets/cover.jpg'),
+                                                                ),
+                                                                queue[index].artUri == null
+                                                                    ? SizedBox()
+                                                                    : queue[index].artUri.toString().startsWith('file:')
+                                                                    ? Image(image: FileImage(File(queue[index].artUri.toFilePath())))
+                                                                    : CachedNetworkImage(
+                                                                    errorWidget: (BuildContext context, _, __) => Image(
+                                                                      image: AssetImage('assets/cover.jpg'),
+                                                                    ),
+                                                                    placeholder: (BuildContext context, _) => Image(
+                                                                      image: AssetImage('assets/cover.jpg'),
+                                                                    ),
+                                                                    imageUrl: queue[index].artUri.toString())
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          title: Text(
+                                                            '${queue[index].title}',
+                                                            overflow:
+                                                            TextOverflow
+                                                                .ellipsis,
+                                                            style: TextStyle(
+                                                                fontWeight: queue[index] == mediaItem
+                                                                    ? FontWeight.w600
+                                                                    : FontWeight.normal),
+                                                          ),
+                                                          subtitle:
+                                                          Text(
+                                                            '${queue[index].artist}',
+                                                            overflow:
+                                                            TextOverflow
+                                                                .ellipsis,
+                                                          ),
+                                                          onTap: () {
+                                                            queue[index].extras["selling"] == 1 && !queue[index].extras["purchased"]
+                                                                ? _handlePurchaseDialog(queue[index])
+                                                                : _playQueue(queue[index].id);
+                                                          },
+                                                        ),
+                                                      ),
+                                                    );
+                                                  }),
+                                            );
+                                          }),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          }
+                        );
+                    }),
+                  ),
+                ),
+              );
+            },
+          );
+        });
+    return widget.fromMiniplayer
+        ? container
+        : Dismissible(
+            direction: DismissDirection.down,
+            background: Container(color: Colors.transparent),
+            key: Key('OldPlayScreen'),
+            onDismissed: (direction) {
+              Navigator.pop(context);
+            },
+            child: container);
+  }
+
+  _playQueue(id){
+    AudioService.skipToQueueItem(id);
+    Api().playTrack(id, "song");
+  }
+  /// A stream reporting the combined state of the current media item and its
+  /// current position.
+  Stream<MediaState> get _mediaStateStream =>
+      Rx.combineLatest3<MediaItem, Duration, Duration, MediaState>(
+          AudioService.currentMediaItemStream,
+          AudioService.positionStream,
+          AudioService.playbackStateStream.map((state) => state.bufferedPosition).distinct(),
+          (mediaItem, position, bufferPosition) => MediaState(mediaItem, position, bufferPosition));
+
+  /// A stream reporting the combined state of the current queue and the current
+  /// media item within that queue.
+  Stream<QueueState> get _queueStateStream =>
+      Rx.combineLatest2<List<MediaItem>, MediaItem, QueueState>(
+          AudioService.queueStream,
+          AudioService.currentMediaItemStream,
+          (queue, mediaItem) => QueueState(queue, mediaItem));
+
+  audioPlayerButton() async {
+    await AudioService.start(
+      backgroundTaskEntrypoint: _audioPlayerTaskEntrypoint,
+      params: {
+        'index': globalIndex,
+        'offline': offline,
+        'quality': preferredQuality
+      },
+      androidNotificationChannelName: 'ilhewl',
+      androidNotificationColor: 0xFF181818,
+      androidNotificationIcon: 'drawable/ic_stat_music_note',
+      androidEnableQueue: true,
+      androidStopForegroundOnPause: stopServiceOnPause,
+    );
+
+    await AudioService.updateQueue(globalQueue);
+    // await AudioService.skipToQueueItem(globalQueue[globalIndex].id);
+    await AudioService.play();
+    bool isCaptured = await FlutterForbidshot.iosIsCaptured;
+    // if(isCaptured){
+    //   AudioService.customAction("setVolume", 0.0);
+    // }else{
+    //   AudioService.customAction("setVolume", 1.0);
+    // }
+    // subscribe(AudioService.positionStream.listen((Duration position) {
+    //   if(playCountRegistered) return;
+    //   if (position.inSeconds / globalQueue[globalIndex].duration.inSeconds.toDouble() > .25) {
+    //     Api().playTrack(globalQueue[globalIndex].id, "song");
+    //     setState(() {
+    //       playCountRegistered = true;
+    //     });
+    //   }
+    // }));
+
+  }
+
+  FloatingActionButton playButton() => FloatingActionButton(
+        elevation: 10,
+        child: Icon(
+          Icons.play_arrow_rounded,
+          size: 40.0,
+          color: Colors.white,
+        ),
+        onPressed: AudioService.play,
+      );
+
+  FloatingActionButton pauseButton() => FloatingActionButton(
+        elevation: 10,
+        child: Icon(
+          Icons.pause_rounded,
+          color: Colors.white,
+          size: 40.0,
+        ),
+        onPressed: AudioService.pause,
+      );
+}
+
+class QueueState {
+  final List<MediaItem> queue;
+  final MediaItem mediaItem;
+
+  QueueState(this.queue, this.mediaItem);
+}
+
+class MediaState {
+  final MediaItem mediaItem;
+  final Duration position;
+  final Duration bufferPosition;
+
+  MediaState(this.mediaItem, this.position, this.bufferPosition);
+}
+
+void _audioPlayerTaskEntrypoint() async {
+  // AudioServiceBackground.run(() => AudioPlayerHandlerImpl());
+}

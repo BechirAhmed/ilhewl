@@ -7,6 +7,7 @@ import 'package:ilhewl/CustomWidgets/collage.dart';
 import 'package:ilhewl/CustomWidgets/custom_physics.dart';
 import 'package:ilhewl/Helpers/cache_provider.dart';
 import 'package:ilhewl/Screens/Player/audioplayer.dart';
+import 'package:ilhewl/Screens/Player/oldaudioplayer.dart';
 import 'package:ilhewl/CustomWidgets/gradientContainers.dart';
 import 'package:ilhewl/CustomWidgets/emptyScreen.dart';
 import 'package:ilhewl/CustomWidgets/miniplayer.dart';

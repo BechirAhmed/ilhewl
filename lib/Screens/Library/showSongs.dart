@@ -1,11 +1,11 @@
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:ilhewl/APIs/api.dart';
-import 'package:ilhewl/Screens/Player/audioplayer.dart';
 import 'package:ilhewl/CustomWidgets/gradientContainers.dart';
 import 'package:ilhewl/CustomWidgets/miniplayer.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:ilhewl/Screens/Player/audioplayer.dart';
 
 class SongsList extends StatefulWidget {
   final List data;

@@ -25,7 +25,7 @@ class HomeData extends StatefulWidget {
   _HomeDataState createState() => _HomeDataState();
 }
 
-class _HomeDataState extends State<HomeData> {
+class _HomeDataState extends State<HomeData> with AutomaticKeepAliveClientMixin<HomeData> {
   double walletBalance = 0.0;
   bool walletLoading = true;
 
@@ -221,6 +221,7 @@ class _HomeDataState extends State<HomeData> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     if (!fetched) {
       getHomePageData();
       fetched = true;
@@ -251,52 +252,7 @@ class _HomeDataState extends State<HomeData> {
                 ],
               ),
               data[lists[idx]] == null
-                  ? SizedBox(
-                      height: MediaQuery.of(context).size.height / 4 + 5,
-                      child: ListView.builder(
-                        physics: BouncingScrollPhysics(),
-                        scrollDirection: Axis.horizontal,
-                        padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
-                        itemCount: 10,
-                        itemBuilder: (context, index) {
-                          return SizedBox(
-                            width: MediaQuery.of(context).size.height / 4 - 30,
-                            child: Column(
-                              children: [
-                                Card(
-                                  elevation: 5,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  clipBehavior: Clip.antiAlias,
-                                  child: Image(
-                                    image: AssetImage('assets/cover.jpg'),
-                                  ),
-                                ),
-                                Text(
-                                  'Loading ...',
-                                  textAlign: TextAlign.center,
-                                  softWrap: false,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                Text(
-                                  'Please Wait',
-                                  textAlign: TextAlign.center,
-                                  softWrap: false,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                      fontSize: 11,
-                                      color: Theme.of(context)
-                                          .textTheme
-                                          .caption
-                                          .color),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      ),
-                    )
+                  ? SizedBox()
                   : SizedBox(
                       height: MediaQuery.of(context).size.height / 4 + 5,
                       child: ListView.builder(
@@ -308,6 +264,7 @@ class _HomeDataState extends State<HomeData> {
                           final item = data[lists[idx]][index];
                           final currentSongList = data[lists[idx]].where((e) => (e["type"] == 'song')).toList();
                           final subTitle = getSubTitle(item);
+                          if (item.isEmpty) return const SizedBox();
                           return GestureDetector(
                             child: SizedBox(
                               width: MediaQuery.of(context).size.height / 4 - 60,
@@ -385,6 +342,46 @@ class _HomeDataState extends State<HomeData> {
                                 ],
                               ),
                             ),
+                            onLongPress: () {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    backgroundColor: Colors.transparent,
+                                    contentPadding: EdgeInsets.zero,
+                                    content: Card(
+                                      elevation: 5,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(15.0),
+                                      ),
+                                      clipBehavior: Clip.antiAlias,
+                                      child: CachedNetworkImage(
+                                        fit: BoxFit.cover,
+                                        errorWidget: (context, _, __) =>
+                                        const Image(
+                                          image: AssetImage('assets/cover.jpg'),
+                                        ),
+                                        imageUrl: item['artwork_url']
+                                            .toString()
+                                            .replaceAll('http:', 'https:')
+                                            .replaceAll('50x50', '500x500')
+                                            .replaceAll('150x150', '500x500'),
+                                        placeholder: (context, url) => Image(
+                                          image: (item['type'] == 'playlist' ||
+                                              item['type'] == 'album')
+                                              ? const AssetImage('assets/album.png')
+                                              : item['type'] == 'artist'
+                                              ? const AssetImage(
+                                              'assets/artist.png')
+                                              : const AssetImage(
+                                              'assets/cover.jpg'),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              );
+                            },
                             onTap: () {
                               item["selling"] == 1 && !item["purchased"]
                                 ? _handlePurchaseDialog(item)
@@ -422,4 +419,7 @@ class _HomeDataState extends State<HomeData> {
       onRefresh: _pullRefresh,
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
