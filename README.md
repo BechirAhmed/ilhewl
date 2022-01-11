@@ -1,4 +1,4 @@
-# BlackHole
+# ILHEWL
 
 Awesome Music Player made with Flutter!
 
@@ -8,10 +8,6 @@ Awesome Music Player made with Flutter!
 ### Dont forget to :star: the repo
 
 [![GitHub stars](https://img.shields.io/github/stars/Sangwan5688/BlackHole.svg?style=social&label=Star)](https://github.com//Sangwan5688/BlackHole) ![GitHub forks](https://img.shields.io/github/forks/Sangwan5688/BlackHole.svg?style=social&label=Forks) ![GitHub followers](https://img.shields.io/github/followers/Sangwan5688.svg?style=social&label=Follow)
-
-## Translations
-
-- [Spanish :es:](/README.ES.md)
 
 ## Features
 
