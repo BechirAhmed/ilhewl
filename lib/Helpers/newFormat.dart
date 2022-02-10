@@ -91,6 +91,7 @@ class NewFormatResponse {
       Map info = {
         "id": response["id"],
         "type": response["type"],
+        "album_model": response["album"] == null || response["album"] == "null" ? {} : response["album"],
         "album": response["album"] == null || response["album"] == "null" ? formatString("ilhewl") : formatString(response["album"]["title"]),
         // .split('(')
         // .first
@@ -441,9 +442,25 @@ class NewFormatResponse {
         "new_trending",
         "latests",
         "popular_artists",
+        "albums",
         "genres",
         "moods",
         // "artist_recos",
+      ];
+    } catch (err) {
+      print(err);
+    }
+    return data;
+  }
+  Future<Map> formatSearchData(Map data) async {
+    try {
+      data["songs"] = await formatSongsInList(data["songs"], false);
+
+      data["collections"] = [
+        "songs",
+        "artists",
+        "genres",
+        "moods",
       ];
     } catch (err) {
       print(err);

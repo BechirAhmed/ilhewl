@@ -22,7 +22,7 @@ class MediaItemConverter {
     };
   }
 
-  MediaItem mapToMediaItem(Map song) {
+  MediaItem mapToMediaItem(Map song, {bool addedByAutoplay = false, bool autoplay = true}) {
     return MediaItem(
         id: song['id'].toString(),
         album: song['album'],
@@ -40,11 +40,30 @@ class MediaItemConverter {
           "has_lyrics": song['has_lyrics'],
           "lyrics_snippet": song['lyrics_snippet'],
           "release_date": song["release_date"],
-          "album_id": song["album_id"],
           "price": song["price"],
           "selling": song["selling"],
           "purchased": song["purchased"],
           "allow_download": song["allow_download"],
+        });
+  }
+
+  MediaItem downMapToMediaItem(Map song) {
+    return MediaItem(
+        id: song['id'].toString(),
+        album: song['album'].toString(),
+        artist: song['artist'].toString(),
+        duration: Duration(seconds: int.parse(
+                (song['duration'] == null || song['duration'] == 'null')
+                    ? '180'
+                    : song['duration'].toString())),
+        title: song['title'].toString(),
+        artUri: Uri.file(song['image'].toString()),
+        genre: song['genre'].toString(),
+        extras: {
+          'url': song['path'].toString(),
+          "has_lyrics": song['has_lyrics'],
+          "lyrics_snippet": song['lyrics_snippet'],
+          'release_date': song['release_date'],
         });
   }
 }

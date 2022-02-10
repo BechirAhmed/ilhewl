@@ -49,6 +49,21 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>FirebaseFirestore.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>FirebaseInstallations.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>FirebaseMessaging.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Flutter.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -99,7 +114,7 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>ext_storage.xcscheme</key>
+		<key>device_info_plus.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -119,12 +134,17 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>firebase_messaging.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>flutter_forbidshot.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>flutter_isolate.xcscheme</key>
+		<key>flutter_lyric.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -145,6 +165,11 @@
 			<false/>
 		</dict>
 		<key>nanopb.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>on_audio_query.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>

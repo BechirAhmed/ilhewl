@@ -31,7 +31,7 @@ class _EqualizerState extends State<Equalizer> {
             onChanged: (value) {
               enabled = value;
               Hive.box('settings').put("equalizerEnabled", value);
-              AudioService.customAction("equalizerEnabled", value);
+              // AudioService.customAction("equalizerEnabled", value);
               setState(() {});
             },
           ),

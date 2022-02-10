@@ -1,6 +1,6 @@
 <img width="125px" src="https://github.com/Sangwan5688/BlackHole/blob/main/assets/icon-white-trans.png" align="center" />
 
-# BlackHole
+# iLhewl
 
 Un increible reproductor de música basado en Flutter
 

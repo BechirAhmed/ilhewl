@@ -203,8 +203,12 @@ class MyTheme with ChangeNotifier {
     notifyListeners();
   }
 
-  List<Color> getCardGradient() {
-    return cardOpt[cardGrad];
+  List<Color> getCardGradient({bool miniplayer = false}) {
+    final List<Color> output = cardOpt[cardGrad];
+    if (miniplayer && output.length > 2) {
+      output.removeAt(0);
+    }
+    return output;
   }
 
   List<Color> getBackGradient() {

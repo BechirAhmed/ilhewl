@@ -324,14 +324,14 @@ class _NowPlayingState extends State<NowPlaying> {
                                                                       newIndex,
                                                                       items);
                                                                   int newMediaIndex = queue.indexWhere((element) => element == mediaItem);
-                                                                  AudioService.customAction(
-                                                                          'reorder',
-                                                                          [
-                                                                            oldIndex,
-                                                                            newIndex,
-                                                                            newMediaIndex
-                                                                          ]
-                                                                  );
+                                                                  // AudioService.customAction(
+                                                                  //         'reorder',
+                                                                  //         [
+                                                                  //           oldIndex,
+                                                                  //           newIndex,
+                                                                  //           newMediaIndex
+                                                                  //         ]
+                                                                  // );
                                                                 });
                                                               },
                                                               physics:

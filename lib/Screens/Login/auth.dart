@@ -1,4 +1,8 @@
+import 'dart:io';
 import 'dart:ui';
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:ilhewl/APIs/api.dart';
 import 'package:ilhewl/CustomWidgets/gradientContainers.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -8,7 +12,6 @@ import 'package:ilhewl/Helpers/app_config.dart';
 import 'package:ilhewl/Screens/Login/register.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:package_info/package_info.dart';
-import 'package:device_info/device_info.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class AuthScreen extends StatefulWidget {
@@ -24,12 +27,87 @@ class _AuthScreenState extends State<AuthScreen> {
   String _phone;
   final _formKey = GlobalKey<FormState>();
 
+  static final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+  Map<String, dynamic> _deviceData = <String, dynamic>{};
+
   @override
   void initState() {
-    main();
+    // main();
     super.initState();
+    initPlatformState();
     phoneController = TextEditingController();
     passwordController = TextEditingController();
+  }
+
+  Future<void> initPlatformState() async {
+    var deviceData = <String, dynamic>{};
+
+    try {
+      if (Platform.isAndroid) {
+        deviceData = _readAndroidBuildData(await deviceInfoPlugin.androidInfo);
+      } else if (Platform.isIOS) {
+        deviceData = _readIosDeviceInfo(await deviceInfoPlugin.iosInfo);
+      }
+    } on PlatformException {
+      deviceData = <String, dynamic>{
+        'Error:': 'Failed to get platform version.'
+      };
+    }
+
+    if (!mounted) return;
+
+    setState(() {
+      _deviceData = deviceData;
+    });
+  }
+
+  Map<String, dynamic> _readAndroidBuildData(AndroidDeviceInfo build) {
+    return <String, dynamic>{
+      'version.securityPatch': build.version.securityPatch,
+      'version.sdkInt': build.version.sdkInt,
+      'version.release': build.version.release,
+      'version.previewSdkInt': build.version.previewSdkInt,
+      'version.incremental': build.version.incremental,
+      'version.codename': build.version.codename,
+      'version.baseOS': build.version.baseOS,
+      'board': build.board,
+      'bootloader': build.bootloader,
+      'brand': build.brand,
+      'device': build.device,
+      'display': build.display,
+      'fingerprint': build.fingerprint,
+      'hardware': build.hardware,
+      'host': build.host,
+      'id': build.id,
+      'manufacturer': build.manufacturer,
+      'model': build.model,
+      'product': build.product,
+      'supported32BitAbis': build.supported32BitAbis,
+      'supported64BitAbis': build.supported64BitAbis,
+      'supportedAbis': build.supportedAbis,
+      'tags': build.tags,
+      'type': build.type,
+      'isPhysicalDevice': build.isPhysicalDevice,
+      'androidId': build.androidId,
+      'systemFeatures': build.systemFeatures,
+    };
+  }
+
+  Map<String, dynamic> _readIosDeviceInfo(IosDeviceInfo data) {
+    return <String, dynamic>{
+      'name': data.name,
+      'systemName': data.systemName,
+      'systemVersion': data.systemVersion,
+      'model': data.model,
+      'localizedModel': data.localizedModel,
+      'identifierForVendor': data.identifierForVendor,
+      'isPhysicalDevice': data.isPhysicalDevice,
+      'utsname.sysname:': data.utsname.sysname,
+      'utsname.nodename:': data.utsname.nodename,
+      'utsname.release:': data.utsname.release,
+      'utsname.version:': data.utsname.version,
+      'utsname.machine:': data.utsname.machine,
+    };
   }
 
     @override
@@ -38,63 +116,44 @@ class _AuthScreenState extends State<AuthScreen> {
       passwordController.dispose();
       super.dispose();
     }
-
-  void main() async {
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    DeviceInfoPlugin info = DeviceInfoPlugin();
-    AndroidDeviceInfo androidInfo = await info.androidInfo;
-    appVersion = packageInfo.version;
-    deviceInfo.addAll({
-      'Brand': androidInfo.brand,
-      'Manufacturer': androidInfo.manufacturer,
-      'Device': androidInfo.device,
-      'isPhysicalDevice': androidInfo.isPhysicalDevice,
-      'Fingerprint': androidInfo.fingerprint,
-      'Model': androidInfo.model,
-      'Build': androidInfo.display,
-      'Product': androidInfo.product,
-      'androidVersion': androidInfo.version.release,
-      'supportedAbis': androidInfo.supportedAbis,
-    });
-    setState(() {});
-  }
+  //
+  // void main() async {
+  //   PackageInfo packageInfo = await PackageInfo.fromPlatform();
+  //   DeviceInfoPlugin info = DeviceInfoPlugin();
+  //   AndroidDeviceInfo androidInfo = await info.androidInfo;
+  //   appVersion = packageInfo.version;
+  //   deviceInfo.addAll({
+  //     'Brand': androidInfo.brand,
+  //     'Manufacturer': androidInfo.manufacturer,
+  //     'Device': androidInfo.device,
+  //     'isPhysicalDevice': androidInfo.isPhysicalDevice,
+  //     'Fingerprint': androidInfo.fingerprint,
+  //     'Model': androidInfo.model,
+  //     'Build': androidInfo.display,
+  //     'Product': androidInfo.product,
+  //     'androidVersion': androidInfo.version.release,
+  //     'supportedAbis': androidInfo.supportedAbis,
+  //   });
+  //   setState(() {});
+  // }
 
   Future _addUserData(String phone, String password) async {
+    // print(_deviceData);
+    // return;
     if(password == null || password == ''){
       EasyLoading.showError("Password is Required!");
       return;
     }
     EasyLoading.show(status: "Loading...");
-    // DatabaseReference pushedPostRef = dbRef.push();
-    // String postId = pushedPostRef.key;
 
     Map user = await Api().registerOrLogin(
         'phone='+phone
         +'&password='+password
+        +'&device_id='+_deviceData['identifierForVendor']
+        +'&device_name='+_deviceData['name']
     );
     // print(user);
     if(user != null && user["success"]){
-      // pushedPostRef.set({
-      //   "name": user["user"]["name"],
-      //   "email": "",
-      //   "DOB": "",
-      //   "phone": user["user"]["phone"],
-      //   "country": "",
-      //   "streamingQuality": "",
-      //   "downloadQuality": "",
-      //   "version": appVersion,
-      //   "darkMode": "",
-      //   "themeColor": "",
-      //   "colorHue": "",
-      //   "lastLogin": "",
-      //   "accountCreatedOn": DateTime.now()
-      //       .toUtc()
-      //       .toString()
-      //       .split('.')
-      //       .first,
-      //   "deviceInfo": deviceInfo,
-      //   "preferredLanguage": ["English"],
-      // });
       Hive.box('settings').put('userID', user["user"]["id"]);
       Hive.box('settings').put('name', user["user"]["name"]);
       Hive.box('settings').put('phone', user["user"]["phone"]);
@@ -102,11 +161,21 @@ class _AuthScreenState extends State<AuthScreen> {
       Hive.box('settings').put('artistId', user["user"]['artist_id']);
       Hive.box('settings').put('artwork_url', user["user"]['artwork_url']);
       Hive.box('settings').put('currency', user['currency']);
+
       EasyLoading.dismiss();
       Navigator.popAndPushNamed(context, '/');
       EasyLoading.showSuccess("Success!");
+      final savedDeviceToken = Hive.box('cache').get('deviceToken');
+      if (user['user']["device_id"] != savedDeviceToken) {
+        Api().updateDevice(
+            data: {
+              "device_id": savedDeviceToken,
+              "device_type": Platform.isIOS ? "1" : "2"
+            }
+        );
+      }
     }else{
-      EasyLoading.showError(user['message']);
+      EasyLoading.showError(user['message'], duration: Duration(seconds: 30), dismissOnTap: true);
     }
 
     EasyLoading.dismiss();

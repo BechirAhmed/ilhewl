@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:ui';
 import 'package:ilhewl/APIs/api.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -8,7 +9,7 @@ import 'package:ilhewl/CustomWidgets/gradientContainers.dart';
 import 'package:ilhewl/Helpers/app_config.dart';
 import 'package:otp_text_field/style.dart';
 import 'package:package_info/package_info.dart';
-import 'package:device_info/device_info.dart';
+// import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:otp_text_field/otp_text_field.dart';
@@ -46,7 +47,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   void initState() {
-    main();
+    // main();
     errorController = StreamController<ErrorAnimationType>();
     super.initState();
     nameController = TextEditingController();
@@ -67,31 +68,31 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
 
 
-  void main() async {
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    DeviceInfoPlugin info = DeviceInfoPlugin();
-    AndroidDeviceInfo androidInfo = await info.androidInfo;
-    appVersion = packageInfo.version;
-    deviceInfo.addAll({
-      'Brand': androidInfo.brand,
-      'Manufacturer': androidInfo.manufacturer,
-      'Device': androidInfo.device,
-      'isPhysicalDevice': androidInfo.isPhysicalDevice,
-      'Fingerprint': androidInfo.fingerprint,
-      'Model': androidInfo.model,
-      'Build': androidInfo.display,
-      'Product': androidInfo.product,
-      'androidVersion': androidInfo.version.release,
-      'supportedAbis': androidInfo.supportedAbis,
-    });
-    setState(() {});
-  }
+  // void main() async {
+  //   PackageInfo packageInfo = await PackageInfo.fromPlatform();
+  //   DeviceInfoPlugin info = DeviceInfoPlugin();
+  //   AndroidDeviceInfo androidInfo = await info.androidInfo;
+  //   appVersion = packageInfo.version;
+  //   deviceInfo.addAll({
+  //     'Brand': androidInfo.brand,
+  //     'Manufacturer': androidInfo.manufacturer,
+  //     'Device': androidInfo.device,
+  //     'isPhysicalDevice': androidInfo.isPhysicalDevice,
+  //     'Fingerprint': androidInfo.fingerprint,
+  //     'Model': androidInfo.model,
+  //     'Build': androidInfo.display,
+  //     'Product': androidInfo.product,
+  //     'androidVersion': androidInfo.version.release,
+  //     'supportedAbis': androidInfo.supportedAbis,
+  //   });
+  //   setState(() {});
+  // }
 
   Future _checkPhone(String phone) async {
     EasyLoading.show(status: "Loading...");
 
     var res = await Api().authData('check-phone?phone=$phone');
-    print(res);
+
     if(!res['success'] && res['status'] == "phone_exist"){
       EasyLoading.dismiss();
       EasyLoading.showError("Phone Number Exist! Please login instead.");
@@ -178,6 +179,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
       EasyLoading.dismiss();
       Navigator.popAndPushNamed(context, '/');
       EasyLoading.showSuccess("Success!");
+
+      final savedDeviceToken = Hive.box('cache').get('deviceToken');
+      if (user['user']["device_id"] != savedDeviceToken) {
+        Api().updateDevice(
+            data: {
+              "device_id": savedDeviceToken,
+              "device_type": Platform.isIOS ? "1" : "2"
+            }
+        );
+      }
+
     }else{
       EasyLoading.showError("Error!");
     }
