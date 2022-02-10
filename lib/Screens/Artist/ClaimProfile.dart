@@ -24,7 +24,9 @@ class _ClaimArtistProfileState extends State<ClaimArtistProfile> {
 
   Map artist;
   bool loading = true;
+  bool requestSended = true;
   String _selectedAffiliation;
+  String _passportImage;
   List _affiliationsList = [
     'Artist/Band Member',
     'Manager',
@@ -32,6 +34,8 @@ class _ClaimArtistProfileState extends State<ClaimArtistProfile> {
     'Other'
   ];
   File _selectedFile;
+  String token = Hive.box("settings").get("token");
+  Map<String, String> headers = {};
   TextEditingController _nameController, _phoneController, _emailController, _messageController, _youtubeController, _facebookController;
   var dio = Dio();
 
@@ -71,22 +75,86 @@ class _ClaimArtistProfileState extends State<ClaimArtistProfile> {
   void main() async {
     EasyLoading.show(status: "Loading...");
     if(userId != null){
-      Map user = await Api().fetchUserData(userId);
-      if(user['artist_id'] != 0){
+      Map user = await Api().checkArtistRequest(userId);
+
+      if(user['user']['artist_id'] != 0){
         if(artistId == 0){
-          Hive.box('settings').put('artistId', user['artist_id']);
+          Hive.box('settings').put('artistId', user['user']['artist_id']);
         }
         ShowSnackBar().showSnackBar(context, 'Your Request already accepted!');
+        Navigator.of(context).pop();
+      }else if(user['success']){
+        requestSended = false;
+      }else{
+        ShowSnackBar().showSnackBar(context, user["message"]);
+        _messageController = TextEditingController(text: user['request']['message']);
+        _facebookController = TextEditingController(text: user['request']['facebook']);
+        _youtubeController = TextEditingController(text: user['request']['twitter']);
+        _selectedAffiliation = user['request']['affiliation'];
+        _passportImage = user['request']['passport_url'];
       }
-      _nameController = TextEditingController(text: user["name"]);
-      _phoneController = TextEditingController(text: user["phone"]);
-      _emailController = TextEditingController(text: user["email"]);
+      _nameController = TextEditingController(text: user['user']["name"]);
+      _phoneController = TextEditingController(text: user['user']["phone"]);
+      _emailController = TextEditingController(text: user['user']["email"]);
       setState(() {});
     }
 
     loading = false;
     EasyLoading.dismiss();
     setState(() {});
+  }
+
+  Future<FormData> FormData1() async {
+    return FormData.fromMap({
+      'user_id': userId,
+      'artist_name': _nameController.text,
+      'phone': _phoneController.text,
+      'email': _emailController.text,
+      'affiliation': _selectedAffiliation,
+      'message': _messageController.text,
+      'facebook': _facebookController.text,
+      'youtube': _youtubeController.text,
+      'passport': _selectedFile != null ? await MultipartFile.fromFile(_selectedFile.path, filename: 'passport.jpg') : null,
+    });
+  }
+
+  Future _sendRequestData() async {
+
+    headers = {"Accept": "application/json", 'Authorization': 'Bearer $token'};
+
+    EasyLoading.show(status: "Sending...");
+    Response response;
+
+    try{
+      response = await dio.post(
+        '/auth/user/artist-claim-profile',
+        data: await FormData1(),
+        options: Options(headers: headers),
+        onSendProgress: (received, total) {
+          if (total != -1) {
+            // EasyLoading.showProgress(received / total * 100);
+            // print((received / total * 100).toStringAsFixed(0) + '%');
+          }
+        },
+      );
+
+    }catch(e){
+      print(e);
+    }
+
+    EasyLoading.dismiss();
+    if(response.statusCode == 200 && response.data['success']){
+
+      Hive.box('cache').put('requestId', response.data["request"]['id']);
+
+      EasyLoading.dismiss();
+      Navigator.of(context).pop();
+      EasyLoading.showSuccess("Success!");
+    }else{
+      EasyLoading.showError(response.data['message']);
+    }
+
+    EasyLoading.dismiss();
   }
 
   Widget _buildField(String text, TextEditingController controller, TextInputType type, icon, maxLine, bool _obscure, bool _textInputNext){
@@ -160,7 +228,7 @@ class _ClaimArtistProfileState extends State<ClaimArtistProfile> {
               blendMode: BlendMode.dstIn,
               child: Center(
                 child: Text(
-                  "Connect with your fans on ilhewl",
+                  requestSended ? "You have already claimed artist profile, please wait for our email." : "Connect with your fans on ilhewl",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: AppConfig.screenWidth * .09,
@@ -262,8 +330,8 @@ class _ClaimArtistProfileState extends State<ClaimArtistProfile> {
                                   image: DecorationImage(
                                     image: _selectedFile != null
                                         ? FileImage(File(_selectedFile.path))
-                                        : artist != null && artist['artwork_url'] != null
-                                        ? NetworkImage(artist['artwork_url'])
+                                        : _passportImage != null
+                                        ? NetworkImage(_passportImage)
                                         : AssetImage("assets/artist.png"),
                                     fit: BoxFit.cover,
                                   ),
@@ -338,6 +406,7 @@ class _ClaimArtistProfileState extends State<ClaimArtistProfile> {
               SizedBox(height: 20,),
               _buildField("Youtube Channel", _youtubeController, TextInputType.text, Icons.youtube_searched_for, 1, false, false),
               SizedBox(height: 20,),
+              requestSended ? SizedBox() :
               Padding(
                 padding: const EdgeInsets.only(left: 10, right: 10),
                 child: Container(
@@ -357,7 +426,7 @@ class _ClaimArtistProfileState extends State<ClaimArtistProfile> {
                     child: TextButton(
                       child: Text("Send Request", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
                       onPressed: () {
-
+                        _sendRequestData();
                       },
                     )
                 ),

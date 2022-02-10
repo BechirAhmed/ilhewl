@@ -396,10 +396,10 @@ class _LikedSongsState extends State<LikedSongs> with SingleTickerProviderStateM
                     ),
                   ]),
                   actions: [
-                    if (_songs.isNotEmpty)
-                      MultiDownloadButton(
-                        data: _songs,
-                      ),
+                    // if (_songs.isNotEmpty)
+                    //   MultiDownloadButton(
+                    //     data: _songs,
+                    //   ),
                     PopupMenuButton(
                         icon: Icon(Icons.sort_rounded),
                         shape: RoundedRectangleBorder(
@@ -661,8 +661,7 @@ class _LikedSongsState extends State<LikedSongs> with SingleTickerProviderStateM
                                               image: AssetImage(
                                                   'assets/cover.jpg'),
                                             ),
-                                            imageUrl: _songs[index]['image']
-                                                .replaceAll('http:', 'https:'),
+                                            imageUrl: _songs[index]['image'].replaceAll('http:', 'https:'),
                                             placeholder: (context, url) =>
                                                 Image(
                                               image: AssetImage(
@@ -717,11 +716,10 @@ class _LikedSongsState extends State<LikedSongs> with SingleTickerProviderStateM
                                                   ),
                                                 )
                                             ) : SizedBox(),
-                                            // DownloadButton(
-                                            //     data: _songs[index],
-                                            //     icon: 'download'),
-
-                                            SongCacheIcon(song: _songs[index]),
+                                            DownloadButton(
+                                                data: _songs[index],
+                                                icon: 'download'
+                                            ),
                                             PopupMenuButton(
                                                 icon: Icon(
                                                     Icons.more_vert_rounded),

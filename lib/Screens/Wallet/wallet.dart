@@ -3,7 +3,6 @@ import 'package:ilhewl/Helpers/countrycodes.dart';
 import 'package:ilhewl/CustomWidgets/gradientContainers.dart';
 import 'package:ilhewl/Helpers/picker.dart';
 import 'package:ilhewl/Screens/Collections/collection.dart' as topScreen;
-import 'package:ilhewl/Screens/Home/saavn.dart' as homeScreen;
 // import 'package:ext_storage/ext_storage.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
@@ -28,6 +27,7 @@ class _WalletPageState extends State<WalletPage> {
   Box settingsBox = Hive.box('settings');
   String name = Hive.box('settings').get('name', defaultValue: 'Guest User');
   String currency = Hive.box('settings').get('currency') ?? "MRU";
+  int artistId = Hive.box("settings").get('artistId', defaultValue: 0);
 
   List dirPaths = Hive.box('settings').get('searchPaths', defaultValue: []);
   String region = Hive.box('settings').get('region', defaultValue: 'Arabic');
@@ -50,6 +50,7 @@ class _WalletPageState extends State<WalletPage> {
 
   void main() async {
     wallet = await Api().fetchWalletData();
+    print(wallet);
     if(wallet["orders"] != null){
       orders = wallet["orders"];
     }
@@ -137,47 +138,49 @@ class _WalletPageState extends State<WalletPage> {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(15, 10, 15, 0),
-                child: Text(
-                  'Transactions',
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).accentColor),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(5.0, 0, 5, 10),
-                child: GradientCard(
-                  child: RefreshIndicator(
-                    child: ListView.builder(
-                      physics: BouncingScrollPhysics(),
-                      shrinkWrap: true,
-                      padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                      scrollDirection: Axis.vertical,
-                      itemCount: orders.isEmpty ? 0 : orders.length,
-                      itemBuilder: (context, idx) {
-                        return ListTile(
-                          title: Text("Order #${orders[idx]['transaction_id']}"),
-                          subtitle: Text('${orders[idx]['object']['title']}'),
-                          trailing: SizedBox(
-                            width: 150,
-                            child: Text(
-                              "${orders[idx]['amount']} ${orders[idx]['currency']}",
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              textAlign: TextAlign.end,
-                            ),
-                          ),
-                          dense: true,
-                        );
-                      }
-                    ),
-                    onRefresh: _pullRefresh,
+              if(artistId != 0)...[
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(15, 10, 15, 0),
+                  child: Text(
+                    'Transactions',
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).accentColor),
                   ),
                 ),
-              ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(5.0, 0, 5, 10),
+                  child: GradientCard(
+                    child: RefreshIndicator(
+                      child: ListView.builder(
+                          physics: BouncingScrollPhysics(),
+                          shrinkWrap: true,
+                          padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                          scrollDirection: Axis.vertical,
+                          itemCount: orders.isEmpty ? 0 : orders.length,
+                          itemBuilder: (context, idx) {
+                            return ListTile(
+                              title: Text("Order #${orders[idx]['uuid']}"),
+                              subtitle: Text('${orders[idx]['object']['title']}'),
+                              trailing: SizedBox(
+                                width: 150,
+                                child: Text(
+                                  "${orders[idx]['amount']} ${orders[idx]['currency']}",
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.end,
+                                ),
+                              ),
+                              dense: true,
+                            );
+                          }
+                      ),
+                      onRefresh: _pullRefresh,
+                    ),
+                  ),
+                ),
+              ],
             ],
           ),
         ),

@@ -65,6 +65,22 @@ class Api {
     return result;
   }
 
+  Future<Map> fetchAllSongs(page, limit) async {
+    String params = "all_songs";
+    Map result;
+    try {
+      final res = await getResponse(params);
+      if (res.statusCode == 200) {
+        final data = json.decode(res.body);
+        result = await NewFormatResponse().formatHomePageData(data);
+      }
+    } catch (e) {
+      print(e);
+    }
+    return result;
+  }
+
+
   Future<Map> fetchWalletData() async {
     String params = "settings/wallet";
     Map result;
@@ -96,6 +112,44 @@ class Api {
 
     return result;
   }
+  Future<Map> checkArtistRequest(userId) async {
+    String params = "auth/user/check-artist-request";
+    Map result;
+    try {
+      final res = await getResponse(params);
+        var body = json.decode(res.body);
+        result = body;
+    } catch (e) {
+      print(e);
+    }
+
+    return result;
+  }
+
+  Future<Map> updateDevice({data}) async {
+    String url = '/auth/user/update-device';
+    String fullUrl = 'https://'+baseUrl+apiStr+url;
+    Map result;
+    try {
+      final res = await post(
+        Uri.parse(fullUrl),
+        body: data,
+        headers: {
+          "Accept": "application/json",
+          'Authorization': 'Bearer $token'
+        }
+      );
+      if(res.statusCode == 200){
+        var body = json.decode(res.body);
+        result = body;
+      }
+    } catch (e) {
+      print(e);
+    }
+
+    return result;
+  }
+
   Future<Map> fetchArtistData(userId) async {
     String params = "artist/data/$userId";
     Map result;
@@ -120,6 +174,28 @@ class Api {
     try {
       final res = await post(
           Uri.parse(fullUrl)
+      );
+
+      // if(res.statusCode == 200){
+        final body = json.decode(res.body);
+        result = body;
+      // }
+
+    } catch(e) {
+      print(e);
+    }
+    return result;
+  }
+  Future<Map> logout(data) async {
+    String params = '/auth/mobile-logout?$data';
+    String fullUrl = 'https://'+baseUrl+apiStr+params;
+    headers = {"Accept": "application/json", 'Authorization': 'Bearer $token'};
+
+    Map result;
+    try {
+      final res = await post(
+          Uri.parse(fullUrl),
+        headers: headers
       );
 
       // if(res.statusCode == 200){
@@ -190,7 +266,8 @@ class Api {
   Future<Map> purchaseSong(data) async {
     String songId = data["id"].toString();
     String userId = Hive.box("settings").get("userID").toString();
-    String params = '/song/$songId/purchase?user_id=$userId&sing_id=$songId';
+    String type = data["type"].toString();
+    String params = '/song/$songId/purchase?user_id=$userId&song_id=$songId&type=$type';
     String fullUrl = 'https://'+baseUrl+apiStr+params;
 
     Map result;
@@ -199,12 +276,15 @@ class Api {
           Uri.parse(fullUrl),
         headers: {
           'Authorization': 'Bearer $token',
-        });
+        }
+      );
 
       if(res.statusCode == 200){
         final body = json.decode(res.body);
         result = body;
       }
+
+
 
     } catch(e) {
       print(e);
@@ -223,6 +303,18 @@ class Api {
     }
     return searchedList;
   }
+
+  Future<List> fetchUserAlbumSongs(String albumId) async {
+    List searchedList = [];
+    String params = "discover/album/$albumId/songs";
+    final res = await getResponse(params);
+    if (res.statusCode == 200) {
+      List responseList = json.decode(res.body);
+      searchedList = await NewFormatResponse().formatSongsResponse(responseList, 'album');
+    }
+    return searchedList;
+  }
+
   Future<List> fetchMoodSongs(String moodId) async {
     List searchedList = [];
     String params = "discover/mood/$moodId/songs";
@@ -250,7 +342,7 @@ class Api {
   }
 
   Future<Map> fetchSongSearchResults(query) async {
-    String params = "search/$query";
+    String params = "mobile-search/$query";
     Map result;
     try {
       final res = await getResponse(params);

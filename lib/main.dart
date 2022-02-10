@@ -16,10 +16,12 @@
  */
 
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'package:audio_session/audio_session.dart';
 import 'package:flutter_forbidshot/flutter_forbidshot.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:ilhewl/APIs/api.dart';
 import 'package:ilhewl/Helpers/cache_provider.dart';
 import 'package:ilhewl/Helpers/config.dart';
 import 'package:ilhewl/Helpers/route_handler.dart';
@@ -29,7 +31,7 @@ import 'package:ilhewl/Screens/Library/nowplaying.dart';
 import 'package:ilhewl/Screens/Library/playlists.dart';
 import 'package:ilhewl/Screens/Library/recent.dart';
 import 'package:ilhewl/Screens/LocalMusic/localplaylists.dart';
-import 'package:ilhewl/Screens/LocalMusic/my_music.dart';
+import 'package:ilhewl/Screens/Home/allSongs.dart';
 import 'package:ilhewl/Screens/Player/audioplayer.dart';
 import 'package:ilhewl/Screens/Wallet/wallet.dart';
 import 'package:audio_service/audio_service.dart';
@@ -46,15 +48,20 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:ilhewl/Screens/Login/auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_windowmanager/flutter_windowmanager.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:secure_application/secure_application.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 AudioPlayerHandler audioHandler;
 
+final GlobalKey<NavigatorState> navigatorKey = new GlobalKey<NavigatorState>();
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   await Hive.initFlutter();
 
   await openHiveBox('settings');
@@ -64,8 +71,41 @@ void main() async {
 
   Paint.enableDithering = true;
   await startService();
+
+  FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+    alert: true,
+  );
+  FirebaseMessaging.onMessage.listen((RemoteMessage event) async {
+    print(event.notification.body);
+
+    if (event.data['data'] != null) {
+      final data = jsonDecode(event.data['data']);
+
+    }
+  });
+
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+
+  FirebaseMessaging.onMessageOpenedApp.listen((message) {
+    print('Message clicked!');
+    if (message.data['data'] != null) {
+      final data = jsonDecode(message.data['data']);
+      if (data['screen'] != null) {
+        navigatorKey.currentState.pushNamed(
+          data['screen'],
+          arguments: {'id': data['id']},
+        );
+      }
+    }
+  });
+
   runApp(MyApp());
   configLoading();
+}
+
+Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  //NotificationService().showNotification(message);
 }
 
 Future<void> startService() async {
@@ -146,10 +186,12 @@ class _MyAppState extends State<MyApp> {
   Locale _locale = const Locale('en', '');
   bool isCaptured = false;
   StreamSubscription<void> subscription;
+  FirebaseMessaging messaging;
 
   @override
   void initState() {
     init();
+    messaging = FirebaseMessaging.instance;
     super.initState();
     final String lang = Hive.box('settings').get('lang', defaultValue: 'English') as String;
     final Map<String, String> codes = {
@@ -178,9 +220,8 @@ class _MyAppState extends State<MyApp> {
     });
     if(isCapture){
       audioHandler.setVolume(0.0);
-    }else{
-      audioHandler.setVolume(1.0);
     }
+
     subscription = FlutterForbidshot.iosShotChange.listen((event) {
       setState(() {
         isCaptured = !isCaptured;
@@ -191,6 +232,24 @@ class _MyAppState extends State<MyApp> {
         audioHandler.setVolume(1.0);
       }
     });
+
+    String fbDeviceToken;
+    final savedDeviceToken = Hive.box('cache').get('deviceToken');
+    try {
+      fbDeviceToken = await messaging.getToken();
+      if (fbDeviceToken != savedDeviceToken) {
+        Hive.box('cache').put('deviceToken', fbDeviceToken);
+        var future = Hive.box('settings').get('token') != null ? Api().updateDevice(
+            data: {
+              "device_id": fbDeviceToken,
+              "device_type": Platform.isIOS ? "1" : "2"
+            }
+        ): null;
+      }
+    } catch(e) {
+      print(e);
+    }
+
   }
 
   @override
@@ -290,6 +349,7 @@ class _MyAppState extends State<MyApp> {
         '/playlists': (context) => PlaylistScreen(),
         '/downloads': (context) => const Downloads(),
         '/claim_artist_profile': (context) => ClaimArtistProfile(),
+        '/all_songs': (context) => AllSongs(),
       },
       onGenerateRoute: (RouteSettings settings) {
         return HandleRoute().handleRoute(settings.name);

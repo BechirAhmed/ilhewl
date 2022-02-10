@@ -31,8 +31,7 @@ class Lyrics {
     String unencodedPath = '/search/' + song + ' ' + artist;
     Response res = await get(Uri.https(authority, unencodedPath));
     if (res.statusCode != 200) return '';
-    RegExpMatch result =
-        RegExp(r'href=\"(\/lyrics\/.*?)\"').firstMatch(res.body);
+    RegExpMatch result = RegExp(r'href=\"(\/lyrics\/.*?)\"').firstMatch(res.body);
     return result == null ? '' : result[1];
   }
 

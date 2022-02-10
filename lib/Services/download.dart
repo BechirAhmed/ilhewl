@@ -16,7 +16,7 @@ class Download with ChangeNotifier {
   int rememberOption;
   final ValueNotifier<bool> remember = ValueNotifier<bool>(false);
   String preferredDownloadQuality = Hive.box('settings').get('downloadQuality', defaultValue: '320 kbps') as String;
-  String downloadFormat = 'm4a';
+  String downloadFormat = 'mp3';
   bool createDownloadFolder = Hive.box('settings').get('createDownloadFolder', defaultValue: false) as bool;
   bool createYoutubeFolder = Hive.box('settings').get('createYoutubeFolder', defaultValue: false) as bool;
   double progress = 0.0;
@@ -59,16 +59,10 @@ class Download with ChangeNotifier {
       filename = tempList.join(', ');
     }
 
-    filename = '${filename.replaceAll(avoid, "").replaceAll("  ", " ")}.m4a';
+    filename = '${filename.replaceAll(avoid, "").replaceAll("  ", " ")}.mp3';
     if (dlPath == '') {
       final String temp = await ExtStorageProvider.getExtStorage(dirName: 'Music');
       dlPath = temp;
-    }
-    if (data['url'].toString().contains('google') && createYoutubeFolder) {
-      dlPath = '$dlPath/YouTube';
-      if (!await Directory(dlPath).exists()) {
-        await Directory(dlPath).create();
-      }
     }
 
     if (createFolder && createDownloadFolder && folderName != null) {
@@ -91,7 +85,7 @@ class Download with ChangeNotifier {
             break;
           case 2:
             while (await File('$dlPath/$filename').exists()) {
-              filename = filename.replaceAll('.m4a', ' (1).m4a');
+              filename = filename.replaceAll('.mp3', ' (1).mp3');
             }
             break;
           default:
@@ -187,8 +181,7 @@ class Download with ChangeNotifier {
                             onPressed: () async {
                               Navigator.pop(context);
                               while (await File('$dlPath/$filename').exists()) {
-                                filename =
-                                    filename.replaceAll('.m4a', ' (1).m4a');
+                                filename = filename.replaceAll('.mp3', ' (1).mp3');
                               }
                               rememberOption = 2;
                               downloadSong(context, dlPath, filename, data);
@@ -227,7 +220,7 @@ class Download with ChangeNotifier {
     String appPath;
     final List<int> _bytes = [];
     String lyrics;
-    final artname = fileName.replaceAll('.m4a', '.jpg');
+    final artname = fileName.replaceAll('.mp3', '.jpg');
     if (!Platform.isWindows) {
       final Directory appDir = await getTemporaryDirectory();
       appPath = appDir.path;
@@ -235,9 +228,7 @@ class Download with ChangeNotifier {
       final Directory temp = await getDownloadsDirectory();
       appPath = temp.path;
     }
-    // if (data['url'].toString().contains('google')) {
-    // filename = filename.replaceAll('.m4a', '.opus');
-    // }
+
     try {
       await File('$dlPath/$fileName')
           .create(recursive: true)
@@ -260,8 +251,9 @@ class Download with ChangeNotifier {
     // debugPrint('Audio path $filepath');
     // debugPrint('Image path $filepath2');
 
-    final String kUrl = data['url'].toString().replaceAll('_96.', "_${preferredDownloadQuality.replaceAll(' kbps', '')}.");
+    final String kUrl = data['url'].toString();
     final client = Client();
+
     final response = await client.send(Request('GET', Uri.parse(kUrl)));
     final int total = response.contentLength ?? 0;
     int recieved = 0;
@@ -300,7 +292,7 @@ class Download with ChangeNotifier {
         final Tag tag = Tag(
           title: data['title'].toString(),
           artist: data['artist'].toString(),
-          albumArtist: data['album_artist']?.toString() ?? data['artist']?.toString().split(', ')[0],
+          albumArtist: data['album_artist']?.toString() ?? data['artist'].toString().split(', ')[0],
           artwork: filepath2.toString(),
           album: data['album'].toString(),
           genre: data['genre'].toString(),
@@ -356,4 +348,54 @@ class Download with ChangeNotifier {
       }
     });
   }
+
+  static Future<String> isSongDownloaded(BuildContext context, Map data, {bool createFolder = false, String folderName}) async {
+    if (!Platform.isWindows) {
+      PermissionStatus status = await Permission.storage.status;
+      if (status.isPermanentlyDenied || status.isDenied) {
+        await [
+          Permission.storage,
+          Permission.accessMediaLocation,
+          Permission.mediaLibrary,
+        ].request();
+        // debugPrint(statuses[Permission.storage].toString());
+      }
+      status = await Permission.storage.status;
+    }
+
+    bool createDownloadFolder = Hive.box('settings').get('createDownloadFolder', defaultValue: false) as bool;
+
+    final RegExp avoid = RegExp(r'[\.\\\*\:\"\?#/;\|]');
+    data['title'] = data['title'].toString().split('(From')[0].trim();
+    String filename = '${data["title"]} - ${data["artist"]}';
+    String dlPath = Hive.box('settings').get('downloadPath', defaultValue: '') as String;
+    if (filename.length > 200) {
+      final String temp = filename.substring(0, 200);
+      final List tempList = temp.split(', ');
+      tempList.removeLast();
+      filename = tempList.join(', ');
+    }
+
+    filename = '${filename.replaceAll(avoid, "").replaceAll("  ", " ")}.mp3';
+    if (dlPath == '') {
+      final String temp = await ExtStorageProvider.getExtStorage(dirName: 'Music');
+      dlPath = temp;
+    }
+
+    if (createFolder && createDownloadFolder && folderName != null) {
+      final String foldername = folderName.replaceAll(avoid, '');
+      dlPath = '$dlPath/$foldername';
+      if (!await Directory(dlPath).exists()) {
+        await Directory(dlPath).create();
+      }
+    }
+
+    final bool exists = await File('$dlPath/$filename').exists();
+    if (exists) {
+      return 'true';
+    } else {
+      return 'false';
+    }
+  }
+
 }

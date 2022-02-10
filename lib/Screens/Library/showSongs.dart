@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:ilhewl/APIs/api.dart';
 import 'package:ilhewl/CustomWidgets/gradientContainers.dart';
@@ -9,10 +11,9 @@ import 'package:ilhewl/Screens/Player/audioplayer.dart';
 
 class SongsList extends StatefulWidget {
   final List data;
-  Map item;
   final bool offline;
   final String title;
-  SongsList({Key key, @required this.data, @required this.offline, this.title, this.item})
+  SongsList({Key key, @required this.data, @required this.offline, this.title})
       : super(key: key);
   @override
   _SongsListState createState() => _SongsListState();
@@ -29,15 +30,16 @@ class _SongsListState extends State<SongsList> {
 
   void getSongs() async {
     // EasyLoading.show(status: "Loading...");
-    String albumId = widget.item['id'].toString();
-    final response = await Api().fetchAlbumSongs(albumId);
-    if (response != null) {
-      _songs = response;
-
-      // EasyLoading.dismiss();
-    } else {
-      throw Exception('Failed to load Data');
-    }
+    _songs = widget.data;
+    // String albumId = widget.item['id'].toString();
+    // final response = await Api().fetchAlbumSongs(albumId);
+    // if (response != null) {
+    //   _songs = response;
+    //
+    //   // EasyLoading.dismiss();
+    // } else {
+    //   throw Exception('Failed to load Data');
+    // }
     added = true;
     // _songs = widget.data;
     offline = widget.offline;
@@ -224,9 +226,10 @@ class _SongsListState extends State<SongsList> {
                                                     width: 50.0,
                                                     child: Image(
                                                       fit: BoxFit.cover,
-                                                      image: MemoryImage(
-                                                          _songs[index]
-                                                              ['image']),
+                                                      image: FileImage(
+                                                        File(_songs[index]['image'].toString(),
+                                                        ),
+                                                      ),
                                                     ),
                                                   ),
                                           ],

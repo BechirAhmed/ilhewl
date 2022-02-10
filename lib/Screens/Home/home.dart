@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:audio_service/audio_service.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/services.dart';
+import 'package:ilhewl/APIs/api.dart';
 import 'package:ilhewl/CustomWidgets/custom_physics.dart';
 import 'package:ilhewl/CustomWidgets/snackbar.dart';
 import 'package:ilhewl/Helpers/app_config.dart';
@@ -8,14 +12,12 @@ import 'package:ilhewl/Helpers/config.dart';
 import 'package:ilhewl/Helpers/countrycodes.dart';
 import 'package:ilhewl/CustomWidgets/gradientContainers.dart';
 import 'package:ilhewl/Screens/Home/homeData.dart';
-import 'package:ilhewl/Screens/Home/saavn.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:ilhewl/Screens/Library/library.dart';
 import 'package:ilhewl/Screens/Search/search.dart';
 import 'package:ilhewl/Screens/Settings/profile.dart';
 import 'package:ilhewl/Screens/Settings/setting.dart';
 import 'package:ilhewl/Screens/Wallet/wallet.dart';
-import 'package:device_info/device_info.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -162,11 +164,86 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  static final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+  Map<String, dynamic> _deviceData = <String, dynamic>{};
+
   @override
   void initState() {
     _scrollController = ScrollController();
     _scrollController.addListener(_scrollListener);
     super.initState();
+    initPlatformState();
+  }
+
+  Future<void> initPlatformState() async {
+    var deviceData = <String, dynamic>{};
+
+    try {
+      if (Platform.isAndroid) {
+        deviceData = _readAndroidBuildData(await deviceInfoPlugin.androidInfo);
+      } else if (Platform.isIOS) {
+        deviceData = _readIosDeviceInfo(await deviceInfoPlugin.iosInfo);
+      }
+    } on PlatformException {
+      deviceData = <String, dynamic>{
+        'Error:': 'Failed to get platform version.'
+      };
+    }
+
+    if (!mounted) return;
+
+    setState(() {
+      _deviceData = deviceData;
+    });
+  }
+
+  Map<String, dynamic> _readAndroidBuildData(AndroidDeviceInfo build) {
+    return <String, dynamic>{
+      'version.securityPatch': build.version.securityPatch,
+      'version.sdkInt': build.version.sdkInt,
+      'version.release': build.version.release,
+      'version.previewSdkInt': build.version.previewSdkInt,
+      'version.incremental': build.version.incremental,
+      'version.codename': build.version.codename,
+      'version.baseOS': build.version.baseOS,
+      'board': build.board,
+      'bootloader': build.bootloader,
+      'brand': build.brand,
+      'device': build.device,
+      'display': build.display,
+      'fingerprint': build.fingerprint,
+      'hardware': build.hardware,
+      'host': build.host,
+      'id': build.id,
+      'manufacturer': build.manufacturer,
+      'model': build.model,
+      'product': build.product,
+      'supported32BitAbis': build.supported32BitAbis,
+      'supported64BitAbis': build.supported64BitAbis,
+      'supportedAbis': build.supportedAbis,
+      'tags': build.tags,
+      'type': build.type,
+      'isPhysicalDevice': build.isPhysicalDevice,
+      'androidId': build.androidId,
+      'systemFeatures': build.systemFeatures,
+    };
+  }
+
+  Map<String, dynamic> _readIosDeviceInfo(IosDeviceInfo data) {
+    return <String, dynamic>{
+      'name': data.name,
+      'systemName': data.systemName,
+      'systemVersion': data.systemVersion,
+      'model': data.model,
+      'localizedModel': data.localizedModel,
+      'identifierForVendor': data.identifierForVendor,
+      'isPhysicalDevice': data.isPhysicalDevice,
+      'utsname.sysname:': data.utsname.sysname,
+      'utsname.nodename:': data.utsname.nodename,
+      'utsname.release:': data.utsname.release,
+      'utsname.version:': data.utsname.version,
+      'utsname.machine:': data.utsname.machine,
+    };
   }
 
   @override
@@ -281,24 +358,24 @@ class _HomePageState extends State<HomePage> {
                                 Navigator.pushNamed(context, '/downloads');
                               },
                             ),
-                            ListTile(
-                              title: Text('Wallet'),
-                              contentPadding:
-                              EdgeInsets.symmetric(horizontal: 20.0),
-                              leading: Icon(
-                                Icons
-                                    .account_balance_wallet, // miscellaneous_services_rounded,
-                                color: Theme.of(context).iconTheme.color,
-                              ),
-                              onTap: () {
-                                Navigator.pop(context);
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            WalletPage(callback: callback)));
-                              },
-                            ),
+                            // ListTile(
+                            //   title: Text('Wallet'),
+                            //   contentPadding:
+                            //   EdgeInsets.symmetric(horizontal: 20.0),
+                            //   leading: Icon(
+                            //     Icons
+                            //         .account_balance_wallet, // miscellaneous_services_rounded,
+                            //     color: Theme.of(context).iconTheme.color,
+                            //   ),
+                            //   onTap: () {
+                            //     Navigator.pop(context);
+                            //     Navigator.push(
+                            //         context,
+                            //         MaterialPageRoute(
+                            //             builder: (context) =>
+                            //                 WalletPage(callback: callback)));
+                            //   },
+                            // ),
                             ListTile(
                               title: Text('Settings'),
                               contentPadding:
@@ -894,15 +971,26 @@ class _HomePageState extends State<HomePage> {
 
   void _logout() async {
     EasyLoading.show(status: "Loading...");
-    await Hive.box('settings').clear();
-    await Hive.box('downloads').clear();
-    await Hive.box('cache').clear();
-    await Hive.box('Favorite Songs').clear();
-    audioHandler.stop();
-    // AudioService.stop();
-    // AudioService.disconnect();
+
+    Map res = await Api().logout(
+        'user_id='+Hive.box('settings').get('userID').toString()
+        +'&token='+Hive.box('settings').get('token').toString()
+        +'&device_id='+_deviceData['identifierForVendor']
+    );
+
+    if(res['success']){
+      await Hive.box('settings').clear();
+      await Hive.box('downloads').clear();
+      await Hive.box('cache').clear();
+      await Hive.box('Favorite Songs').clear();
+      audioHandler.stop();
+      EasyLoading.dismiss();
+      Navigator.popAndPushNamed(context, '/');
+    }else{
+      EasyLoading.showError(res['message']);
+    }
+
     EasyLoading.dismiss();
-    Navigator.popAndPushNamed(context, '/');
   }
 
   Future<dynamic> _handleLogoutDlg() {

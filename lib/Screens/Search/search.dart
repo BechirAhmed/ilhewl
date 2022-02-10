@@ -42,6 +42,7 @@ class _SearchPageState extends State<SearchPage> {
   List search = Hive.box('settings').get('search', defaultValue: []);
   bool showHistory = Hive.box('settings').get('showHistory', defaultValue: true);
   FloatingSearchBarController _controller = FloatingSearchBarController();
+  List _playableSongs = [];
 
   @override
   void dispose() {
@@ -228,6 +229,15 @@ class _SearchPageState extends State<SearchPage> {
       data = receivedData;
       lists = [...?data["collections"]];
     }
+    data['songs'].forEach((item) {
+      if((item['selling'] == 1 && item['purchased']) || item['selling'] == 0){
+        if((_playableSongs.firstWhere((el) => el['id'] == item['id'], orElse: () => null)) != null){
+
+        }else{
+          _playableSongs.add(item);
+        }
+      }
+    });
     setState(() {});
     EasyLoading.dismiss();
   }
@@ -552,8 +562,8 @@ class _SearchPageState extends State<SearchPage> {
                                                     "song"
                                                     ? PlayScreen(
                                                   data: {
-                                                    'response': currentSongList,
-                                                    'index': currentSongList.indexWhere(
+                                                    'response': _playableSongs,
+                                                    'index': _playableSongs.indexWhere(
                                                             (e) => (e["id"] == item['id'])),
                                                     'offline': false,
                                                   },

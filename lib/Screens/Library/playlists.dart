@@ -103,28 +103,28 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
                         setState(() {});
                       },
                     ),
-                    ListTile(
-                        title: Text(AppLocalizations.of(context).importFile),
-                        leading: Card(
-                          elevation: 0,
-                          color: Colors.transparent,
-                          child: SizedBox(
-                            width: 50,
-                            height: 50,
-                            child: Center(
-                              child: Icon(
-                                MdiIcons.import,
-                                color: Theme.of(context).iconTheme.color,
-                              ),
-                            ),
-                          ),
-                        ),
-                        onTap: () async {
-                          playlistNames = await ImportPlaylist()
-                              .importPlaylist(context, playlistNames);
-                          settingsBox.put('playlistNames', playlistNames);
-                          setState(() {});
-                        }),
+                    // ListTile(
+                    //     title: Text(AppLocalizations.of(context).importFile),
+                    //     leading: Card(
+                    //       elevation: 0,
+                    //       color: Colors.transparent,
+                    //       child: SizedBox(
+                    //         width: 50,
+                    //         height: 50,
+                    //         child: Center(
+                    //           child: Icon(
+                    //             MdiIcons.import,
+                    //             color: Theme.of(context).iconTheme.color,
+                    //           ),
+                    //         ),
+                    //       ),
+                    //     ),
+                    //     onTap: () async {
+                    //       playlistNames = await ImportPlaylist()
+                    //           .importPlaylist(context, playlistNames);
+                    //       settingsBox.put('playlistNames', playlistNames);
+                    //       setState(() {});
+                    //     }),
                     if (playlistNames.isEmpty)
                       const SizedBox()
                     else
@@ -134,43 +134,33 @@ class _PlaylistScreenState extends State<PlaylistScreen> {
                           itemCount: playlistNames.length,
                           itemBuilder: (context, index) {
                             final String name = playlistNames[index].toString();
-                            final String showName = playlistDetails
-                                .containsKey(name)
-                                ? playlistDetails[name]['name']?.toString() ??
-                                name
+                            final String showName = playlistDetails.containsKey(name)
+                                ? playlistDetails[name]['name']?.toString() ?? name
                                 : name;
                             return ListTile(
-                              leading: (playlistDetails[name] == null ||
-                                  playlistDetails[name]['imagesList'] ==
-                                      null ||
-                                  (playlistDetails[name]['imagesList']
-                                  as List)
-                                      .isEmpty)
-                                  ? Card(
-                                elevation: 5,
-                                color: Colors.transparent,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius:
-                                  BorderRadius.circular(7.0),
-                                ),
-                                clipBehavior: Clip.antiAlias,
-                                child: SizedBox(
-                                  height: 50,
-                                  width: 50,
-                                  child:
-                                  name.toString() == 'Favorite Songs'
-                                      ? const Image(
-                                      image: AssetImage(
-                                          'assets/cover.jpg'))
-                                      : const Image(
-                                      image: AssetImage(
-                                          'assets/album.png')),
-                                ),
-                              )
-                                  : Collage(
-                                  imageList: playlistDetails[name]
-                                  ['imagesList'] as List,
-                                  placeholderImage: 'assets/cover.jpg'),
+                              leading: (playlistDetails[name] == null || playlistDetails[name]['imagesList'] == null || (playlistDetails[name]['imagesList'] as List).isEmpty)
+                                ? Card(
+                                    elevation: 5,
+                                    color: Colors.transparent,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius:
+                                      BorderRadius.circular(7.0),
+                                    ),
+                                    clipBehavior: Clip.antiAlias,
+                                    child: SizedBox(
+                                      height: 50,
+                                      width: 50,
+                                      child:
+                                      name.toString() == 'Favorite Songs'
+                                          ? const Image(image: AssetImage('assets/cover.jpg'))
+                                          : const Image(image: AssetImage('assets/album.png')),
+                                    ),
+                                  )
+                                : Collage(
+                                    imageList: playlistDetails[name]
+                                    ['imagesList'] as List,
+                                    placeholderImage: 'assets/cover.jpg'
+                                  ),
                               title: Text(
                                 showName,
                                 overflow: TextOverflow.ellipsis,

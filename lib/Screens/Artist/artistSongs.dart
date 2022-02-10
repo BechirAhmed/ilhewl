@@ -951,7 +951,6 @@ class _ArtistSongsState extends State<ArtistSongs> with SingleTickerProviderStat
                       opaque: false, // set to false
                       pageBuilder: (_, __, ___) => SongsList(
                         data: loadedAlbums,
-                        item: loadedAlbums[index],
                         offline: false,
                       ),
                     ),

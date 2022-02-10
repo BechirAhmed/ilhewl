@@ -2,9 +2,13 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:flutter_lyric/flutter_lyric.dart';
 import 'package:audio_service/audio_service.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_forbidshot/flutter_forbidshot.dart';
+import 'package:flutter_lyric/lyric_controller.dart';
+import 'package:flutter_lyric/lyric_util.dart';
+import 'package:flutter_lyric/lyric_widget.dart';
 import 'package:ilhewl/APIs/api.dart';
 import 'package:ilhewl/CustomWidgets/add_playlist.dart';
 import 'package:ilhewl/CustomWidgets/downloadButton.dart';
@@ -20,6 +24,7 @@ import 'package:ilhewl/Helpers/lyrics.dart';
 import 'package:ilhewl/Helpers/mediaitem_converter.dart';
 import 'package:ilhewl/Screens/Common/song_list.dart';
 import 'package:ilhewl/Screens/Wallet/wallet.dart';
+import 'package:ilhewl/Services/download.dart';
 import 'package:ilhewl/main.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flip_card/flip_card.dart';
@@ -36,6 +41,10 @@ import 'package:path_provider/path_provider.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+
+Box downloadsBox = Hive.box('downloads');
+String currency = Hive.box('settings').get('currency') ?? "MRU";
 
 class PlayScreen extends StatefulWidget {
   final Map data;
@@ -54,8 +63,8 @@ class PlayScreen extends StatefulWidget {
 class _PlayScreenState extends State<PlayScreen> {
   bool fromMiniplayer = false;
   String preferredQuality = Hive.box('settings').get('streamingQuality', defaultValue: '96 kbps').toString();
-  String repeatMode = Hive.box('settings').get('repeatMode', defaultValue: 'None').toString();
-  bool enforceRepeat = Hive.box('settings').get('enforceRepeat', defaultValue: false) as bool;
+  String repeatMode = Hive.box('settings').get('repeatMode', defaultValue: 'All').toString();
+  bool enforceRepeat = Hive.box('settings').get('enforceRepeat', defaultValue: true) as bool;
   bool shuffle = Hive.box('settings').get('shuffle', defaultValue: false) as bool;
   bool useImageColor = Hive.box('settings').get('useImageColor', defaultValue: true) as bool;
   List<MediaItem> globalQueue = [];
@@ -68,6 +77,8 @@ class _PlayScreenState extends State<PlayScreen> {
   bool fromYT = false;
   String defaultCover = '';
   final ValueNotifier<Color> gradientColor = ValueNotifier<Color>(currentTheme.playGradientColor);
+
+  Download down = Download();
 
   GlobalKey<FlipCardState> cardKey = GlobalKey<FlipCardState>();
 
@@ -270,21 +281,13 @@ class _PlayScreenState extends State<PlayScreen> {
 
   Future<MediaItem> setTags(Map response, Directory tempDir) async {
     String playTitle = response['title'].toString();
-    playTitle == ''
-        ? playTitle = response['_display_name_wo_ext'].toString()
-        : playTitle = response['title'].toString();
     String playArtist = response['artist'].toString();
-    playArtist == '<unknown>'
-        ? playArtist = 'Unknown'
-        : playArtist = response['artist'].toString();
-
     final String playAlbum = response['album'].toString();
-    final int playDuration = response['duration'] as int ?? 180000;
+    final int playDuration = int.parse(response['duration']) ?? 180000;
     String filePath;
     if (response['image'] != null) {
       try {
-        final File file =
-            File('${tempDir.path}/${response["_display_name_wo_ext"]}.jpg');
+        final File file = File('${tempDir.path}/${response["_display_name_wo_ext"]}.jpg');
         filePath = file.path;
         if (!await file.exists()) {
           await file.create();
@@ -301,7 +304,7 @@ class _PlayScreenState extends State<PlayScreen> {
         id: response['_id'].toString(),
         album: playAlbum,
         duration: Duration(milliseconds: playDuration),
-        title: playTitle != null ? playTitle.split('(')[0] : 'Unknown',
+        title: playTitle ?? 'Unknown',
         artist: playArtist ?? 'Unknown',
         artUri: Uri.file(filePath),
         extras: {
@@ -323,12 +326,10 @@ class _PlayScreenState extends State<PlayScreen> {
 
   void setOffValues(List response, {bool downloaed = false}) {
     getTemporaryDirectory().then((tempDir) async {
-      final File file =
-          File('${(await getTemporaryDirectory()).path}/cover.jpg');
+      final File file = File('${(await getTemporaryDirectory()).path}/cover.jpg');
       if (!await file.exists()) {
         final byteData = await rootBundle.load('assets/cover.jpg');
-        await file.writeAsBytes(byteData.buffer
-            .asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
+        await file.writeAsBytes(byteData.buffer.asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
       }
       for (int i = 0; i < response.length; i++) {
         globalQueue.add(await setTags(response[i] as Map, tempDir));
@@ -349,9 +350,7 @@ class _PlayScreenState extends State<PlayScreen> {
   void setValues(List response) {
     List songs = [];
     response.forEach((element) {
-      if(element['selling'] == 1 && !element['purchased']){
-
-      }else{
+      if((element['selling'] == 1 && element['purchased']) || element['selling'] == 0){
         songs.add(element);
       }
     });
@@ -399,11 +398,9 @@ class _PlayScreenState extends State<PlayScreen> {
     if (globalIndex == -1) {
       globalIndex = 0;
     }
-    fromYT = data['fromYT'] as bool ?? false;
     downloaded = data['downloaded'] as bool ?? false;
     if (data['offline'] == null) {
-      if (audioHandler.mediaItem.value.extras['url'].startsWith('https')
-          as bool) {
+      if (audioHandler.mediaItem.value.extras['url'].startsWith('https') as bool) {
         offline = false;
       } else {
         offline = true;
@@ -411,13 +408,14 @@ class _PlayScreenState extends State<PlayScreen> {
     } else {
       offline = data['offline'] as bool;
     }
+
     if (!fetched) {
       if (response.isEmpty || same) {
         fromMiniplayer = true;
       } else {
         fromMiniplayer = false;
         if (!enforceRepeat) {
-          repeatMode = 'None';
+          repeatMode = 'all';
           Hive.box('settings').put('repeatMode', repeatMode);
         }
         shuffle = false;
@@ -450,7 +448,7 @@ class _PlayScreenState extends State<PlayScreen> {
           builder: (context, snapshot) {
             final MediaItem mediaItem = snapshot.data;
 
-            if (mediaItem == null) return SizedBox();
+            if (mediaItem == null) return const SizedBox();
 
             mediaItem.artUri.toString().startsWith('file')
                 ? getColors(FileImage(File(mediaItem.artUri.toFilePath())))
@@ -1057,6 +1055,7 @@ abstract class AudioPlayerHandler implements AudioHandler {
   ValueStream<double> get speed;
 }
 
+
 class NowPlayingStream extends StatelessWidget {
   final AudioPlayerHandler audioHandler;
   final bool hideHeader;
@@ -1132,57 +1131,49 @@ class NowPlayingStream extends StatelessWidget {
                               tooltip: AppLocalizations.of(context).playing,
                               onPressed: () {},
                             )
-                          : queue[index]
-                                  .extras['url']
-                                  .toString()
-                                  .startsWith('http')
-                              ? Row(
+                          : queue[index].extras['url'].toString().startsWith('http')
+                              ? ((queue[index].extras['selling'] == 1 && queue[index].extras['purchased']) || queue[index].extras['selling'] == 0) ?
+                                Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     LikeButton(
                                       mediaItem: queue[index],
                                     ),
-                                    DownloadButton(
+                                    if(downloadsBox.containsKey(queue[index].id.toString()))
+                                      SizedBox()
+                                    else
+                                      DownloadButton(
                                         icon: 'download',
                                         data: {
                                           'id': queue[index].id.toString(),
-                                          'artist':
-                                              queue[index].artist.toString(),
-                                          'album':
-                                              queue[index].album.toString(),
-                                          'image':
-                                              queue[index].artUri.toString(),
-                                          'duration': queue[index]
-                                              .duration
-                                              .inSeconds
-                                              .toString(),
-                                          'title':
-                                              queue[index].title.toString(),
-                                          'url': queue[index]
-                                              .extras['url']
-                                              .toString(),
-                                          'year': queue[index]
-                                              .extras['year']
-                                              .toString(),
-                                          'language': queue[index]
-                                              .extras['language']
-                                              .toString(),
-                                          'genre':
-                                              queue[index].genre.toString(),
-                                          '320kbps':
-                                              queue[index].extras['320kbps'],
-                                          'has_lyrics': queue[index]
-                                              .extras['has_lyrics'],
-                                          'release_date': queue[index]
-                                              .extras['release_date'],
-                                          'album_id':
-                                              queue[index].extras['album_id'],
-                                          'subtitle':
-                                              queue[index].extras['subtitle'],
-                                          'perma_url':
-                                              queue[index].extras['perma_url'],
+                                          'artist': queue[index].artist.toString(),
+                                          'album': queue[index].album.toString(),
+                                          'image': queue[index].artUri.toString(),
+                                          'duration': queue[index].duration.inSeconds.toString(),
+                                          'title': queue[index].title.toString(),
+                                          'url': queue[index].extras['url'].toString(),
+                                          'genre': queue[index].genre.toString(),
+                                          'has_lyrics': queue[index].extras['has_lyrics'],
+                                          'release_date': queue[index].extras['release_date'],
+                                          'album_id': queue[index].extras['album_id'],
                                         })
                                   ],
+                                )
+                                : Container(
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: Theme.of(context).accentColor,
+                                        ),
+                                        color: Theme.of(context).accentColor,
+                                        borderRadius: BorderRadius.all(Radius.circular(7))
+                                    ),
+                                    padding: EdgeInsets.only(left: 3.0, right: 3.0),
+                                    child: Text(
+                                      "${queue[index].extras['price']} $currency",
+                                      style: TextStyle(
+                                          color: Colors.black
+                                      ),
+                                    )
                                 )
                               : const SizedBox(),
                       leading: Row(
@@ -1312,13 +1303,27 @@ class ArtWorkWidget extends StatefulWidget {
   _ArtWorkWidgetState createState() => _ArtWorkWidgetState();
 }
 
-class _ArtWorkWidgetState extends State<ArtWorkWidget> {
+class _ArtWorkWidgetState extends State<ArtWorkWidget> with TickerProviderStateMixin {
   final ValueNotifier<bool> dragging = ValueNotifier<bool>(false);
   final ValueNotifier<bool> done = ValueNotifier<bool>(false);
   Map lyrics = {'id': '', 'lyrics': ''};
 
+  // var songLyc = "[00:00.000] 作曲 : Maynard Plant/Blaise Plant/菊池拓哉 \n[00:00.226] 作词 : Maynard Plant/Blaise Plant/菊池拓哉\n[00:00.680]明日を照らすよSunshine\n[00:03.570]窓から射し込む…扉開いて\n[00:20.920]Stop!'cause you got me thinking\n[00:22.360]that I'm a little quicker\n[00:23.520]Go!Maybe the rhythm's off,\n[00:25.100]but I will never let you\n[00:26.280]Know!I wish that you could see it for yourself.\n[00:28.560]It's not,it's not,just stop,hey y'all!やだ!\n[00:30.930]I never thought that I would take over it all.\n[00:33.420]And now I know that there's no way I could fall.\n[00:35.970]You know it's on and on and off and on,\n[00:38.210]And no one gets away.\n[00:40.300]僕の夢は何処に在るのか?\n[00:45.100]影も形も見えなくて\n[00:50.200]追いかけていた守るべきもの\n[00:54.860]There's a sunshine in my mind\n[01:02.400]明日を照らすよSunshineどこまでも続く\n[01:07.340]目の前に広がるヒカリの先へ\n[01:12.870]未来の\n[01:15.420]輝く\n[01:18.100]You know it's hard,just take a chance.\n[01:19.670]信じて\n[01:21.289]明日も晴れるかな?\n[01:32.960]ほんの些細なことに何度も躊躇ったり\n[01:37.830]誰かのその言葉いつも気にして\n[01:42.850]そんな弱い僕でも「いつか必ずきっと!」\n[01:47.800]強がり?それも負け惜しみ?\n[01:51.940]僕の夢は何だったのか\n[01:56.720]大事なことも忘れて\n[02:01.680]目の前にある守るべきもの\n[02:06.640]There's a sunshine in my mind\n[02:14.500]明日を照らすよSunshineどこまでも続く\n[02:19.000]目の前に広がるヒカリの先へ\n[02:24.670]未来のSunshine\n[02:27.200]輝くSunshine\n[02:29.900]You know it's hard,just take a chance.\n[02:31.420]信じて\n[02:33.300]明日も晴れるかな?\n[02:47.200]Rain's got me now\n[03:05.650]I guess I'm waiting for that Sunshine\n[03:09.200]Why's It only shine in my mind\n[03:15.960]I guess I'm waiting for that Sunshine\n[03:19.110]Why's It only shine in my mind\n[03:25.970]明日を照らすよSunshineどこまでも続く\n[03:30.690]目の前に広がるヒカリの先へ\n[03:36.400]未来のSunshine\n[03:38.840]輝くSunshine\n[03:41.520]You know it's hard,just take a chance.\n[03:43.200]信じて\n[03:44.829]明日も晴れるかな?\n";
+
+  // LyricController controller;
+
+  // @override
+  // void initState() {
+  //   controller = LyricController(vsync: this);
+  //   controller.addListener(() {
+  //     print(controller.progress);
+  //   });
+  //   super.initState();
+  // }
+
   @override
   Widget build(BuildContext context) {
+    // var newlyrics = LyricUtil.formatLyric(songLyc);
     return SizedBox(
       height: widget.width * 0.9,
       child: Align(
@@ -1332,36 +1337,25 @@ class _ArtWorkWidgetState extends State<ArtWorkWidget> {
               key: widget.cardKey,
               flipOnTouch: false,
               onFlipDone: (value) {
-                if (lyrics['id'] != widget.mediaItem.id ||
-                    (!value && lyrics['lyrics'] == '' && !done.value)) {
+                if (lyrics['id'] != widget.mediaItem.id || (!value && lyrics['lyrics'] == '')) {
                   done.value = false;
                   if (widget.offline) {
-                    Lyrics()
-                        .getOffLyrics(
-                            widget.mediaItem.extras['url'].toString())
-                        .then((value) {
+                    Lyrics().getOffLyrics(widget.mediaItem.extras['url'].toString()).then((value) {
                       lyrics['lyrics'] = value;
                       lyrics['id'] = widget.mediaItem.id;
                       done.value = true;
                     });
                   } else {
-                    if (widget.mediaItem.extras['has_lyrics'] == 'true' && widget.mediaItem.extras['lyrics_snippet'] != Null) {
-                      lyrics['lyrics'] =
-                      widget.mediaItem.extras['lyrics_snippet'];
+                    if (widget.mediaItem.extras['has_lyrics'] && widget.mediaItem.extras['lyrics_snippet'] != '') {
+                      lyrics['lyrics'] = widget.mediaItem.extras['lyrics_snippet'];
                       lyrics['id'] = widget.mediaItem.id;
                       done.value = true;
-                    }else if(widget.mediaItem.extras['has_lyrics'] == 'true'){
-                      Lyrics()
-                          .getSaavnLyrics(widget.mediaItem.id.toString())
-                          .then((value) {
+                    } else {
+                      Lyrics().getLyrics(widget.mediaItem.title, widget.mediaItem.artist).then((value) {
                         lyrics['lyrics'] = value;
                         lyrics['id'] = widget.mediaItem.id;
                         done.value = true;
                       });
-                    } else {
-                        lyrics['lyrics'] = " ";
-                        lyrics['id'] = widget.mediaItem.id;
-                        done.value = true;
                     }
                   }
                 }
@@ -1388,41 +1382,49 @@ class _ArtWorkWidgetState extends State<ArtWorkWidget> {
                       },
                       blendMode: BlendMode.dstIn,
                       child: Center(
-                        child: SingleChildScrollView(
+                        child: lyrics['lyrics'] == ''
+                            ? EmptyScreen().emptyScreen(
+                          context,
+                          false,
+                          0,
+                          ':( ',
+                          100.0,
+                          AppLocalizations.of(context)
+                              .lyrics,
+                          60.0,
+                          AppLocalizations.of(context)
+                              .notAvailable,
+                          20.0,
+                        )
+                        // LyricWidget(
+                        //   size: Size(double.infinity, double.infinity),
+                        //   lyrics: newlyrics,
+                        //   controller: controller,
+                        // )
+                            : SingleChildScrollView(
                           physics: const BouncingScrollPhysics(),
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 55, horizontal: 10),
+                          padding: const EdgeInsets.symmetric(vertical: 55, horizontal: 10),
                           child: ValueListenableBuilder(
                               valueListenable: done,
                               builder: (BuildContext context, bool value,
                                   Widget child) {
                                 return value
-                                    ? lyrics['lyrics'] == ''
-                                        ? EmptyScreen().emptyScreen(
-                                            context,
-                                            false,
-                                            0,
-                                            ':( ',
-                                            100.0,
-                                            AppLocalizations.of(context)
-                                                .lyrics,
-                                            60.0,
-                                            AppLocalizations.of(context)
-                                                .notAvailable,
-                                            20.0,
-                                          )
-                                        : SelectableText(
-                                            lyrics['lyrics'].toString(),
-                                            textAlign: TextAlign.center,
-                                          )
+                                    ? SelectableText(
+                                        lyrics['lyrics'].toString(),
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          fontSize: widget.width * .05
+                                        ),
+                                      )
                                     : const CircularProgressIndicator();
                               }),
                         ),
                       ),
                     ),
-                    Align(
-                      alignment: Alignment.bottomRight,
-                      child: Card(
+                    if(lyrics['lyrics'] != '')
+                      Align(
+                        alignment: Alignment.bottomRight,
+                        child: Card(
                         elevation: 10.0,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0)),
@@ -1667,8 +1669,7 @@ class NameNControls extends StatelessWidget {
           AudioService.position,
           _bufferedPositionStream,
           _durationStream,
-          (position, bufferedPosition, duration) => PositionData(
-              position, bufferedPosition, duration ?? Duration.zero));
+          (position, bufferedPosition, duration) => PositionData(position, bufferedPosition, duration ?? Duration.zero));
 
   @override
   Widget build(BuildContext context) {
@@ -1747,9 +1748,7 @@ class NameNControls extends StatelessWidget {
         StreamBuilder<PositionData>(
           stream: _positionDataStream,
           builder: (context, snapshot) {
-            final positionData = snapshot.data ??
-                PositionData(Duration.zero, Duration.zero,
-                    mediaItem.duration ?? Duration.zero);
+            final positionData = snapshot.data ?? PositionData(Duration.zero, Duration.zero, mediaItem.duration ?? Duration.zero);
             return SeekBar(
               duration: positionData.duration,
               position: positionData.position,
@@ -1807,12 +1806,10 @@ class NameNControls extends StatelessWidget {
                         .map((state) => state.repeatMode)
                         .distinct(),
                     builder: (context, snapshot) {
-                      final repeatMode =
-                          snapshot.data ?? AudioServiceRepeatMode.none;
+                      final repeatMode = snapshot.data ?? AudioServiceRepeatMode.all;
                       const texts = ['None', 'All', 'One'];
                       final icons = [
-                        Icon(Icons.repeat_rounded,
-                            color: Theme.of(context).disabledColor),
+                        Icon(Icons.repeat_rounded, color: Theme.of(context).disabledColor),
                         const Icon(
                           Icons.repeat_rounded,
                         ),
@@ -1821,8 +1818,8 @@ class NameNControls extends StatelessWidget {
                         ),
                       ];
                       const cycleModes = [
-                        AudioServiceRepeatMode.none,
                         AudioServiceRepeatMode.all,
+                        AudioServiceRepeatMode.none,
                         AudioServiceRepeatMode.one,
                       ];
                       final index = cycleModes.indexOf(repeatMode);
@@ -1830,16 +1827,16 @@ class NameNControls extends StatelessWidget {
                         icon: icons[index],
                         tooltip: 'Repeat ${texts[(index + 1) % texts.length]}',
                         onPressed: () {
-                          Hive.box('settings').put(
-                              'repeatMode', texts[(index + 1) % texts.length]);
-                          audioHandler.setRepeatMode(cycleModes[
-                              (cycleModes.indexOf(repeatMode) + 1) %
-                                  cycleModes.length]);
+                          Hive.box('settings').put('repeatMode', texts[(index + 1) % texts.length]);
+                          audioHandler.setRepeatMode(cycleModes[(cycleModes.indexOf(repeatMode) + 1) % cycleModes.length]);
                         },
                       );
                     },
                   ),
                   if (!offline)
+                    if(downloadsBox.containsKey(mediaItem.id.toString()))
+                      SizedBox()
+                  else
                     DownloadButton(data: {
                       'id': mediaItem.id.toString(),
                       'artist': mediaItem.artist.toString(),
@@ -1848,15 +1845,10 @@ class NameNControls extends StatelessWidget {
                       'duration': mediaItem.duration.inSeconds.toString(),
                       'title': mediaItem.title.toString(),
                       'url': mediaItem.extras['url'].toString(),
-                      'year': mediaItem.extras['year'].toString(),
-                      'language': mediaItem.extras['language'].toString(),
                       'genre': mediaItem.genre.toString(),
-                      '320kbps': mediaItem.extras['320kbps'],
                       'has_lyrics': mediaItem.extras['has_lyrics'],
                       'release_date': mediaItem.extras['release_date'],
                       'album_id': mediaItem.extras['album_id'],
-                      'subtitle': mediaItem.extras['subtitle'],
-                      'perma_url': mediaItem.extras['perma_url'],
                     })
                 ],
               ),
@@ -1893,7 +1885,8 @@ class NameNControls extends StatelessWidget {
                       borderRadius: const BorderRadius.only(
                           topLeft: Radius.circular(15.0),
                           topRight: Radius.circular(15.0)),
-                      child: NowPlayingStream(audioHandler));
+                      child: NowPlayingStream(audioHandler)
+                  );
                 });
           },
           child: Column(
