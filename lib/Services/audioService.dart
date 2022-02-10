@@ -29,6 +29,7 @@ class AudioPlayerTask extends BackgroundAudioTask {
     );
   }
 
+
   Timer _sleepTimer;
   StreamSubscription<PlaybackEvent> _eventSubscription;
   String preferredQuality;

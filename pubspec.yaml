@@ -85,6 +85,8 @@ dependencies:
   pin_code_fields: ^7.3.0
   unicorndial: ^1.1.5
   multi_select_flutter: ^4.0.0
+  palette_generator: ^0.3.2
+  flip_card: ^0.6.0
 
 
 dev_dependencies:

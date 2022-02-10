@@ -20,6 +20,7 @@ import 'dart:io';
 import 'package:audio_session/audio_session.dart';
 import 'package:flutter_forbidshot/flutter_forbidshot.dart';
 import 'package:ilhewl/Helpers/config.dart';
+import 'package:ilhewl/Screens/Artist/ClaimProfile.dart';
 import 'package:ilhewl/Screens/Library/nowplaying.dart';
 import 'package:ilhewl/Screens/Library/playlists.dart';
 import 'package:ilhewl/Screens/Library/recent.dart';
@@ -260,6 +261,7 @@ class _MyAppState extends State<MyApp> {
         '/playlists': (context) => PlaylistScreen(),
         '/nowplaying': (context) => NowPlaying(),
         '/recent': (context) => RecentlyPlayed(),
+        '/claim_artist_profile': (context) => ClaimArtistProfile(),
       },
     );
   }

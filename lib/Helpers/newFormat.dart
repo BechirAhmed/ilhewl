@@ -451,6 +451,22 @@ class NewFormatResponse {
     return data;
   }
 
+  Future<Map> formatSearchData(Map data) async {
+    try {
+      data["songs"] = await formatSongsInList(data["songs"], false);
+
+      data["collections"] = [
+        "songs",
+        "artists",
+        "genres",
+        "moods",
+      ];
+    } catch (err) {
+      print(err);
+    }
+    return data;
+  }
+
   Future<Map> formatArtistPageData(Map data) async {
     try {
       data["songs"] = await formatSongsInList(data["songs"], false);
