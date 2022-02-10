@@ -2,6 +2,8 @@
 //  Generated file. Do not edit.
 //
 
+// clang-format off
+
 #import "GeneratedPluginRegistrant.h"
 
 #if __has_include(<audio_service/AudioServicePlugin.h>)
@@ -22,10 +24,10 @@
 @import device_info;
 #endif
 
-#if __has_include(<ext_storage/ExtStoragePlugin.h>)
-#import <ext_storage/ExtStoragePlugin.h>
+#if __has_include(<device_info_plus/FLTDeviceInfoPlusPlugin.h>)
+#import <device_info_plus/FLTDeviceInfoPlusPlugin.h>
 #else
-@import ext_storage;
+@import device_info_plus;
 #endif
 
 #if __has_include(<file_picker/FilePickerPlugin.h>)
@@ -46,16 +48,22 @@
 @import firebase_database;
 #endif
 
+#if __has_include(<firebase_messaging/FLTFirebaseMessagingPlugin.h>)
+#import <firebase_messaging/FLTFirebaseMessagingPlugin.h>
+#else
+@import firebase_messaging;
+#endif
+
 #if __has_include(<flutter_forbidshot/FlutterForbidshotPlugin.h>)
 #import <flutter_forbidshot/FlutterForbidshotPlugin.h>
 #else
 @import flutter_forbidshot;
 #endif
 
-#if __has_include(<flutter_isolate/FlutterIsolatePlugin.h>)
-#import <flutter_isolate/FlutterIsolatePlugin.h>
+#if __has_include(<flutter_lyric/FlutterLyricPlugin.h>)
+#import <flutter_lyric/FlutterLyricPlugin.h>
 #else
-@import flutter_isolate;
+@import flutter_lyric;
 #endif
 
 #if __has_include(<image_picker/FLTImagePickerPlugin.h>)
@@ -68,6 +76,12 @@
 #import <just_audio/JustAudioPlugin.h>
 #else
 @import just_audio;
+#endif
+
+#if __has_include(<on_audio_query/OnAudioQueryPlugin.h>)
+#import <on_audio_query/OnAudioQueryPlugin.h>
+#else
+@import on_audio_query;
 #endif
 
 #if __has_include(<open_file/OpenFilePlugin.h>)
@@ -136,14 +150,16 @@
   [AudioServicePlugin registerWithRegistrar:[registry registrarForPlugin:@"AudioServicePlugin"]];
   [AudioSessionPlugin registerWithRegistrar:[registry registrarForPlugin:@"AudioSessionPlugin"]];
   [FLTDeviceInfoPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTDeviceInfoPlugin"]];
-  [ExtStoragePlugin registerWithRegistrar:[registry registrarForPlugin:@"ExtStoragePlugin"]];
+  [FLTDeviceInfoPlusPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTDeviceInfoPlusPlugin"]];
   [FilePickerPlugin registerWithRegistrar:[registry registrarForPlugin:@"FilePickerPlugin"]];
   [FLTFirebaseCorePlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseCorePlugin"]];
   [FLTFirebaseDatabasePlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseDatabasePlugin"]];
+  [FLTFirebaseMessagingPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTFirebaseMessagingPlugin"]];
   [FlutterForbidshotPlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterForbidshotPlugin"]];
-  [FlutterIsolatePlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterIsolatePlugin"]];
+  [FlutterLyricPlugin registerWithRegistrar:[registry registrarForPlugin:@"FlutterLyricPlugin"]];
   [FLTImagePickerPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTImagePickerPlugin"]];
   [JustAudioPlugin registerWithRegistrar:[registry registrarForPlugin:@"JustAudioPlugin"]];
+  [OnAudioQueryPlugin registerWithRegistrar:[registry registrarForPlugin:@"OnAudioQueryPlugin"]];
   [OpenFilePlugin registerWithRegistrar:[registry registrarForPlugin:@"OpenFilePlugin"]];
   [OTPPlugin registerWithRegistrar:[registry registrarForPlugin:@"OTPPlugin"]];
   [FLTPackageInfoPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTPackageInfoPlugin"]];

@@ -5,7 +5,7 @@ import 'package:hive/hive.dart';
 import 'package:ilhewl/APIs/api.dart';
 import 'package:ilhewl/CustomWidgets/add_queue.dart';
 import 'package:ilhewl/CustomWidgets/downloadButton.dart';
-import 'package:ilhewl/Screens/Player/audioplayer.dart';
+import 'package:ilhewl/Screens/Player/oldaudioplayer.dart';
 import 'package:ilhewl/CustomWidgets/gradientContainers.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +13,7 @@ import 'package:ilhewl/CustomWidgets/emptyScreen.dart';
 import 'package:ilhewl/CustomWidgets/miniplayer.dart';
 import 'package:ilhewl/APIs/saavnApi.dart';
 import 'package:html_unescape/html_unescape_small.dart';
+import 'package:ilhewl/Screens/Player/audioplayer.dart';
 import 'package:ilhewl/Screens/Wallet/wallet.dart';
 
 class SongsListPage extends StatefulWidget {
@@ -32,10 +33,12 @@ class SongsListPage extends StatefulWidget {
 class _SongsListPageState extends State<SongsListPage> {
   bool status = false;
   List songList = [];
+  List _playableSongs = [];
   bool fetched = false;
   HtmlUnescape unescape = HtmlUnescape();
   double walletBalance = 0.0;
   bool walletLoading = true;
+  bool isFirstLoad = true;
   String currency = Hive.box('settings').get('currency') ?? "MRU";
 
 
@@ -43,6 +46,7 @@ class _SongsListPageState extends State<SongsListPage> {
     Map wallet = await Api().fetchWalletData();
     walletBalance = double.parse(wallet["balance"]);
     walletLoading = false;
+    isFirstLoad = false;
     setState(() {});
   }
 
@@ -51,9 +55,21 @@ class _SongsListPageState extends State<SongsListPage> {
   }
 
   _handlePurchaseDialog(item) async {
-    EasyLoading.show(status: "loading...");
-    await fetchWallet();
-    EasyLoading.dismiss();
+    if(isFirstLoad){
+      EasyLoading.show(status: "loading...");
+      await fetchWallet();
+      EasyLoading.dismiss();
+    }
+
+    bool isAlbumForSell = false;
+    Map album = item["album_model"];
+    if(album != null){
+      if(album["selling"] == 1){
+        isAlbumForSell = true;
+      }
+      setState(() {});
+    }
+
     return showModalBottomSheet(
         isScrollControlled: true,
         context: context,
@@ -102,14 +118,42 @@ class _SongsListPageState extends State<SongsListPage> {
                       ),
                     )
                 ),
+                onTap: () {
+                  _handlePurchaseSong(item);
+                },
               ),
+              isAlbumForSell ?
+              ListTile(
+                leading: new Icon(Icons.album),
+                title: new Text("Or Buy the whole album"),
+                subtitle: Text("${album['title']} (${album["song_count"]})"),
+                trailing: Container(
+                    decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Theme.of(context).accentColor,
+                        ),
+                        color: Theme.of(context).accentColor,
+                        borderRadius: BorderRadius.all(Radius.circular(7))
+                    ),
+                    padding: EdgeInsets.only(left: 3.0, right: 3.0),
+                    child: Text(
+                      "${album['price']} $currency",
+                      style: TextStyle(
+                          color: Colors.black
+                      ),
+                    )
+                ),
+                onTap: () {
+                  _handlePurchaseSong(item);
+                },
+              ) : SizedBox(),
               ListTile(
                 tileColor: Theme.of(context).accentColor,
                 leading: walletLoading ? SizedBox(width: 20, height: 20, child: CircularProgressIndicator(color: Colors.black,)) : new Icon(Icons.account_balance_wallet_outlined),
                 title: new Text(
                   '$walletBalance $currency',
                   style: TextStyle(
-                      color: Colors.black54
+                      color: walletBalance < double.parse(item['price']) ? Colors.white : Colors.black54
                   ),
                 ),
                 subtitle: Text(
@@ -118,7 +162,7 @@ class _SongsListPageState extends State<SongsListPage> {
                       color: Colors.black54
                   ),
                 ),
-                trailing: walletBalance < double.parse(item['price']) ? TextButton(
+                trailing: TextButton(
                   child: Text("Wallet", style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold),),
                   onPressed: () {
                     Navigator.push(
@@ -127,15 +171,10 @@ class _SongsListPageState extends State<SongsListPage> {
                             builder: (context) =>
                                 WalletPage(callback: callback)));
                   },
-                ) : TextButton(
-                  child: Text("Buy", style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold),),
-                  onPressed: () {
-                    _handlePurchaseSong(item);
-                  },
                 ),
-                onTap: () {
-                  _handlePurchaseSong(item);
-                },
+                // onTap: () {
+                //   _handlePurchaseSong(item);
+                // },
               ),
               SizedBox(height: 50,)
             ],
@@ -207,14 +246,26 @@ class _SongsListPageState extends State<SongsListPage> {
         .trim();
   }
 
+  void setPlayableSongs(_songs) {
+    _songs.forEach((item) {
+      if((item['selling'] == 1 && item['purchased']) || item['selling'] == 0){
+        if((_playableSongs.firstWhere((el) => el['id'] == item['id'], orElse: () => null)) != null){
+
+        }else{
+          _playableSongs.add(item);
+        }
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     if (!status) {
       status = true;
       switch (widget.listItem['type']) {
         case 'mood':
-          Api().fetchMoodSongs(widget.listItem['alt_name'])
-              .then((value) {
+          Api().fetchMoodSongs(widget.listItem['alt_name']).then((value) {
+            setPlayableSongs(value);
             setState(() {
               songList = value;
               fetched = true;
@@ -223,6 +274,7 @@ class _SongsListPageState extends State<SongsListPage> {
           break;
         case 'genre':
           Api().fetchGenreSongs(widget.listItem['alt_name']).then((value) {
+            setPlayableSongs(value);
             setState(() {
               songList = value;
               fetched = true;
@@ -231,8 +283,18 @@ class _SongsListPageState extends State<SongsListPage> {
           break;
         case 'artist':
           Api().fetchArtistSongs("auth/artist", widget.listItem['id'].toString()).then((value) {
+            setPlayableSongs(value['songs']['data']);
             setState(() {
               songList = value['songs']['data'];
+              fetched = true;
+            });
+          });
+          break;
+        case 'album':
+          Api().fetchUserAlbumSongs(widget.listItem['id'].toString()).then((value) {
+            setPlayableSongs(value);
+            setState(() {
+              songList = value;
               fetched = true;
             });
           });
@@ -400,10 +462,8 @@ class _SongsListPageState extends State<SongsListPage> {
                                             pageBuilder: (_, __, ___) =>
                                               PlayScreen(
                                               data: {
-                                                'response': songList,
-                                                'index': songList.indexWhere(
-                                                    (element) =>
-                                                        element == entry),
+                                                'response': _playableSongs,
+                                                'index': _playableSongs.indexWhere((element) => element == entry),
                                                 'offline': false,
                                               },
                                               fromMiniplayer: false,

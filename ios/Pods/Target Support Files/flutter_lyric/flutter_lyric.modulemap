@@ -1,0 +1,6 @@
+framework module flutter_lyric {
+  umbrella header "flutter_lyric-umbrella.h"
+
+  export *
+  module * { export * }
+}

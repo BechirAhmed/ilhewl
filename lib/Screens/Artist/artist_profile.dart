@@ -139,7 +139,7 @@ class _ArtistProfileState extends State<ArtistProfile> {
     }
 
     EasyLoading.dismiss();
-    print(response.data['success']);
+    // print(response.data['success']);
     if(response.statusCode == 200 && response.data['success']){
       print(response.data);
       Hive.box('settings').delete('name');

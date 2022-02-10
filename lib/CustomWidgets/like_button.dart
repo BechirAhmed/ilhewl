@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 class LikeButton extends StatefulWidget {
   final MediaItem mediaItem;
   final double size;
-  const LikeButton({Key key, @required this.mediaItem, this.size})
+  final Map data;
+  const LikeButton({Key key, @required this.mediaItem, this.size, this.data})
       : super(key: key);
 
   @override
@@ -30,8 +31,12 @@ class _LikeButtonState extends State<LikeButton> {
         iconSize: widget.size ?? 24.0,
         onPressed: () {
           liked
-              ? removeLiked(widget.mediaItem.id)
-              : addPlaylist('Favorite Songs', widget.mediaItem);
+              ? removeLiked(widget.mediaItem == null
+              ? widget.data['id'].toString()
+              : widget.mediaItem.id)
+              : widget.mediaItem == null
+                ? addMapToPlaylist('Favorite Songs', widget.data)
+                : addItemToPlaylist('Favorite Songs', widget.mediaItem);
           liked = !liked;
           setState(() {});
           ScaffoldMessenger.of(context).showSnackBar(
@@ -42,8 +47,13 @@ class _LikeButtonState extends State<LikeButton> {
                   label: 'Undo',
                   onPressed: () {
                     liked
-                        ? removeLiked(widget.mediaItem.id)
-                        : addPlaylist('Favorite Songs', widget.mediaItem);
+                        ? removeLiked(widget.mediaItem == null
+                        ? widget.data['id'].toString()
+                        : widget.mediaItem.id)
+                        : widget.mediaItem == null
+                        ? addMapToPlaylist('Favorite Songs', widget.data)
+                        : addItemToPlaylist(
+                        'Favorite Songs', widget.mediaItem);
                     liked = !liked;
                     setState(() {});
                   }),

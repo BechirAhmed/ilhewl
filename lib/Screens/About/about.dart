@@ -95,36 +95,36 @@ class _AboutScreenState extends State<AboutScreen> {
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 16),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          TextButton(
-                              child: Container(
-                                width: MediaQuery.of(context).size.width / 4,
-                                child: Image(
-                                  image: Theme.of(context).brightness == Brightness.dark
-                                      ? AssetImage('assets/appstore.png')
-                                      : AssetImage('assets/appstore.png'),
-                                ),
-                              ),
-                              onPressed: () {
-                                launch("https://ilhewl.com");
-                              }
-                          ),
-                          TextButton(
-                              child: Container(
-                                width: MediaQuery.of(context).size.width / 4,
-                                child: Image(
-                                  image: Theme.of(context).brightness == Brightness.dark
-                                      ? AssetImage('assets/playstore.png')
-                                      : AssetImage('assets/playstore.png'),
-                                ),
-                              ),
-                              onPressed: () {
-                                launch("https://ilhewl.com");
-                              }),
-                        ],
-                      ),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.center,
+                      //   children: [
+                      //     TextButton(
+                      //         child: Container(
+                      //           width: MediaQuery.of(context).size.width / 4,
+                      //           child: Image(
+                      //             image: Theme.of(context).brightness == Brightness.dark
+                      //                 ? AssetImage('assets/appstore.png')
+                      //                 : AssetImage('assets/appstore.png'),
+                      //           ),
+                      //         ),
+                      //         onPressed: () {
+                      //           launch("https://ilhewl.com");
+                      //         }
+                      //     ),
+                      //     TextButton(
+                      //         child: Container(
+                      //           width: MediaQuery.of(context).size.width / 4,
+                      //           child: Image(
+                      //             image: Theme.of(context).brightness == Brightness.dark
+                      //                 ? AssetImage('assets/playstore.png')
+                      //                 : AssetImage('assets/playstore.png'),
+                      //           ),
+                      //         ),
+                      //         onPressed: () {
+                      //           launch("https://ilhewl.com");
+                      //         }),
+                      //   ],
+                      // ),
                       Text(
                         "If you liked the app\nshow some ♥ and ⭐ rate it",
                         textAlign: TextAlign.center,

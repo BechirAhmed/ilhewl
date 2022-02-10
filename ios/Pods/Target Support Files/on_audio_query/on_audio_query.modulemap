@@ -1,0 +1,6 @@
+framework module on_audio_query {
+  umbrella header "on_audio_query-umbrella.h"
+
+  export *
+  module * { export * }
+}

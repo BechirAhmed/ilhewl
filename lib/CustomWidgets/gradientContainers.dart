@@ -71,7 +71,11 @@ class _BottomGradientContainerState extends State<BottomGradientContainer> {
 
 class GradientCard extends StatefulWidget {
   final Widget child;
-  GradientCard({@required this.child});
+  final bool miniplayer;
+  final double radius;
+  final double elevation;
+  const GradientCard(
+      {@required this.child, this.miniplayer, this.radius, this.elevation});
   @override
   _GradientCardState createState() => _GradientCardState();
 }
@@ -80,22 +84,23 @@ class _GradientCardState extends State<GradientCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 3,
+      elevation: widget.elevation ?? 3,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0),
+        borderRadius: BorderRadius.circular(widget.radius ?? 10.0),
       ),
       clipBehavior: Clip.antiAlias,
+      margin: EdgeInsets.zero,
       child: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: Theme.of(context).brightness == Brightness.dark
-                ? currentTheme.getCardGradient()
+                ? currentTheme.getCardGradient(miniplayer: widget.miniplayer ?? false)
                 : [
-                    Colors.white,
-                    Theme.of(context).canvasColor,
-                  ],
+              Colors.white,
+              Theme.of(context).canvasColor,
+            ],
           ),
         ),
         child: widget.child,

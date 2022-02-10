@@ -53,6 +53,7 @@ class _EditSongModalState extends State<EditSongModal> {
   File _selectedImage;
 
   bool _visibility = true;
+  bool _free = false;
   TextEditingController _songTitleController;
   TextEditingController _descriptionController;
   TextEditingController _lyricsController;
@@ -121,13 +122,13 @@ class _EditSongModalState extends State<EditSongModal> {
         _lyricsController = TextEditingController(text: editedSong['lyrics']);
 
         _visibility = editedSong['visibility'] == 0 ? false : true;
+        _free = editedSong['selling'] == 0 ? true : false;
         _selectedAlbum = editedSong['album'] != null ? editedSong['album']['id'] : null;
         _releaseDate = editedSong['released_at'];
         _initialDate = DateTime.parse(editedSong['released_at']);
 
         // _selectedGenres = editedSong['genres'];
         // _selectedMoods = editedSong['moods'];
-
 
         _initialGenres = editedSong['genres'];
 
@@ -187,6 +188,7 @@ class _EditSongModalState extends State<EditSongModal> {
       'copyright': _copyrightController.text,
       'user_id': userId,
       'visibility': _visibility,
+      'free': _free,
       'artwork': _selectedImage != null ? await MultipartFile.fromFile(_selectedImage.path, filename: 'artwork.jpg') : null,
     });
   }
@@ -622,7 +624,17 @@ class _EditSongModalState extends State<EditSongModal> {
                       setState(() {
                         _visibility = value;
                       });
-                      print(_visibility);
+                    },
+                  ),
+                  SizedBox(height: 20,),
+                  _customLabel("Free", false),
+                  SizedBox(height: 5,),
+                  Checkbox(
+                    value: _free,
+                    onChanged: (value) {
+                      setState(() {
+                        _free = value;
+                      });
                     },
                   ),
                   SizedBox(height: 20.0,),

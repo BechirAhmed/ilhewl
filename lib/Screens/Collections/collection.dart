@@ -6,7 +6,7 @@ import 'package:ilhewl/CustomWidgets/custom_physics.dart';
 import 'package:ilhewl/CustomWidgets/emptyScreen.dart';
 import 'package:ilhewl/Helpers/newFormat.dart';
 import 'package:ilhewl/Screens/Common/song_list.dart';
-import 'package:ilhewl/Screens/Player/audioplayer.dart';
+import 'package:ilhewl/Screens/Player/oldaudioplayer.dart';
 import 'package:ilhewl/Screens/Search/search.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/foundation.dart';
@@ -24,7 +24,7 @@ bool fetched = false;
 bool emptyRegional, emptyGlobal = false;
 
 // List data;
-List data = Hive.box('cache').get('collections', defaultValue: {});
+List data = Hive.box('cache').get('collections', defaultValue: []);
 
 class Collections extends StatefulWidget {
   const Collections({Key key}) : super(key: key);

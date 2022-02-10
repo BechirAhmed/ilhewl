@@ -29,7 +29,7 @@ import Firebase
 //                  self.window.isHidden = false
 //              }
 
-//             print(isCaptured)
+            print(isCaptured)
         }
     }
     
